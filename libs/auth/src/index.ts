@@ -11,6 +11,8 @@ export {
 
 export { DaffAuthFacadeInterface } from './interfaces/auth-facade.interface';
 
+export { DaffAuthFacadeService } from './facades/auth.facade'
+
 export { authReducers } from './reducers/auth-reducers';
 
 export {
