@@ -1,7 +1,8 @@
 <demo-header>
-    <button type="button" header-menu-button daff-icon-button (click)="openSidebar()"><fa-icon [icon]="faBars"></fa-icon></button>
-    <a header-logo routerLink="/">
-        <demo-logo></demo-logo>
-    </a>
-    <button type="button" header-cart-button daff-icon-button><fa-icon [icon]="faShoppingCart"></fa-icon></button>
+  <button type="button" header-menu-button daff-icon-button (click)="openSidebar()"><fa-icon [icon]="faBars"></fa-icon></button>
+  <a header-logo routerLink="/">
+      <demo-logo></demo-logo>
+  </a>
+  <demo-login-link header-login-link></demo-login-link>
+  <button type="button" header-cart-button daff-icon-button><fa-icon [icon]="faShoppingCart"></fa-icon></button>
 </demo-header>

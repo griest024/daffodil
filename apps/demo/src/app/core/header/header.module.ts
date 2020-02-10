@@ -9,6 +9,7 @@ import { DemoHeaderContainer } from './containers/header/header.component';
 import { LogoModule } from '../logo/logo.module';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AuthModule } from '../../auth/auth.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     SidebarModule,
     RouterModule,
     DaffButtonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AuthModule
   ],
   declarations: [
     DemoHeaderComponent,
