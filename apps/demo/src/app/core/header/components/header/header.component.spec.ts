@@ -18,7 +18,7 @@ describe('DemoHeaderComponent', () => {
         DaffNavbarModule,
         RouterTestingModule
       ],
-      declarations: [ 
+      declarations: [
         DemoHeaderComponent
       ]
     })
@@ -37,7 +37,7 @@ describe('DemoHeaderComponent', () => {
   });
 
   describe('when cart icon is clicked', () => {
-    
+
     it('should call router.navigateByUrl', () => {
       spyOn(router, 'navigateByUrl');
       fixture.debugElement.query(By.css('.demo-header__right-nav')).nativeElement.click();

@@ -7,7 +7,16 @@
   </div>
   <ng-content></ng-content>
   <div class="demo-header__spacer"></div>
-  <div class="demo-header__right-nav" (click)="navigateToCart()">
-      <ng-content select="[header-cart-button]"></ng-content>
+  <div
+    class="demo-header__middle-nav"
+  >
+    <ng-content select="[header-login-link]"></ng-content>
+  </div>
+  <div class="demo-header__spacer"></div>
+  <div
+    class="demo-header__right-nav"
+    (click)="navigateToCart()"
+  >
+    <ng-content select="[header-cart-button]"></ng-content>
   </div>
 </daff-navbar>
