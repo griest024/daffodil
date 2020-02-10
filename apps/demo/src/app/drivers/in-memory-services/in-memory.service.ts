@@ -12,6 +12,7 @@ import { DaffInMemoryBackendProductService } from '@daffodil/product/testing';
 import { DaffInMemoryBackendCartService } from '@daffodil/cart/testing';
 import { DaffInMemoryBackendCheckoutService } from '@daffodil/checkout/testing';
 import { DaffInMemoryBackendNavigationService } from '@daffodil/navigation/testing';
+import { DaffInMemoryBackendAuthService } from '@daffodil/auth/testing';
 import { DaffNavigationTree } from '@daffodil/navigation';
 
 @Injectable({
@@ -22,7 +23,8 @@ export class DemoInMemoryService implements InMemoryDbService {
     private productTestingService: DaffInMemoryBackendProductService,
     private cartTestingService: DaffInMemoryBackendCartService,
     private checkoutTestingService: DaffInMemoryBackendCheckoutService,
-    private navigationTestingService: DaffInMemoryBackendNavigationService
+    private navigationTestingService: DaffInMemoryBackendNavigationService,
+    private authTestingService: DaffInMemoryBackendAuthService
   ) {}
 
   parseRequestUrl(url: string, utils: RequestInfoUtilities): ParsedRequestUrl {
@@ -35,6 +37,8 @@ export class DemoInMemoryService implements InMemoryDbService {
       return this.cartTestingService.post(reqInfo);
     } else if (collectionName === 'checkout') {
       return this.checkoutTestingService.post(reqInfo);
+    } else if (collectionName === 'auth') {
+      return this.authTestingService.post(reqInfo);
     }
 
     return undefined;
