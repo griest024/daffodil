@@ -5,13 +5,25 @@ import {
   DaffAuthModule,
   DaffAuthFacadeService
 } from '@daffodil/auth';
+import { DaffLoadingIconModule } from '@daffodil/design';
+import { DaffContainerModule } from '@daffodil/design';
 
+import { DemoLoginLinkComponent } from './containers/login-link/login-link.component';
 import { DemoAuthStateModule } from './auth-state.module';
+
 @NgModule({
   imports: [
     CommonModule,
     DaffAuthModule,
+    DaffLoadingIconModule,
+    DaffContainerModule,
     DemoAuthStateModule
+  ],
+  declarations: [
+    DemoLoginLinkComponent
+  ],
+  exports: [
+    DemoLoginLinkComponent
   ],
   providers: [
     DaffAuthFacadeService

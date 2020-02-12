@@ -1,0 +1,15 @@
+<a
+  *ngIf="isUnauthenticated | async; else logoutBlock"
+  class="login-link__login-signup"
+  routerLink="/auth/login"
+>Log In</a>
+<ng-template
+  #logoutBlock
+>
+  <div
+    class="login-link__logout"
+    (click)="logout()"
+  >
+    Logout
+  </div>
+</ng-template>
