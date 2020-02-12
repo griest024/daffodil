@@ -20,7 +20,12 @@ import { DaffCustomerRegistration } from '../../models/customer-registration';
 
 describe('Driver | Magento | Auth | RegisterService', () => {
   let controller: ApolloTestingController;
-  let registerService: DaffMagentoRegisterService;
+  let registerService: DaffMagentoRegisterService<
+    DaffLoginInfo,
+    DaffAuthToken,
+    DaffCustomerRegistration,
+    DaffAccountRegistration<DaffCustomerRegistration>
+  >;
 
   const loginServiceSpy = jasmine.createSpyObj('DaffMagentoLoginService', ['login'])
 

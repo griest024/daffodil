@@ -17,10 +17,17 @@ import { DaffAuthToken } from '../../models/auth-token';
 import { DaffAuthTransformer } from '../injection-tokens/auth-transformer.token';
 import { DaffCustomerRegistration } from '../../models/customer-registration';
 import { DaffLoginInfo } from '../../models/login-info';
+import { GenerateTokenResponse } from './models/outputs/generate-token-response'
 
 describe('Driver | Magento | Auth | LoginService', () => {
   let controller: ApolloTestingController;
-  let loginService: DaffMagentoLoginService;
+  let loginService: DaffMagentoLoginService<
+    DaffLoginInfo,
+    DaffAuthToken,
+    DaffCustomerRegistration,
+    DaffAccountRegistration<DaffCustomerRegistration>,
+    GenerateTokenResponse
+  >;
 
   const transformerServiceSpy = jasmine.createSpyObj('DaffMagentoAuthTransformerService', ['transform'])
 
