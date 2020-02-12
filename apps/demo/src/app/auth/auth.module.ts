@@ -6,10 +6,12 @@ import {
   DaffAuthFacadeService
 } from '@daffodil/auth';
 
+import { DemoAuthStateModule } from './auth-state.module';
 @NgModule({
   imports: [
     CommonModule,
     DaffAuthModule,
+    DemoAuthStateModule
   ],
   providers: [
     DaffAuthFacadeService
