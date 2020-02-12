@@ -1,7 +1,11 @@
-import { Component, Inject } from '@angular/core';
-import { DaffAuthFacadeInterface, DaffAuthToken, DaffAuthFacadeService } from '@daffodil/auth';
+import { Component } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+
+import {
+  DaffAuthFacadeService,
+  DaffAuthLogout
+} from '@daffodil/auth';
 
 @Component({
   selector: 'demo-login-link',
@@ -10,7 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class DemoLoginLinkComponent {
   constructor(
-    @Inject(DaffAuthFacadeService) private facade: DaffAuthFacadeInterface<DaffAuthToken>
+    private facade: DaffAuthFacadeService
   ) {}
 
   get isUnauthenticated(): Observable<boolean> {

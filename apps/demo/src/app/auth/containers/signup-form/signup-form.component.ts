@@ -1,8 +1,6 @@
-import { Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 
 import {
-  DaffAuthFacadeInterface,
   DaffAuthRegister,
   DaffAuthToken,
   DaffAuthFacadeService,
@@ -16,7 +14,7 @@ import {
 })
 export class DemoSignupFormContainer {
   constructor(
-    @Inject(DaffAuthFacadeService) private facade: DaffAuthFacadeInterface<DaffAuthToken>,
+    private facade: DaffAuthFacadeService,
   ) {}
 
   onSubmit(singupInfo: DaffAccountRegistration<DaffCustomerRegistration>) {

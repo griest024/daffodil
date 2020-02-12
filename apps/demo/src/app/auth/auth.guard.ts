@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
-  Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -9,8 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {
-  DaffAuthFacadeInterface,
-  DaffAuthToken
+  DaffAuthFacadeService,
 } from '@daffodil/auth';
 
 @Injectable({
@@ -18,8 +16,7 @@ import {
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private facade: DaffAuthFacadeInterface<DaffAuthToken>,
-    private router: Router
+    private facade: DaffAuthFacadeService,
   ) {}
 
   canActivate(

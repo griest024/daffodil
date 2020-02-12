@@ -1,8 +1,6 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 
 import {
-  DaffAuthFacadeInterface,
-  DaffAuthToken,
   DaffAuthLogin,
   DaffLoginInfo,
   DaffAuthFacadeService
@@ -14,7 +12,7 @@ import {
 })
 export class DemoLoginFormContainer {
   constructor(
-    @Inject(DaffAuthFacadeService) private facade: DaffAuthFacadeInterface<DaffAuthToken>,
+    private facade: DaffAuthFacadeService,
   ) {}
 
   onSubmit(loginInfo: DaffLoginInfo) {
