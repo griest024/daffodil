@@ -2,10 +2,13 @@
 @import 'theme';
 
 :host {
-	display: block;
+	display: flex;
+	justify-content: center;
 }
 
 .demo-signup-form {
+	width: 70%;
+
 	&__header {
 		font-size: 24px;
 	}
