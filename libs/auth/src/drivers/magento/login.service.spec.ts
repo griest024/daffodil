@@ -18,6 +18,8 @@ import { DaffAuthTransformer } from '../injection-tokens/auth-transformer.token'
 import { DaffCustomerRegistration } from '../../models/customer-registration';
 import { DaffLoginInfo } from '../../models/login-info';
 import { GenerateTokenResponse } from './models/outputs/generate-token-response'
+import { RevokeCustomerTokenResponse } from './models/outputs/revoke-customer-token-response';
+import { DaffMagentoRevokeTokenTransformerService } from './transforms/revoke-token-transformer.service';
 
 describe('Driver | Magento | Auth | LoginService', () => {
   let controller: ApolloTestingController;
@@ -26,10 +28,12 @@ describe('Driver | Magento | Auth | LoginService', () => {
     DaffAuthToken,
     DaffCustomerRegistration,
     DaffAccountRegistration<DaffCustomerRegistration>,
-    GenerateTokenResponse
+    GenerateTokenResponse,
+    RevokeCustomerTokenResponse
   >;
 
-  const transformerServiceSpy = jasmine.createSpyObj('DaffMagentoAuthTransformerService', ['transform'])
+  const authTransformerServiceSpy = jasmine.createSpyObj('DaffMagentoAuthTransformerService', ['transform'])
+  const revokeTokenTransformerServiceSpy = jasmine.createSpyObj('DaffMagentoRevokeTokenTransformerService', ['transform'])
 
   const registrationFactory: DaffAccountRegistrationFactory = new DaffAccountRegistrationFactory();
   const authTokenFactory: DaffAuthTokenFactory = new DaffAuthTokenFactory();
@@ -58,7 +62,11 @@ describe('Driver | Magento | Auth | LoginService', () => {
         },
         {
           provide: DaffAuthTransformer,
-          useValue: transformerServiceSpy
+          useValue: authTransformerServiceSpy
+        },
+        {
+          provide: DaffMagentoRevokeTokenTransformerService,
+          useValue: revokeTokenTransformerServiceSpy
         }
       ]
     });
@@ -96,23 +104,22 @@ describe('Driver | Magento | Auth | LoginService', () => {
         }
       };
 
-      transformerServiceSpy.transform.withArgs(response).and.returnValue(mockAuth);
+      authTransformerServiceSpy.transform.withArgs(response).and.returnValue(mockAuth);
     });
 
-    // TODO: determine if mocked tests are appropriate
-    // it('should call the transformer', () => {
-    //   loginService.login(mockLoginInfo).subscribe((auth) => {
-    //     expect(auth).toEqual(mockAuth);
-    //     // need to do the expectation in here because the transformer is invoked inside a callback
-    //     expect(transformerServiceSpy.transform.calls.any()).toBeTruthy();
-    //   });
+    it('should call the transformer', () => {
+      loginService.login(mockLoginInfo).subscribe((auth) => {
+        expect(auth).toEqual(mockAuth);
+        // need to do the expectation in here because the transformer is invoked inside a callback
+        expect(authTransformerServiceSpy.transform).toHaveBeenCalledWith(response);
+      });
 
-    //   const op = controller.expectOne(authGraphQlQueryManagerService.generateATokenMutation(email, password).mutation);
+      const op = controller.expectOne(authGraphQlQueryManagerService.generateATokenMutation(mockLoginInfo).mutation);
 
-    //   op.flush({
-    //     data: response
-    //   });
-    // });
+      op.flush({
+        data: response
+      });
+    });
 
     it('should return the correct observable', done => {
       loginService.login(mockLoginInfo).subscribe((auth) => {
@@ -120,11 +127,86 @@ describe('Driver | Magento | Auth | LoginService', () => {
         done();
       });
 
-      const op = controller.expectOne(authGraphQlQueryManagerService.generateATokenMutation({email, password}).mutation);
+      const op = controller.expectOne(authGraphQlQueryManagerService.generateATokenMutation(mockLoginInfo).mutation);
 
       op.flush({
         data: response
       });
     });
+  });
+
+  describe('logout | revoking an access token', () => {
+    let response: RevokeCustomerTokenResponse;
+    let result: boolean;
+
+    afterEach(() => {
+      controller.verify();
+    });
+
+    beforeEach(() => {
+      result = true;
+      response = {
+        revokeCustomerToken: {
+          result
+        }
+      };
+
+      revokeTokenTransformerServiceSpy.transform.withArgs(response).and.returnValue(result);
+    });
+
+    it('should call the transformer', () => {
+      loginService.logout().subscribe(() => {
+        // need to do the expectation in here because the transformer is invoked inside a callback
+        expect(revokeTokenTransformerServiceSpy.transform).toHaveBeenCalledWith(response);
+      });
+
+      const op = controller.expectOne(authGraphQlQueryManagerService.revokeCustomerTokenMutation().mutation);
+
+      op.flush({
+        data: response
+      });
+    });
+
+    describe('when the result is true', () => {
+      it('should return void and not throw an error', done => {
+        loginService.logout().subscribe((ret) => {
+          expect(ret).toBeUndefined();
+          done();
+        });
+
+        const op = controller.expectOne(authGraphQlQueryManagerService.revokeCustomerTokenMutation().mutation);
+
+        op.flush({
+          data: response
+        });
+      });
+    });
+
+    // TODO: determine if #logout should return an Error
+    // describe('when the result is false', () => {
+    //   beforeEach(() => {
+    //     result = false;
+    //     response = {
+    //       revokeCustomerToken: {
+    //         result
+    //       }
+    //     };
+
+    //     revokeTokenTransformerServiceSpy.transform.withArgs(response).and.returnValue(result);
+    //   });
+
+    //   it('should throw an error', done => {
+    //     loginService.logout().subscribe((ret: Error) => {
+    //       expect<Error>(ret).toEqual(new Error('Token revocation failed'));
+    //       done();
+    //     });
+
+    //     const op = controller.expectOne(authGraphQlQueryManagerService.revokeCustomerTokenMutation().mutation);
+
+    //     op.flush({
+    //       data: response
+    //     });
+    //   })
+    // });
   });
 });
