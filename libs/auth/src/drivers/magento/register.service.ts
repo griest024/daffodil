@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 
 import { DaffRegisterServiceInterface } from '../interfaces/register-service.interface';
@@ -47,7 +47,7 @@ export class DaffMagentoRegisterService<
     return this.apollo.mutate(
       this.queryManager.createACustomerMutation(registration)
     ).pipe(
-      mergeMap<any, Observable<TAuthToken>>((): Observable<TAuthToken> =>
+      switchMap<any, Observable<TAuthToken>>((): Observable<TAuthToken> =>
         this.loginDriver.login(this.loginInfoTransformer.transform(registration))
       )
     )
