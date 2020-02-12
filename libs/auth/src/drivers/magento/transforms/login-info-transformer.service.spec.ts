@@ -32,7 +32,7 @@ describe('DaffMagentoLoginInfoTransformerService', () => {
   });
 
   describe('transform | transforming the account registration into login info', () => {
-    it('should return a DaffAuthToken with the correct token field', () => {
+    it('should return a DaffLoginInfo with the correct fields', () => {
       const result = service.transform(mockRegistration);
 
       expect(result).toEqual(jasmine.objectContaining({
