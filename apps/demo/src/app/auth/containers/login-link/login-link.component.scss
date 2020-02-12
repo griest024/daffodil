@@ -5,3 +5,9 @@
 	display: block;
 	height: 100%;
 }
+
+.demo-login-link {
+	&__logout {
+		cursor: pointer;
+	}
+}
