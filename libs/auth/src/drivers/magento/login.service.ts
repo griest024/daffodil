@@ -26,19 +26,25 @@ const unwrapResult = pipe(
 @Injectable({
   providedIn: 'root'
 })
-export class DaffMagentoLoginService implements DaffLoginServiceInterface<DaffLoginInfo, DaffAuthToken> {
+export class DaffMagentoLoginService<
+  TLoginInfo extends DaffLoginInfo,
+  TAuthToken extends DaffAuthToken,
+  TCustomerRegistration extends DaffCustomerRegistration,
+  TAccountRegistration extends DaffAccountRegistration<TCustomerRegistration>,
+  TGenerateTokenResponse extends GenerateTokenResponse
+> implements DaffLoginServiceInterface<TLoginInfo, TAuthToken> {
   constructor(
     private apollo: Apollo,
     @Inject(DaffAuthQueryManager) public queryManager: DaffAuthQueryManagerInterface<
-      DaffAccountRegistration<DaffCustomerRegistration>,
-      DaffCustomerRegistration,
-      DaffLoginInfo
+      TAccountRegistration,
+      TCustomerRegistration,
+      TLoginInfo
     >,
-    @Inject(DaffAuthTransformer) public transformer: DaffAuthTransformerInterface<DaffAuthToken>
+    @Inject(DaffAuthTransformer) public transformer: DaffAuthTransformerInterface<TAuthToken>
   ) {}
 
-  login(loginInfo: DaffLoginInfo): Observable<DaffAuthToken> {
-    return this.apollo.mutate<GenerateTokenResponse>(
+  login(loginInfo: TLoginInfo): Observable<TAuthToken> {
+    return this.apollo.mutate<TGenerateTokenResponse>(
       this.queryManager.generateATokenMutation(loginInfo)
     ).pipe(
       unwrapResult,

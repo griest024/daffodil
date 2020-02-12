@@ -12,34 +12,43 @@ import { DaffLoginInfo } from '../../models/login-info';
 import { DaffAuthToken } from '../../models/auth-token';
 import { DaffCustomerRegistration } from '../../models/customer-registration';
 import { DaffAccountRegistration } from '../../models/account-registration';
+import { LoginInfoTransformerInterface } from './interfaces/login-info-transformer';
+import { DaffMagentoLoginInfoTransformerService } from './transforms/login-info-transformer.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DaffMagentoRegisterService implements DaffRegisterServiceInterface<
-  DaffAccountRegistration<DaffCustomerRegistration>,
-  DaffCustomerRegistration,
-  DaffAuthToken
+export class DaffMagentoRegisterService<
+  TLoginInfo extends DaffLoginInfo,
+  TAuthToken extends DaffAuthToken,
+  TCustomerRegistration extends DaffCustomerRegistration,
+  TAccountRegistration extends DaffAccountRegistration<TCustomerRegistration>,
+> implements DaffRegisterServiceInterface<
+  TAccountRegistration,
+  TCustomerRegistration,
+  TAuthToken
 > {
   constructor(
     private apollo: Apollo,
     @Inject(DaffAuthQueryManager) public queryManager: DaffAuthQueryManagerInterface<
-      DaffAccountRegistration<DaffCustomerRegistration>,
-      DaffCustomerRegistration,
-      DaffLoginInfo
+      TAccountRegistration,
+      TCustomerRegistration,
+      TLoginInfo
     >,
-    @Inject(DaffLoginDriver) private loginDriver: DaffLoginServiceInterface<DaffLoginInfo, DaffAuthToken>
+    @Inject(DaffLoginDriver) private loginDriver: DaffLoginServiceInterface<TLoginInfo, TAuthToken>,
+    @Inject(DaffMagentoLoginInfoTransformerService) private loginInfoTransformer: LoginInfoTransformerInterface<
+      TAccountRegistration,
+      TCustomerRegistration,
+      TLoginInfo
+    >
   ) {}
 
-  register(registration: DaffAccountRegistration<DaffCustomerRegistration>): Observable<DaffAuthToken> {
+  register(registration: TAccountRegistration): Observable<TAuthToken> {
     return this.apollo.mutate(
       this.queryManager.createACustomerMutation(registration)
     ).pipe(
-      mergeMap(() =>
-        this.loginDriver.login({
-          email: registration.customer.email,
-          password: registration.password
-        })
+      mergeMap<any, Observable<TAuthToken>>((): Observable<TAuthToken> =>
+        this.loginDriver.login(this.loginInfoTransformer.transform(registration))
       )
     )
   }
