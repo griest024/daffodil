@@ -24,6 +24,6 @@ export class DemoLoginLinkComponent {
   }
 
   logout() {
-    console.log('logout')
+    this.facade.dispatch(new DaffAuthLogout());
   }
 }
