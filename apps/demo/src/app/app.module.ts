@@ -19,6 +19,7 @@ import { AppComponent } from './app.component';
 
 import { ProductModule } from './product/product.module';
 import { CheckoutModule } from './checkout/checkout.module';
+import { AuthModule } from './auth/auth.module';
 
 import { NotFoundModule } from './misc/not-found/not-found.module';
 import { TemplateModule } from './core/template/template/template.module';
@@ -38,7 +39,7 @@ import { InMemoryModule } from './in-memory.module';
     HttpClientModule,
 
     InMemoryModule,
-    
+
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
 
@@ -46,11 +47,12 @@ import { InMemoryModule } from './in-memory.module';
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
-    
+
     AppRoutingModule,
     DemoRoutingComponentModule,
 
     ProductModule,
+    AuthModule,
     CheckoutModule,
     ThankYouModule,
     TemplateModule,
