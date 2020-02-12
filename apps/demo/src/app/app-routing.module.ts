@@ -18,8 +18,12 @@ export const appRoutes: Routes = [
     path: '', component: TemplateComponent, children: [
       { path: 'product-grid', component: ProductGridViewComponent},
       { path: 'cart',       loadChildren: () => import('./cart/cart.module').then(m => m.DemoCartModule)},
+      {
+        path: 'auth',
+        loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+      },
       { path: 'product/:id', component: ProductViewComponent },
-      { 
+      {
         path: 'checkout',
         children: [
           { path: '', component: CheckoutViewComponent },

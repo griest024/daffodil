@@ -9,6 +9,7 @@ import { DaffLoadingIconModule } from '@daffodil/design';
 import { DaffContainerModule } from '@daffodil/design';
 
 import { DemoLoginLinkComponent } from './containers/login-link/login-link.component';
+import { DemoAuthRoutingModule } from './auth-routing.module';
 import { DemoAuthStateModule } from './auth-state.module';
 
 @NgModule({
@@ -17,6 +18,7 @@ import { DemoAuthStateModule } from './auth-state.module';
     DaffAuthModule,
     DaffLoadingIconModule,
     DaffContainerModule,
+    DemoAuthRoutingModule,
     DemoAuthStateModule
   ],
   declarations: [
