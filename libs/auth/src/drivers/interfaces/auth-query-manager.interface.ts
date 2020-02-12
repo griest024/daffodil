@@ -11,4 +11,6 @@ export interface DaffAuthQueryManagerInterface<
   generateATokenMutation(request: LoginRequest): MutationOptions<any>;
 
   createACustomerMutation(request: RegisterRequest): MutationOptions<any>
+
+  revokeCustomerTokenMutation(): MutationOptions<any>
 }

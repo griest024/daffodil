@@ -7,6 +7,7 @@ import { DaffLoginInfo } from '../../../models/login-info';
 import { DaffAccountRegistration } from '../../../models/account-registration';
 import { DaffCustomerRegistration } from '../../../models/customer-registration';
 import { GenerateTokenResponse } from '../models/outputs/generate-token-response';
+import { RevokeCustomerTokenResponse } from '../models/outputs/revoke-customer-token-response';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,18 @@ export class DaffMagentoAuthGraphQlQueryManagerService implements DaffAuthQueryM
         email,
         password
       }
+    }
+  }
+
+  revokeCustomerTokenMutation(): MutationOptions<RevokeCustomerTokenResponse> {
+    return {
+      mutation: gql`
+        mutation revokeCustomerToken {
+          revokeCustomerToken {
+            result
+          }
+        }
+      `
     }
   }
 
