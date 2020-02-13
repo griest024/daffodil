@@ -8,18 +8,20 @@
     <label for="firstName">First Name</label>
     <input
       daff-input
-      id="firstName"
+      id="first-name"
       autocomplete="given-name"
       type="text"
-      name="firstName"
+      name="first-name"
+      formControlName="firstName"
     />
     <label for="lastName">Last Name</label>
     <input
       daff-input
-      id="lastName"
+      id="last-name"
       autocomplete="family-name"
       type="text"
-      name="lastName"
+      name="last-name"
+      formControlName="lastName"
     />
     <label for="email">Email</label>
     <input
@@ -28,6 +30,7 @@
       type="email"
       autocomplete="email"
       name="email"
+      formControlName="email"
     />
     <label for="password" daffFormLabel>Create Password</label>
     <input
@@ -36,6 +39,7 @@
       type="password"
       autocomplete="new-password"
       name="password"
+      formControlName="password"
     />
     <label for="confirm-password" daffFormLabel>Confirm Password</label>
     <input
@@ -43,6 +47,7 @@
       id="confirm-password"
       type="password"
       name="confirm-password"
+      formControlName="confirmPassword"
     />
     <button
       daff-button

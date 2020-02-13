@@ -4,6 +4,7 @@
 :host {
 	display: flex;
 	justify-content: center;
+	padding: 25px 0;
 }
 
 .demo-signup-form {
@@ -11,9 +12,16 @@
 
 	&__header {
 		font-size: 24px;
+		margin-bottom: 40px;
 	}
 
 	&__form {
 		display: flex;
+		flex-direction: column;
+
+		input {
+			border: 1px solid #000000;
+			margin-bottom: 25px;
+		}
 	}
 }
