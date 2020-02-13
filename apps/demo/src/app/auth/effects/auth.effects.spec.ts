@@ -3,7 +3,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable ,  of } from 'rxjs';
+import { Observable ,  of, EMPTY } from 'rxjs';
 import { hot, cold } from 'jasmine-marbles';
 
 import {
@@ -51,6 +51,7 @@ describe('DemoAuthEffects', () => {
         provideMockActions(() => actions$),
       ]
     });
+
     effects = TestBed.get(DemoAuthEffects);
     router = TestBed.get(Router);
     location = TestBed.get(Location);
@@ -81,16 +82,12 @@ describe('DemoAuthEffects', () => {
     beforeEach(() => {
       navigateSpy = spyOn(router, 'navigateByUrl');
       actions$ = hot('--a', { a: mockAuthLoginSuccessAction });
-      expected = cold('--b', { b: undefined });
+      expected = cold('---');
     });
 
-    it('should navigate to the homepage', done => {
-      effects.authSuccess$.subscribe(() => {
-        expect(navigateSpy).toHaveBeenCalledWith(homepageUrl);
-        done();
-      });
-
+    it('should navigate to the homepage', () => {
       expect(effects.authSuccess$).toBeObservable(expected);
+      expect(navigateSpy).toHaveBeenCalledWith(homepageUrl);
     });
   });
 
@@ -103,16 +100,12 @@ describe('DemoAuthEffects', () => {
     beforeEach(() => {
       navigateSpy = spyOn(router, 'navigateByUrl');
       actions$ = hot('--a', { a: mockAuthRegisterSuccessAction });
-      expected = cold('--b', { b: undefined });
+      expected = cold('---');
     });
 
-    it('should navigate to the homepage', done => {
-      effects.authSuccess$.subscribe(() => {
-        expect(navigateSpy).toHaveBeenCalledWith(homepageUrl);
-        done();
-      });
-
+    it('should navigate to the homepage', () => {
       expect(effects.authSuccess$).toBeObservable(expected);
+      expect(navigateSpy).toHaveBeenCalledWith(homepageUrl);
     });
   });
 });
