@@ -49,15 +49,15 @@ describe('DemoLoginLinkComponent', () => {
 
       fixture.detectChanges();
 
-      logoutElement = fixture.debugElement.query(By.css('.login-link__logout'));
-      loginElement = fixture.debugElement.query(By.css('.login-link__login-signup'));
+      logoutElement = fixture.debugElement.query(By.css('.demo-login-link__logout'));
+      loginElement = fixture.debugElement.query(By.css('.demo-login-link__login-signup'));
     });
 
-    it('should render .login-link__logout', () => {
+    it('should render .demo-login-link__logout', () => {
       expect(logoutElement).not.toBeNull();
     });
 
-    it('should not render .login-link__login-signup', () => {
+    it('should not render .demo-login-link__login-signup', () => {
       expect(loginElement).toBeNull();
     });
   });
@@ -68,15 +68,15 @@ describe('DemoLoginLinkComponent', () => {
 
       fixture.detectChanges();
 
-      logoutElement = fixture.debugElement.query(By.css('.login-link__logout'));
-      loginElement = fixture.debugElement.query(By.css('.login-link__login-signup'));
+      logoutElement = fixture.debugElement.query(By.css('.demo-login-link__logout'));
+      loginElement = fixture.debugElement.query(By.css('.demo-login-link__login-signup'));
     });
 
-    it('should not render .login-link__logout', () => {
+    it('should not render .demo-login-link__logout', () => {
       expect(logoutElement).toBeNull();
     });
 
-    it('should render .login-link__login-signup', () => {
+    it('should render .demo-login-link__login-signup', () => {
       expect(loginElement).not.toBeNull();
     });
   });
