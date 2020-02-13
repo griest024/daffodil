@@ -11,6 +11,8 @@ export {
 
 export { DaffAuthFacadeInterface } from './interfaces/auth-facade.interface';
 
+export { authReducers } from './reducers/auth-reducers';
+
 export { DaffAccountRegistration } from './models/account-registration'
 export { DaffCustomerRegistration } from './models/customer-registration'
 export { DaffAuthToken } from './models/auth-token'
