@@ -16,14 +16,13 @@ import {
 } from '@daffodil/auth/testing';
 
 import { DemoSignupFormContainer } from './signup-form.component';
-import { SignupInfo } from '../../models/signup-info';
 
 @Component({
   template: '',
   selector: 'demo-signup-form'
 })
 class MockSignupFormComponent {
-  @Output() submitForm = new EventEmitter<SignupInfo>();
+  @Output() submit = new EventEmitter<DaffAccountRegistration<DaffCustomerRegistration>>();
 }
 
 describe('DemoSignupFormContainer', () => {
@@ -39,7 +38,6 @@ describe('DemoSignupFormContainer', () => {
 
   let mockRegistration: DaffAccountRegistration<DaffCustomerRegistration>;
   let mockAuthToken: DaffAuthToken;
-  let mockSignupInfo: SignupInfo;
 
   let mockSignupFormComponent: MockSignupFormComponent;
 
@@ -67,10 +65,6 @@ describe('DemoSignupFormContainer', () => {
 
     mockAuthToken = authTokenFactory.create();
     mockRegistration = registrationFactory.create();
-    mockSignupInfo = {
-      ...mockRegistration,
-      confirmpassword: mockRegistration.password
-    };
 
     mockSignupFormComponent = fixture.debugElement.query(By.css('demo-signup-form')).componentInstance;
   }));
@@ -79,20 +73,20 @@ describe('DemoSignupFormContainer', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when submitForm is emitted', () => {
+  describe('when submit is emitted', () => {
     const dispatchSpy = mockFacadeSpy.dispatch;
     const mockAction = new DaffAuthRegister(mockRegistration);
 
     it('should dispatch the DaffAuthRegister action type', () => {
-      mockSignupFormComponent.submitForm.emit(mockSignupInfo);
+      mockSignupFormComponent.submit.emit(mockRegistration);
 
-      expect(dispatchSpy.calls.mostRecent().args[0].type).toEqual(mockAction.type);
+      expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({type: mockAction.type}));
     });
 
     it('should dispatch the action with the event payload', () => {
-      mockSignupFormComponent.submitForm.emit(mockSignupInfo);
+      mockSignupFormComponent.submit.emit(mockRegistration);
 
-      expect(dispatchSpy.calls.mostRecent().args[0].registration).toEqual(jasmine.objectContaining(mockRegistration));
+      expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({registration: mockRegistration}));
     });
   });
 });
