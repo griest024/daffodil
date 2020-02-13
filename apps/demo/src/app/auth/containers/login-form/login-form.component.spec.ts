@@ -23,7 +23,7 @@ import { DaffAuthLogin } from 'libs/auth/src';
   selector: 'demo-login-form'
 })
 class MockLoginFormComponent {
-  @Output() submitForm = new EventEmitter<DaffLoginInfo>();
+  @Output() submit = new EventEmitter<DaffLoginInfo>();
 }
 
 describe('DemoLoginFormContainer', () => {
@@ -79,20 +79,20 @@ describe('DemoLoginFormContainer', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('when submitForm is emitted', () => {
+  describe('when submit is emitted', () => {
     const dispatchSpy = mockFacadeSpy.dispatch;
     const mockAction = new DaffAuthLogin(mockLoginInfo);
 
     it('should dispatch the DaffAuthLogin action type', () => {
-      mockLoginFormComponent.submitForm.emit(mockLoginInfo);
+      mockLoginFormComponent.submit.emit(mockLoginInfo);
 
-      expect(dispatchSpy.calls.mostRecent().args[0].type).toEqual(mockAction.type);
+      expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({type: mockAction.type}));
     });
 
     it('should dispatch the action with the event payload', () => {
-      mockLoginFormComponent.submitForm.emit(mockLoginInfo);
+      mockLoginFormComponent.submit.emit(mockLoginInfo);
 
-      expect(dispatchSpy.calls.mostRecent().args[0].loginInfo).toEqual(mockLoginInfo);
+      expect(dispatchSpy).toHaveBeenCalledWith(jasmine.objectContaining({loginInfo: mockLoginInfo}));
     });
   });
 });
