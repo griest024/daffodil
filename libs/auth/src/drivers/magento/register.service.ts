@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { mapTo } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 
 import { DaffRegisterServiceInterface } from '../interfaces/register-service.interface';
@@ -20,13 +20,12 @@ import { DaffMagentoLoginInfoTransformerService } from './transforms/login-info-
 })
 export class DaffMagentoRegisterService<
   TLoginInfo extends DaffLoginInfo,
-  TAuthToken extends DaffAuthToken,
   TCustomerRegistration extends DaffCustomerRegistration,
   TAccountRegistration extends DaffAccountRegistration<TCustomerRegistration>,
 > implements DaffRegisterServiceInterface<
   TAccountRegistration,
   TCustomerRegistration,
-  TAuthToken
+  TLoginInfo
 > {
   constructor(
     private apollo: Apollo,
@@ -35,7 +34,6 @@ export class DaffMagentoRegisterService<
       TCustomerRegistration,
       TLoginInfo
     >,
-    @Inject(DaffLoginDriver) private loginDriver: DaffLoginServiceInterface<TLoginInfo, TAuthToken>,
     @Inject(DaffMagentoLoginInfoTransformerService) private loginInfoTransformer: LoginInfoTransformerInterface<
       TAccountRegistration,
       TCustomerRegistration,
@@ -43,13 +41,11 @@ export class DaffMagentoRegisterService<
     >
   ) {}
 
-  register(registration: TAccountRegistration): Observable<TAuthToken> {
+  register(registration: TAccountRegistration): Observable<TLoginInfo> {
     return this.apollo.mutate(
       this.queryManager.createACustomerMutation(registration)
     ).pipe(
-      switchMap<any, Observable<TAuthToken>>((): Observable<TAuthToken> =>
-        this.loginDriver.login(this.loginInfoTransformer.transform(registration))
-      )
+      mapTo(this.loginInfoTransformer.transform(registration))
     )
   }
 }
