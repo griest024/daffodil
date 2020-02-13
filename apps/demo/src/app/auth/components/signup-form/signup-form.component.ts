@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 import { DaffAccountRegistration, DaffCustomerRegistration } from '@daffodil/auth';
 
@@ -17,13 +17,30 @@ export class DemoSignupFormComponent implements OnInit {
 
   ngOnInit() {
     this.signupForm = this.formBuilder.group({
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
-      confirmpassword: '',
+      confirmPassword: '',
     });
   }
 
-  onSubmit(data) {
-    this.submit.emit(data)
+  onSubmit({
+    email,
+    firstName,
+    lastName,
+    password,
+    confirmPassword
+  }) {
+    if (password === confirmPassword) {
+      this.submit.emit({
+        customer: {
+          email,
+          firstName,
+          lastName
+        },
+        password
+      })
+    }
   }
 }
