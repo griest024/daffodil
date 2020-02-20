@@ -23,4 +23,8 @@ export class DaffInMemoryCartService implements DaffCartServiceInterface<DaffCar
   clear(): Observable<void> {
     return this.http.post<void>(this.url + '/clear', {});
   }
+
+  create(): Observable<Partial<DaffCart>> {
+    return this.http.post<Partial<DaffCart>>(this.url + '/create', {});
+  }
 }
