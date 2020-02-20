@@ -1,7 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DaffCartServiceInterface } from '../interfaces/cart-service.interface';
 import { DaffCart } from '../../models/cart';
 
 /**
@@ -11,7 +10,12 @@ export interface DaffCartServiceInterface<T extends DaffCart> {
 	/**
 	 * Retrieve a cart
 	 */
-	get(id: T['id']): Observable<T>;
+  get(id: T['id']): Observable<T>;
+
+  /**
+   * Creates a cart.
+   */
+  create(): Observable<Partial<T>>
 
 	/**
 	 * @deprecated
