@@ -8,6 +8,7 @@ export { DaffTestingCartService } from './drivers/testing/cart.service';
 
 export { DaffInMemoryCartService } from './drivers/in-memory/cart/cart.service';
 export { DaffInMemoryCartBillingAddressService } from './drivers/in-memory/cart-billing-address/cart-billing-address.service';
+export { DaffInMemoryCartItemService } from './drivers/in-memory/cart-item/cart-item.service';
 
 export { DaffInMemoryBackendCartService } from './in-memory-backend/cart.service';
 export { DaffCartInMemoryDriverModule } from './drivers/in-memory/cart-driver.module';
