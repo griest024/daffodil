@@ -7,6 +7,7 @@ import {
   DaffCartItemDriver,
   DaffCartPaymentDriver,
   DaffCartPaymentMethodsDriver,
+  DaffCartShippingAddressDriver,
 } from '@daffodil/cart';
 
 import { DaffInMemoryCartService } from './cart/cart.service';
@@ -14,6 +15,7 @@ import { DaffInMemoryCartBillingAddressService } from './cart-billing-address/ca
 import { DaffInMemoryCartItemService } from './cart-item/cart-item.service';
 import { DaffInMemoryCartPaymentService } from './cart-payment/cart-payment.service';
 import { DaffInMemoryCartPaymentMethodsService } from './cart-payment-methods/cart-payment-methods.service';
+import { DaffInMemoryCartShippingAddressService } from './cart-shipping-address/cart-shipping-address.service';
 
 @NgModule({
   imports: [
@@ -44,6 +46,10 @@ export class DaffCartInMemoryDriverModule {
         {
           provide: DaffCartPaymentMethodsDriver,
           useExisting: DaffInMemoryCartPaymentMethodsService
+        },
+        {
+          provide: DaffCartShippingAddressDriver,
+          useExisting: DaffInMemoryCartShippingAddressService
         }
       ]
     };
