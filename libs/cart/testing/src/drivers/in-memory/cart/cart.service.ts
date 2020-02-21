@@ -12,7 +12,7 @@ export class DaffInMemoryCartService implements DaffCartServiceInterface<DaffCar
 
   constructor(private http: HttpClient) {}
 
-  get(cartId: string): Observable<DaffCart> {
+  get(cartId: DaffCart['id']): Observable<DaffCart> {
     return this.http.get<DaffCart>(`${this.url}/${cartId}`);
   }
 
@@ -20,7 +20,7 @@ export class DaffInMemoryCartService implements DaffCartServiceInterface<DaffCar
     return this.http.post<DaffCart>(this.url + '/addToCart', { productId, qty });
   }
 
-  clear(cartId: string): Observable<void> {
+  clear(cartId: DaffCart['id']): Observable<void> {
     return this.http.post<void>(this.url + '/clear', {cartId});
   }
 
