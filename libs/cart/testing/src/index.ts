@@ -12,6 +12,7 @@ export { DaffInMemoryCartItemService } from './drivers/in-memory/cart-item/cart-
 export { DaffInMemoryCartPaymentService } from './drivers/in-memory/cart-payment/cart-payment.service';
 export { DaffInMemoryCartPaymentMethodsService } from './drivers/in-memory/cart-payment-methods/cart-payment-methods.service';
 export { DaffInMemoryCartShippingAddressService } from './drivers/in-memory/cart-shipping-address/cart-shipping-address.service';
+export { DaffInMemoryCartShippingInformationService } from './drivers/in-memory/cart-shipping-information/cart-shipping-information.service';
 
 export { DaffInMemoryBackendCartService } from './in-memory-backend/cart.service';
 export { DaffCartInMemoryDriverModule } from './drivers/in-memory/cart-driver.module';
