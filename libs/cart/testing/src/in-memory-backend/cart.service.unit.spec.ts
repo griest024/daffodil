@@ -14,7 +14,7 @@ import {
 import { DaffInMemoryBackendCartService } from './cart.service';
 
 describe('DaffInMemoryBackendCartService | Unit', () => {
-  let cartTestingService: DaffInMemoryBackendCartService;
+  let service: DaffInMemoryBackendCartService;
   let cartFactory: DaffCartFactory;
   let cartItemFactory: DaffCartItemFactory;
 
@@ -22,6 +22,9 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
   let mockCartItemInput: DaffCartItemInput;
   let mockCartItem: DaffCartItem;
   let cartId;
+  let reqInfoStub;
+  let baseUrl;
+  let cartUrl;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -29,7 +32,7 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
         DaffInMemoryBackendCartService,
       ]
     });
-    cartTestingService = TestBed.get(DaffInMemoryBackendCartService);
+    service = TestBed.get(DaffInMemoryBackendCartService);
 
     cartFactory = TestBed.get(DaffCartFactory);
     cartItemFactory = TestBed.get(DaffCartItemFactory);
@@ -41,47 +44,53 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
       qty: mockCartItem.qty
     };
     cartId = mockCart.id;
+    baseUrl = 'api/cart';
+    cartUrl = `${baseUrl}/${cartId}`;
+    reqInfoStub = {
+      id: '',
+      resourceUrl: baseUrl,
+      collection: [
+        mockCart
+      ],
+      req: {
+        body: {}
+      },
+      utils: {
+        createResponse$: func => {
+          return func();
+        }
+      }
+    };
   });
 
   it('should be created', () => {
-    expect(cartTestingService).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 
   describe('after initialization', () => {
     let result;
 
     beforeEach(() => {
-      result = cartTestingService.createDb();
+      result = service.createDb();
     });
 
     it('should have an empty array in DB', () => {
-      result = cartTestingService.createDb();
+      result = service.createDb();
       expect(result.cart).toEqual([]);
     });
   });
 
   describe('processing a create request', () => {
-    let reqInfoStub;
     let result;
 
     beforeEach(() => {
-      reqInfoStub = {
-        id: '',
-        req: {
-          body: {}
-        },
-        utils: {
-          createResponse$: func => {
-            return func();
-          }
-        }
-      };
+      service.carts.push(mockCart);
 
-      cartTestingService.carts.push(mockCart);
+      reqInfoStub.url = baseUrl;
     });
 
     it('should return a partial with id', () => {
-      result = cartTestingService.post(reqInfoStub);
+      result = service.post(reqInfoStub);
 
       const id = result.body.id;
 
@@ -89,70 +98,47 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
     });
 
     it('should store a cart in the DB', () => {
-      result = cartTestingService.post(reqInfoStub);
+      result = service.post(reqInfoStub);
 
       const id = result.body.id;
 
-      expect(cartTestingService.carts.find(cart => cart.id === id)).toBeTruthy()
+      expect(service.carts.find(cart => cart.id === id)).toBeTruthy()
     });
   });
 
   describe('processing a clear request', () => {
-    let reqInfoStub;
     let result;
 
     beforeEach(() => {
       mockCart.items.push(mockCartItem);
-      cartTestingService.carts.push(mockCart);
+      service.carts.push(mockCart);
 
-      //test clear endpoint
-      reqInfoStub = {
-        id: 'clear',
-        req: {
-          body: {
-            cartId
-          }
-        },
-        utils: {
-          createResponse$: func => {
-            return func();
-          }
-        }
-      };
+      reqInfoStub.url = `${cartUrl}/clear`;
     });
 
     it('should remove the items in the cart', () => {
-      result = cartTestingService.post(reqInfoStub);
+      result = service.post(reqInfoStub);
 
       expect(result.body.items.length).toEqual(0);
     });
   });
 
   describe('processing an addToCart request', () => {
-    let reqInfoStub;
     let result;
     let productIdValue;
 
     beforeEach(() => {
-      reqInfoStub = {
-        id: 'addToCart',
-        req: {
-          body: mockCartItemInput
-        },
-        utils: {
-          createResponse$: func => {
-            return func();
-          }
-        }
-      };
+      reqInfoStub.id = 'addToCart';
+      reqInfoStub.req.body = mockCartItemInput;
+      reqInfoStub.url = `${cartUrl}/addToCart`;
 
-      cartTestingService.carts.push(mockCart);
+      service.carts.push(mockCart);
     });
 
     describe('and product is unique', () => {
       it('should add an item to the cart', () => {
         reqInfoStub.req.body.productId = 'addToCartTest';
-        result = cartTestingService.post(reqInfoStub);
+        result = service.post(reqInfoStub);
 
         expect(result.body.items.length).toEqual(1);
       });
@@ -161,7 +147,7 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
         reqInfoStub.req.body.productId = 'qtyTest';
         reqInfoStub.req.body.qty = 2;
 
-        result = cartTestingService.post(reqInfoStub);
+        result = service.post(reqInfoStub);
 
         expect(result.body.items[0].qty).toEqual(2);
       });
@@ -170,7 +156,7 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
         productIdValue = 'productIdTest';
         reqInfoStub.req.body.productId = productIdValue;
 
-        result = cartTestingService.post(reqInfoStub);
+        result = service.post(reqInfoStub);
 
         expect(result.body.items[0].product_id).toEqual(productIdValue);
       });
@@ -178,7 +164,7 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
       it('should set an image on cartItem', () => {
         productIdValue = 'imageTest';
 
-        result = cartTestingService.post(reqInfoStub);
+        result = service.post(reqInfoStub);
 
         expect(result.body.items[0].image).toBeDefined();
       });
@@ -189,11 +175,11 @@ describe('DaffInMemoryBackendCartService | Unit', () => {
         reqInfoStub.req.body.productId = 'qtyTest';
         reqInfoStub.req.body.qty = 2;
 
-        result = cartTestingService.post(reqInfoStub);
+        result = service.post(reqInfoStub);
 
         expect(result.body.items[0].qty).toEqual(2);
 
-        result = cartTestingService.post(reqInfoStub);
+        result = service.post(reqInfoStub);
 
         expect(result.body.items[0].qty).toEqual(4);
       });
