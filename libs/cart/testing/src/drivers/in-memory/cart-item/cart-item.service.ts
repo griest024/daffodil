@@ -30,7 +30,7 @@ export class DaffInMemoryCartItemService implements DaffCartItemServiceInterface
   }
 
   add(cartId: DaffCart['id'], input: DaffCartItemInput): Observable<Partial<DaffCart>> {
-    return this.http.post<Partial<DaffCart>>(`${this.url}/${cartId}/items`, { input });
+    return this.http.post<Partial<DaffCart>>(`${this.url}/${cartId}/items`, input);
   }
 
   update(
@@ -38,7 +38,7 @@ export class DaffInMemoryCartItemService implements DaffCartItemServiceInterface
     itemId: DaffCartItem['item_id'],
     item: Partial<DaffCartItem>
   ): Observable<Partial<DaffCart>> {
-    return this.http.put<Partial<DaffCart>>(`${this.url}/${cartId}/items/${itemId}`, {item});
+    return this.http.put<Partial<DaffCart>>(`${this.url}/${cartId}/items/${itemId}`, item);
   }
 
   delete(cartId: string, itemId: string): Observable<Partial<DaffCart>> {

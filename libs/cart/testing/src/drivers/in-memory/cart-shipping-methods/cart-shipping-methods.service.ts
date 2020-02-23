@@ -17,6 +17,6 @@ export class DaffInMemoryCartShippingMethodsService implements DaffCartShippingM
   constructor(private http: HttpClient) {}
 
   list(cartId: DaffCart['id']): Observable<DaffCartShippingRate[]> {
-    return this.http.get<DaffCartShippingRate[]>(`${this.url}/${cartId}/paymentMethods`)
+    return this.http.get<DaffCartShippingRate[]>(`${this.url}/${cartId}/shippingMethods`)
   }
 }

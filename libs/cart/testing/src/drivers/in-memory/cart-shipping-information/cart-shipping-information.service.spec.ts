@@ -84,7 +84,7 @@ describe('Driver | In Memory | Cart | CartShippingInformationService', () => {
       const req = httpMock.expectOne(`${cartShippingInformationService.url}/${cartId}/shippingInfo`);
 
       expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual({info});
+      expect(req.request.body).toEqual(info);
 
       mockCart.shipping_information.price = newPrice;
 

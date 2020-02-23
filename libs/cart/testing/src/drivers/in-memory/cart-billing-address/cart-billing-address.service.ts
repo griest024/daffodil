@@ -21,6 +21,6 @@ export class DaffInMemoryCartBillingAddressService implements DaffCartBillingAdd
   }
 
   update(cartId: DaffCart['id'], address: DaffCartAddress): Observable<Partial<DaffCart>> {
-    return this.http.put<Partial<DaffCart>>(this.url + '/billingAddress', {cartId, address});
+    return this.http.put<Partial<DaffCart>>(`${this.url}/${cartId}/billingAddress`, address);
   }
 }

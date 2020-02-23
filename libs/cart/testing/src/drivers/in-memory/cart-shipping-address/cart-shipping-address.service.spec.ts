@@ -79,13 +79,10 @@ describe('Driver | In Memory | Cart | CartService', () => {
         done();
       });
 
-      const req = httpMock.expectOne(`${cartShippingAddressService.url}/shippingAddress`);
+      const req = httpMock.expectOne(`${cartShippingAddressService.url}/${cartId}/shippingAddress`);
 
       expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual({
-        cartId,
-        address: mockCartAddressUpdate
-      });
+      expect(req.request.body).toEqual(mockCartAddressUpdate);
 
       req.flush(mockCart);
     });

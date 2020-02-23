@@ -80,9 +80,7 @@ describe('Driver | In Memory | Cart | CartPaymentService', () => {
       const req = httpMock.expectOne(`${cartPaymentService.url}/${cartId}/payment`);
 
       expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual({
-        payment: mockPayment
-      });
+      expect(req.request.body).toEqual(mockPayment);
 
       mockCart.payment = mockPayment;
 

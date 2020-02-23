@@ -21,7 +21,7 @@ export class DaffInMemoryCartPaymentService implements DaffCartPaymentServiceInt
   }
 
   update(cartId: DaffCart['id'], payment: Partial<DaffCartPaymentMethod>): Observable<Partial<DaffCart>> {
-    return this.http.put<DaffCart>(`${this.url}/${cartId}/payment`, { payment });
+    return this.http.put<DaffCart>(`${this.url}/${cartId}/payment`, payment);
   }
 
   remove(cartId: DaffCart['id']): Observable<void> {

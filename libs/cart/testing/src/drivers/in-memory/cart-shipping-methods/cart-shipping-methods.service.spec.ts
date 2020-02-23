@@ -51,14 +51,14 @@ describe('Driver | In Memory | Cart | CartShippingMethodsService', () => {
     expect(cartPaymentMethodsService).toBeTruthy();
   });
 
-  describe('list | list a cart\'s payment methods', () => {
+  describe('list | list a cart\'s shipping methods', () => {
     it('should send a get request and return cart', done => {
       cartPaymentMethodsService.list(cartId).subscribe(res => {
         expect(res).toEqual(mockCartShippingMethods);
         done();
       });
 
-      const req = httpMock.expectOne(`${cartPaymentMethodsService.url}/${cartId}/paymentMethods`);
+      const req = httpMock.expectOne(`${cartPaymentMethodsService.url}/${cartId}/shippingMethods`);
 
       expect(req.request.method).toBe('GET');
 

@@ -91,10 +91,9 @@ describe('Driver | In Memory | Cart | CartService', () => {
           done();
         });
 
-        const req = httpMock.expectOne(`${cartService.url}/clear`);
+        const req = httpMock.expectOne(`${cartService.url}/${cartId}/clear`);
 
         expect(req.request.method).toBe('POST');
-        expect(req.request.body).toEqual({cartId});
 
         req.flush(null);
       });

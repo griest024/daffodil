@@ -73,19 +73,16 @@ describe('Driver | In Memory | Cart | CartService', () => {
       mockCart.billing_address = mockCartAddressUpdate;
     });
 
-    it('should send a put request to `api/cart/billingAddress` and respond with a cart with the updated billing address', done => {
+    it('should send a put request and respond with a cart with the updated billing address', done => {
       cartBillingAddressService.update(cartId, mockCartAddressUpdate).subscribe(cart => {
         expect(cart).toEqual(jasmine.objectContaining(mockCart));
         done();
       });
 
-      const req = httpMock.expectOne(`${cartBillingAddressService.url}/billingAddress`);
+      const req = httpMock.expectOne(`${cartBillingAddressService.url}/${cartId}/billingAddress`);
 
       expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual({
-        cartId,
-        address: mockCartAddressUpdate
-      });
+      expect(req.request.body).toEqual(mockCartAddressUpdate);
 
       req.flush(mockCart);
     });

@@ -21,6 +21,6 @@ export class DaffInMemoryCartShippingAddressService implements DaffCartShippingA
   }
 
   update(cartId: DaffCart['id'], address: DaffCartAddress): Observable<Partial<DaffCart>> {
-    return this.http.put<Partial<DaffCart>>(this.url + '/shippingAddress', {cartId, address});
+    return this.http.put<Partial<DaffCart>>(`${this.url}/${cartId}/shippingAddress`, address);
   }
 }
