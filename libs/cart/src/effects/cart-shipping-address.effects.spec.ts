@@ -65,6 +65,7 @@ describe('Daffodil | Cart | CartShippingAddressEffects', () => {
     mockCart = cartFactory.create();
     mockCartShippingAddress = cartAddressFactory.create();
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -103,23 +104,40 @@ describe('Daffodil | Cart | CartShippingAddressEffects', () => {
         expect(effects.get$).toBeObservable(expected);
       });
     });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartShippingAddressLoadAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffShippingAddressDriverSpy.get).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
+        expect(effects.get$).toBeObservable(expected);
+      });
+    });
   });
 
   describe('when CartShippingAddressUpdateAction is triggered', () => {
     let expected;
-    let cartCreateAction;
+    let cartShippingAddressUpdateAction;
     const street = 'updatedStreet';
 
     beforeEach(() => {
       mockCartShippingAddress.street = street;
-      cartCreateAction = new DaffCartShippingAddressUpdate(mockCartShippingAddress);
+      cartShippingAddressUpdateAction = new DaffCartShippingAddressUpdate(mockCartShippingAddress);
     });
 
     describe('and the call to CartShippingAddressService is successful', () => {
       beforeEach(() => {
         daffShippingAddressDriverSpy.update.and.returnValue(of(mockCart));
         const cartCreateSuccessAction = new DaffCartShippingAddressUpdateSuccess(mockCart);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartShippingAddressUpdateAction });
         expected = cold('--b', { b: cartCreateSuccessAction });
       });
 
@@ -134,12 +152,29 @@ describe('Daffodil | Cart | CartShippingAddressEffects', () => {
         const response = cold('#', {}, error);
         daffShippingAddressDriverSpy.update.and.returnValue(response);
         const cartCreateFailureAction = new DaffCartShippingAddressUpdateFailure(error);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartShippingAddressUpdateAction });
         expected = cold('--b', { b: cartCreateFailureAction });
       });
 
       it('should dispatch a CartShippingAddressUpdateFailure action', () => {
         expect(effects.update$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartShippingAddressUpdateAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffShippingAddressDriverSpy.get).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
+        expect(effects.get$).toBeObservable(expected);
       });
     });
   });

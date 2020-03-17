@@ -61,6 +61,7 @@ describe('Daffodil | Cart | CartEffects', () => {
 
     mockCart = cartFactory.create();
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -96,6 +97,23 @@ describe('Daffodil | Cart | CartEffects', () => {
       });
 
       it('should dispatch a CartLoadFailure action', () => {
+        expect(effects.get$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartLoadAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffDriverSpy.get).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.get$).toBeObservable(expected);
       });
     });
@@ -136,9 +154,10 @@ describe('Daffodil | Cart | CartEffects', () => {
 
   describe('when CartCreateSuccessAction is triggered', () => {
     let expected;
+    let cartCreateSuccessAction;
 
     beforeEach(() => {
-      const cartCreateSuccessAction = new DaffCartCreateSuccess({id: mockCart.id});
+      cartCreateSuccessAction = new DaffCartCreateSuccess({id: mockCart.id});
       actions$ = hot('--a', { a: cartCreateSuccessAction });
       expected = cold('---');
     });
@@ -146,6 +165,23 @@ describe('Daffodil | Cart | CartEffects', () => {
     it('should set the cart ID in storage', () => {
       expect(effects.storeId$).toBeObservable(expected);
       expect(daffCartStorageSpy.setCartId).toHaveBeenCalledWith(String(mockCart.id));
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartCreateSuccessAction });
+        expected = cold('---');
+      });
+
+      it('should not set the cart ID in storage', () => {
+        expect(daffCartStorageSpy.setCartId).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
+        expect(effects.create$).toBeObservable(expected);
+      });
     });
   });
 
@@ -187,6 +223,7 @@ describe('Daffodil | Cart | CartEffects', () => {
       });
     });
   });
+
   describe('when CartClearAction is triggered', () => {
     let expected;
     const cartClearAction = new DaffCartClear();
@@ -213,6 +250,23 @@ describe('Daffodil | Cart | CartEffects', () => {
         expected = cold('--b', { b: cartClearFailureAction });
       });
       it('should return a DaffCartClearFailure action', () => {
+        expect(effects.clear$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartClearAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffDriverSpy.clear).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.clear$).toBeObservable(expected);
       });
     });

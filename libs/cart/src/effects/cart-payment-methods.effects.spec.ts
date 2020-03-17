@@ -65,6 +65,7 @@ describe('Daffodil | Cart | DaffCartPaymentMethodsEffects', () => {
     mockCart = cartFactory.create();
     mockCartPaymentMethod = cartPaymentMethodFactory.create();
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -100,6 +101,23 @@ describe('Daffodil | Cart | DaffCartPaymentMethodsEffects', () => {
       });
 
       it('should dispatch a CartPaymentMethodsLoadFailure action', () => {
+        expect(effects.list$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartCreateAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(paymentMethodsDriverSpy.list).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.list$).toBeObservable(expected);
       });
     });

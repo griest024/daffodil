@@ -71,6 +71,7 @@ describe('Daffodil | Cart | CartShippingInformationEffects', () => {
       address_id: null
     };
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -109,23 +110,40 @@ describe('Daffodil | Cart | CartShippingInformationEffects', () => {
         expect(effects.get$).toBeObservable(expected);
       });
     });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartShippingInformationLoadAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffShippingInformationDriverSpy.get).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
+        expect(effects.get$).toBeObservable(expected);
+      });
+    });
   });
 
   describe('when CartShippingInformationUpdateAction is triggered', () => {
     let expected;
-    let cartCreateAction;
+    let cartShippingInformationUpdate;
     const carrier = 'updatedCarrier';
 
     beforeEach(() => {
       mockCartShippingInformation.carrier = carrier;
-      cartCreateAction = new DaffCartShippingInformationUpdate(mockCartShippingInformation);
+      cartShippingInformationUpdate = new DaffCartShippingInformationUpdate(mockCartShippingInformation);
     });
 
     describe('and the call to CartShippingInformationService is successful', () => {
       beforeEach(() => {
         daffShippingInformationDriverSpy.update.and.returnValue(of(mockCart));
         const cartCreateSuccessAction = new DaffCartShippingInformationUpdateSuccess(mockCart);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartShippingInformationUpdate });
         expected = cold('--b', { b: cartCreateSuccessAction });
       });
 
@@ -140,11 +158,28 @@ describe('Daffodil | Cart | CartShippingInformationEffects', () => {
         const response = cold('#', {}, error);
         daffShippingInformationDriverSpy.update.and.returnValue(response);
         const cartCreateFailureAction = new DaffCartShippingInformationUpdateFailure(error);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartShippingInformationUpdate });
         expected = cold('--b', { b: cartCreateFailureAction });
       });
 
       it('should dispatch a CartShippingInformationUpdateFailure action', () => {
+        expect(effects.update$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartShippingInformationUpdate });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffShippingInformationDriverSpy.update).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.update$).toBeObservable(expected);
       });
     });
@@ -177,6 +212,23 @@ describe('Daffodil | Cart | CartShippingInformationEffects', () => {
         expected = cold('--b', { b: cartShippingInformationDeleteFailureAction });
       });
       it('should return a DaffCartShippingInformationDeleteFailure action', () => {
+        expect(effects.delete$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartShippingInformationDeleteAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffShippingInformationDriverSpy.delete).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.delete$).toBeObservable(expected);
       });
     });

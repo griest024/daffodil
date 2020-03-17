@@ -1,4 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { switchMap, map, catchError, switchMapTo, tap } from 'rxjs/operators';
 import { of, EMPTY } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -24,11 +25,16 @@ import { DaffCartStorageService } from '../storage/cart-storage.service';
 
 @Injectable()
 export class DaffCartEffects<T extends DaffCart> {
+  isPlatformBrowser: boolean;
+
   constructor(
     private actions$: Actions,
     @Inject(DaffCartDriver) private driver: DaffCartServiceInterface<T>,
-    private storage: DaffCartStorageService
-  ) {}
+    private storage: DaffCartStorageService,
+    @Inject(PLATFORM_ID) platformId: string
+  ) {
+    this.isPlatformBrowser = isPlatformBrowser(platformId);
+  }
 
   @Effect()
   create$ = this.actions$.pipe(
@@ -46,20 +52,21 @@ export class DaffCartEffects<T extends DaffCart> {
   })
   storeId$ = this.actions$.pipe(
     ofType(DaffCartActionTypes.CartCreateSuccessAction),
-    tap((action: DaffCartCreateSuccess<DaffCart>) =>
-      this.storage.setCartId(String(action.payload.id))
-    ),
+    tap((action: DaffCartCreateSuccess<DaffCart>) => {
+      if (this.isPlatformBrowser) this.storage.setCartId(String(action.payload.id))
+    }),
     switchMapTo(EMPTY)
   )
 
   @Effect()
   get$ = this.actions$.pipe(
     ofType(DaffCartActionTypes.CartLoadAction),
-    switchMap((action: DaffCartLoad) =>
-      this.driver.get(this.storage.getCartId()).pipe(
+    switchMap((action: DaffCartLoad) => this.isPlatformBrowser
+      ? this.driver.get(this.storage.getCartId()).pipe(
         map((resp: T) => new DaffCartLoadSuccess(resp)),
         catchError(error => of(new DaffCartLoadFailure('Failed to load cart')))
       )
+      : EMPTY
     )
   )
 
@@ -77,11 +84,12 @@ export class DaffCartEffects<T extends DaffCart> {
   @Effect()
   clear$ = this.actions$.pipe(
     ofType(DaffCartActionTypes.CartClearAction),
-    switchMap((action: DaffCartClear) =>
-      this.driver.clear(this.storage.getCartId()).pipe(
+    switchMap((action: DaffCartClear) => this.isPlatformBrowser
+      ? this.driver.clear(this.storage.getCartId()).pipe(
         map((resp: T) => new DaffCartClearSuccess(resp)),
         catchError(error => of(new DaffCartClearFailure('Failed to clear the cart.')))
       )
+      : EMPTY
     )
   )
 }

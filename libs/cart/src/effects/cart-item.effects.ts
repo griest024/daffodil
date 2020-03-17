@@ -1,6 +1,7 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, EMPTY } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
 import {
@@ -33,53 +34,61 @@ export class DaffCartItemEffects<
   U extends DaffCartItemInput,
   V extends DaffCart
 > {
+  isPlatformBrowser: boolean;
+
   constructor(
     private actions$: Actions,
     @Inject(DaffCartItemDriver) private driver: DaffCartItemServiceInterface<T, U, V>,
-    private storage: DaffCartStorageService
-  ) {}
+    private storage: DaffCartStorageService,
+    @Inject(PLATFORM_ID) platformId: string
+  ) {
+    this.isPlatformBrowser = isPlatformBrowser(platformId);
+  }
 
   @Effect()
   list$ = this.actions$.pipe(
     ofType(DaffCartItemActionTypes.CartItemListAction),
-    switchMap((action: DaffCartItemList) =>
-      this.driver.list(this.storage.getCartId()).pipe(
+    switchMap((action: DaffCartItemList) => this.isPlatformBrowser
+      ? this.driver.list(this.storage.getCartId()).pipe(
         map((resp: T[]) => new DaffCartItemListSuccess(resp)),
         catchError(error => of(new DaffCartItemListFailure('Failed to list cart items')))
       )
+      : EMPTY
     )
   )
 
   @Effect()
   get$ = this.actions$.pipe(
     ofType(DaffCartItemActionTypes.CartItemLoadAction),
-    switchMap((action: DaffCartItemLoad<T>) =>
-      this.driver.get(this.storage.getCartId(), action.itemId).pipe(
+    switchMap((action: DaffCartItemLoad<T>) => this.isPlatformBrowser
+      ? this.driver.get(this.storage.getCartId(), action.itemId).pipe(
         map((resp: T) => new DaffCartItemLoadSuccess(resp)),
         catchError(error => of(new DaffCartItemLoadFailure('Failed to load cart item')))
       )
+      : EMPTY
     )
   )
 
   @Effect()
   add$ = this.actions$.pipe(
     ofType(DaffCartItemActionTypes.CartItemAddAction),
-    switchMap((action: DaffCartItemAdd<U>) =>
-      this.driver.add(
+    switchMap((action: DaffCartItemAdd<U>) => this.isPlatformBrowser
+      ? this.driver.add(
         this.storage.getCartId(),
         action.input
       ).pipe(
         map((resp: V) => new DaffCartItemAddSuccess(resp)),
         catchError(error => of(new DaffCartItemAddFailure('Failed to add cart item')))
       )
+      : EMPTY
     )
   )
 
   @Effect()
   update$ = this.actions$.pipe(
     ofType(DaffCartItemActionTypes.CartItemUpdateAction),
-    switchMap((action: DaffCartItemUpdate<T>) =>
-      this.driver.update(
+    switchMap((action: DaffCartItemUpdate<T>) => this.isPlatformBrowser
+      ? this.driver.update(
         this.storage.getCartId(),
         action.itemId,
         action.changes
@@ -87,17 +96,19 @@ export class DaffCartItemEffects<
         map((resp: V) => new DaffCartItemUpdateSuccess(resp)),
         catchError(error => of(new DaffCartItemUpdateFailure('Failed to update cart item')))
       )
+      : EMPTY
     )
   )
 
   @Effect()
   delete$ = this.actions$.pipe(
     ofType(DaffCartItemActionTypes.CartItemDeleteAction),
-    switchMap((action: DaffCartItemDelete<T>) =>
-      this.driver.delete(this.storage.getCartId(), action.itemId).pipe(
+    switchMap((action: DaffCartItemDelete<T>) => this.isPlatformBrowser
+      ? this.driver.delete(this.storage.getCartId(), action.itemId).pipe(
         map((resp: V) => new DaffCartItemDeleteSuccess(resp)),
         catchError(error => of(new DaffCartItemDeleteFailure('Failed to remove the cart item')))
       )
+      : EMPTY
     )
   )
 }

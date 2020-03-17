@@ -65,6 +65,7 @@ describe('Daffodil | Cart | DaffCartShippingMethodsEffects', () => {
     mockCart = cartFactory.create();
     mockCartShippingRate = cartShippingRateFactory.create();
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -74,13 +75,13 @@ describe('Daffodil | Cart | DaffCartShippingMethodsEffects', () => {
 
   describe('when CartShippingMethodsLoadAction is triggered', () => {
     let expected;
-    const cartCreateAction = new DaffCartShippingMethodsLoad();
+    const cartShippingMethodsLoad = new DaffCartShippingMethodsLoad();
 
     describe('and the call to CartService is successful', () => {
       beforeEach(() => {
         shippingMethodsDriverSpy.list.and.returnValue(of([mockCartShippingRate]));
         const cartCreateSuccessAction = new DaffCartShippingMethodsLoadSuccess([mockCartShippingRate]);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartShippingMethodsLoad });
         expected = cold('--b', { b: cartCreateSuccessAction });
       });
 
@@ -95,11 +96,28 @@ describe('Daffodil | Cart | DaffCartShippingMethodsEffects', () => {
         const response = cold('#', {}, error);
         shippingMethodsDriverSpy.list.and.returnValue(response);
         const cartCreateFailureAction = new DaffCartShippingMethodsLoadFailure(error);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartShippingMethodsLoad });
         expected = cold('--b', { b: cartCreateFailureAction });
       });
 
       it('should dispatch a CartShippingMethodsLoadFailure action', () => {
+        expect(effects.list$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartShippingMethodsLoad });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(shippingMethodsDriverSpy.list).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.list$).toBeObservable(expected);
       });
     });

@@ -65,6 +65,7 @@ describe('Daffodil | Cart | CartBillingAddressEffects', () => {
     mockCart = cartFactory.create();
     mockCartBillingAddress = cartAddressFactory.create();
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -103,23 +104,40 @@ describe('Daffodil | Cart | CartBillingAddressEffects', () => {
         expect(effects.get$).toBeObservable(expected);
       });
     });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartBillingAddressLoadAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffBillingAddressDriverSpy.get).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
+        expect(effects.get$).toBeObservable(expected);
+      });
+    });
   });
 
   describe('when CartBillingAddressUpdateAction is triggered', () => {
     let expected;
-    let cartCreateAction;
+    let cartBillingAddressUpdate;
     const street = 'updatedStreet';
 
     beforeEach(() => {
       mockCartBillingAddress.street = street;
-      cartCreateAction = new DaffCartBillingAddressUpdate(mockCartBillingAddress);
+      cartBillingAddressUpdate = new DaffCartBillingAddressUpdate(mockCartBillingAddress);
     });
 
     describe('and the call to CartBillingAddressService is successful', () => {
       beforeEach(() => {
         daffBillingAddressDriverSpy.update.and.returnValue(of(mockCart));
         const cartCreateSuccessAction = new DaffCartBillingAddressUpdateSuccess(mockCart);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartBillingAddressUpdate });
         expected = cold('--b', { b: cartCreateSuccessAction });
       });
 
@@ -134,11 +152,28 @@ describe('Daffodil | Cart | CartBillingAddressEffects', () => {
         const response = cold('#', {}, error);
         daffBillingAddressDriverSpy.update.and.returnValue(response);
         const cartCreateFailureAction = new DaffCartBillingAddressUpdateFailure(error);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartBillingAddressUpdate });
         expected = cold('--b', { b: cartCreateFailureAction });
       });
 
       it('should dispatch a CartBillingAddressUpdateFailure action', () => {
+        expect(effects.update$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartBillingAddressUpdate });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffBillingAddressDriverSpy.update).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.update$).toBeObservable(expected);
       });
     });

@@ -68,6 +68,7 @@ describe('Daffodil | Cart | CartPaymentEffects', () => {
     mockCart = cartFactory.create();
     mockCartPayment = cartPaymentFactory.create();
 
+    effects.isPlatformBrowser = true;
     daffCartStorageSpy.getCartId.and.returnValue(String(mockCart.id));
   });
 
@@ -106,23 +107,40 @@ describe('Daffodil | Cart | CartPaymentEffects', () => {
         expect(effects.get$).toBeObservable(expected);
       });
     });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartPaymentLoadAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffPaymentDriverSpy.get).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
+        expect(effects.get$).toBeObservable(expected);
+      });
+    });
   });
 
   describe('when CartPaymentUpdateAction is triggered', () => {
     let expected;
-    let cartCreateAction;
+    let cartPaymentUpdate;
     const method = 'updatedMethod';
 
     beforeEach(() => {
       mockCartPayment.method = method;
-      cartCreateAction = new DaffCartPaymentUpdate(mockCartPayment);
+      cartPaymentUpdate = new DaffCartPaymentUpdate(mockCartPayment);
     });
 
     describe('and the call to CartPaymentService is successful', () => {
       beforeEach(() => {
         daffPaymentDriverSpy.update.and.returnValue(of(mockCart));
         const cartCreateSuccessAction = new DaffCartPaymentUpdateSuccess(mockCart);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartPaymentUpdate });
         expected = cold('--b', { b: cartCreateSuccessAction });
       });
 
@@ -137,11 +155,28 @@ describe('Daffodil | Cart | CartPaymentEffects', () => {
         const response = cold('#', {}, error);
         daffPaymentDriverSpy.update.and.returnValue(response);
         const cartCreateFailureAction = new DaffCartPaymentUpdateFailure(error);
-        actions$ = hot('--a', { a: cartCreateAction });
+        actions$ = hot('--a', { a: cartPaymentUpdate });
         expected = cold('--b', { b: cartCreateFailureAction });
       });
 
       it('should dispatch a CartPaymentUpdateFailure action', () => {
+        expect(effects.update$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartPaymentUpdate });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffPaymentDriverSpy.update).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.update$).toBeObservable(expected);
       });
     });
@@ -173,6 +208,23 @@ describe('Daffodil | Cart | CartPaymentEffects', () => {
         expected = cold('--b', { b: cartPaymentRemoveFailureAction });
       });
       it('should return a DaffCartPaymentRemoveFailure action', () => {
+        expect(effects.remove$).toBeObservable(expected);
+      });
+    });
+
+    describe('and the platform is not the browser', () => {
+      beforeEach(() => {
+        effects.isPlatformBrowser = false;
+
+        actions$ = hot('--a', { a: cartPaymentRemoveAction });
+        expected = cold('---');
+      });
+
+      it('should not make a driver call', () => {
+        expect(daffPaymentDriverSpy.remove).not.toHaveBeenCalled();
+      });
+
+      it('should return EMPTY', () => {
         expect(effects.remove$).toBeObservable(expected);
       });
     });
