@@ -27,6 +27,8 @@
       "@daffodil/navigation/testing": ["libs/navigation/testing/src"],
       "@daffodil/newsletter": ["libs/newsletter/src"],
       "@daffodil/newsletter/testing": ["libs/newsletter/testing/src"],
+      "@daffodil/order": ["libs/order/src"],
+      "@daffodil/order/testing": ["libs/order/testing/src"],
       "@daffodil/paypal": ["libs/paypal/src"],
       "@daffodil/paypal/testing": ["libs/paypal/testing/src"],
       "@daffodil/product": ["libs/product/src"],

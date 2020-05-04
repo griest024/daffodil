@@ -8,7 +8,7 @@ import {
 
 import { DaffProduct } from '@daffodil/product';
 import { DaffCart } from '@daffodil/cart';
-import { DaffOrder } from '@daffodil/checkout';
+import { DaffOrder } from '@daffodil/order';
 import { DaffNavigationTree } from '@daffodil/navigation';
 import { DaffInMemoryBackendProductService } from '@daffodil/product/testing';
 import { DaffInMemoryBackendCartRootService } from '@daffodil/cart/testing';
