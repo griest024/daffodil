@@ -55,8 +55,8 @@ export interface DaffCartFacadeInterface<
   availablePaymentMethods$: Observable<DaffCart['available_payment_methods']>;
   /**
    * The user-defined platform-agnostic payment identifier that corresponds to the cart's current (platform-specific) payment method.
-   * Define the mapping with the `DaffCartPaymentMethodIdMap` injection token.
-   * @see DaffCartPaymentMethodIdMap
+   * Define the mapping with the `DaffCartPaymentMethodIdMapper` injection token.
+   * @see DaffCartPaymentMethodIdMapper
    */
   paymentId$: Observable<any>;
 

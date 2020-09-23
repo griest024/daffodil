@@ -10,7 +10,7 @@ import {
   DaffCartOrderResultGuardRedirectUrl
 } from './guards/public_api';
 import { DaffEmptyCartResolverRedirectUrl, DaffCartResolverRedirectUrl } from './resolvers/public_api';
-import { DaffCartPaymentMethodIdMap } from './injection-tokens/public_api';
+import { DaffCartPaymentMethodIdMapper } from './injection-tokens/public_api';
 
 @NgModule({
   imports: [
@@ -29,7 +29,7 @@ import { DaffCartPaymentMethodIdMap } from './injection-tokens/public_api';
 		{ provide: DaffCartOrderResultGuardRedirectUrl, useValue: '/' },
 		{ provide: DaffEmptyCartResolverRedirectUrl, useValue: '/' },
 		{ provide: DaffCartResolverRedirectUrl, useValue: '/' },
-		{ provide: DaffCartPaymentMethodIdMap, useValue: {} },
+		{ provide: DaffCartPaymentMethodIdMapper, useValue: {} },
 	]
 })
 export class DaffCartModule { }

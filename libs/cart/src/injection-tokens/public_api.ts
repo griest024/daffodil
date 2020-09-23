@@ -1,1 +1,1 @@
-export { DaffCartPaymentMethodIdMap } from './payment-method-map';
+export { DaffCartPaymentMethodIdMapper } from './payment-method-map';

@@ -49,7 +49,7 @@ import { DaffCartOrderResult } from '../../models/cart-order-result';
 import { DaffConfigurableCartItem } from '../../models/configurable-cart-item';
 import { DaffCompositeCartItem } from '../../models/composite-cart-item';
 import { DaffResolveCartSuccess } from '../../actions/public_api';
-import { DaffCartPaymentMethodIdMap } from '../../injection-tokens/public_api';
+import { DaffCartPaymentMethodIdMapper } from '../../injection-tokens/public_api';
 
 describe('DaffCartFacade', () => {
   let store: MockStore<{ product: Partial<DaffCartReducersState> }>;
@@ -64,8 +64,8 @@ describe('DaffCartFacade', () => {
 
   let errors: DaffCartErrors;
   let mockCartOrderResult: DaffCartOrderResult;
-  const paymentMethod = 'so dumb';
-  const paymentId = 'even dumber';
+  let paymentMethod;
+  let paymentId;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -77,10 +77,10 @@ describe('DaffCartFacade', () => {
       providers: [
         DaffCartFacade,
         {
-          provide: DaffCartPaymentMethodIdMap,
-          useValue: {
+          provide: DaffCartPaymentMethodIdMapper,
+          useValue: method => ({
             [paymentMethod]: paymentId
-          }
+          })[method]
         }
       ]
     })
@@ -574,6 +574,8 @@ describe('DaffCartFacade', () => {
     let cart: DaffCart;
 
     beforeEach(() => {
+      paymentMethod = 'paymentMethod';
+      paymentId = 'paymentId';
       cart = cartFactory.create();
       mockPayment = paymentFactory.create();
     });
