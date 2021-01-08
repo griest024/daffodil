@@ -15,7 +15,7 @@ import {
   DaffCartResolveState
 } from '@daffodil/cart/state';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MockDaffCartFacade implements DaffCartFacadeInterface {
   cart$: BehaviorSubject<DaffCart> = new BehaviorSubject(null);
 
