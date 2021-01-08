@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { schema } from '@daffodil/driver/magento';
 import { DaffCart, DaffCartItem } from '@daffodil/cart';
 import { DaffCartItemDriver } from '@daffodil/cart/driver';
-import { MagentoCart, MagentoCartItem, MagentoGetCartResponse, MagentoCreateCartResponse, DaffMagentoCartTransformer, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment, getCart, createCart } from '@daffodil/cart/driver/magento';
+import { MagentoCart, MagentoCartItem, MagentoGetCartResponse, MagentoCreateCartResponse, DaffMagentoCartTransformer, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment, createCart } from '@daffodil/cart/driver/magento';
 import {
   MagentoCartFactory,
   MagentoCartItemFactory,
@@ -60,7 +60,7 @@ describe('Driver | Magento | Cart | CartService', () => {
 					useValue: new InMemoryCache({
 						addTypename: true,
 						possibleTypes: schema.possibleTypes,
-						}),
+					}),
 				}
       ]
     });
@@ -112,7 +112,7 @@ describe('Driver | Magento | Cart | CartService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(getCart([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('GetCart');
 
       op.flush({
         data: mockCartResponse
@@ -125,7 +125,7 @@ describe('Driver | Magento | Cart | CartService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(getCart([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('GetCart');
 
       op.flush({
         data: mockCartResponse

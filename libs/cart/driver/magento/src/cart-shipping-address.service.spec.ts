@@ -9,7 +9,7 @@ import {
   DaffCart,
   DaffCartAddress,
 } from '@daffodil/cart';
-import { MagentoCart, MagentoShippingAddress, MagentoShippingAddressInput, MagentoUpdateShippingAddressResponse, MagentoUpdateShippingAddressWithEmailResponse, MagentoGetShippingAddressResponse, DaffMagentoCartTransformer, DaffMagentoShippingAddressTransformer, DaffMagentoShippingAddressInputTransformer, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment, getShippingAddress, updateShippingAddressWithEmail, updateShippingAddress } from '@daffodil/cart/driver/magento';
+import { MagentoCart, MagentoShippingAddress, MagentoShippingAddressInput, MagentoUpdateShippingAddressResponse, MagentoUpdateShippingAddressWithEmailResponse, MagentoGetShippingAddressResponse, DaffMagentoCartTransformer, DaffMagentoShippingAddressTransformer, DaffMagentoShippingAddressInputTransformer, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment } from '@daffodil/cart/driver/magento';
 import {
   MagentoCartFactory,
   MagentoShippingAddressFactory,
@@ -73,7 +73,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
 					useValue: new InMemoryCache({
 						addTypename: true,
 						possibleTypes: schema.possibleTypes,
-						}),
+					}),
 				}
       ]
     });
@@ -123,7 +123,9 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
         cart: mockMagentoCart
       },
       setGuestEmailOnCart: {
+        __typename: 'Cart',
         cart: {
+				  __typename: 'Cart',
           email
         }
       }
@@ -150,7 +152,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(getShippingAddress([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('GetShippingAddress');
 
       op.flush({
         data: mockGetShippingAddressResponse
@@ -163,7 +165,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(getShippingAddress([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('GetShippingAddress');
 
       op.flush({
         data: mockGetShippingAddressResponse
@@ -181,7 +183,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
           done();
         });
 
-        const op = controller.expectOne(addTypenameToDocument(getShippingAddress([daffMagentoNoopCartFragment])));
+        const op = controller.expectOne('GetShippingAddress');
 
         op.flush({
           data: mockGetShippingAddressResponse
@@ -205,7 +207,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
           })
         ).subscribe();
 
-        const op = controller.expectOne(addTypenameToDocument(updateShippingAddressWithEmail([daffMagentoNoopCartFragment])));
+        const op = controller.expectOne('UpdateShippingAddressWithEmail');
 
         op.graphqlErrors([new GraphQLError(
           'Can\'t find a cart with that ID.',
@@ -237,7 +239,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
             done();
           });
 
-          const op = controller.expectOne(addTypenameToDocument(updateShippingAddressWithEmail([daffMagentoNoopCartFragment])));
+          const op = controller.expectOne('UpdateShippingAddressWithEmail');
 
           op.flush({
             data: mockUpdateShippingAddressWithEmailResponse
@@ -262,7 +264,7 @@ describe('Driver | Magento | Cart | CartShippingAddressService', () => {
             done();
           });
 
-          const op = controller.expectOne(addTypenameToDocument(updateShippingAddress([daffMagentoNoopCartFragment])));
+          const op = controller.expectOne('UpdateShippingAddress');
 
           op.flush({
             data: mockUpdateShippingAddressResponse

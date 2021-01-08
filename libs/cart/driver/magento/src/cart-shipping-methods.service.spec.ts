@@ -6,7 +6,7 @@ import { schema } from '@daffodil/driver/magento';
 import {
   DaffCartShippingRate,
 } from '@daffodil/cart';
-import { MagentoCartShippingMethod, MagentoListShippingMethodsResponse, DaffMagentoCartShippingRateTransformer, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment, listShippingMethods } from '@daffodil/cart/driver/magento';
+import { MagentoCartShippingMethod, MagentoListShippingMethodsResponse, DaffMagentoCartShippingRateTransformer, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment } from '@daffodil/cart/driver/magento';
 import {
   MagentoCartShippingMethodFactory
 } from '@daffodil/cart/driver/magento/testing';
@@ -53,7 +53,7 @@ describe('Driver | Magento | Cart | CartShippingMethodsService', () => {
 					useValue: new InMemoryCache({
 						addTypename: true,
 						possibleTypes: schema.possibleTypes,
-						}),
+					}),
 				}
       ]
     });
@@ -109,7 +109,7 @@ describe('Driver | Magento | Cart | CartShippingMethodsService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(listShippingMethods([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('ListShippingMethods');
 
       op.flush({
         data: mockListCartShippingMethodsResponse
@@ -123,7 +123,7 @@ describe('Driver | Magento | Cart | CartShippingMethodsService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(listShippingMethods([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('ListShippingMethods');
 
       op.flush({
         data: mockListCartShippingMethodsResponse

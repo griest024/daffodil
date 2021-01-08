@@ -14,7 +14,7 @@ import {
   DaffConfigurableCartItemInput,
   DaffSimpleCartItemInput,
 } from '@daffodil/cart';
-import { DaffMagentoCartTransformer, DaffMagentoCartItemUpdateInputTransformer, MagentoCart, MagentoCartItem, MagentoCartItemInput, MagentoCartItemUpdateInput, MagentoAddSimpleCartItemResponse, MagentoAddBundleCartItemResponse, MagentoAddConfigurableCartItemResponse, MagentoListCartItemsResponse, MagentoUpdateCartItemResponse, MagentoRemoveCartItemResponse, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment, listCartItems, addBundleCartItem, addSimpleCartItem, addConfigurableCartItem, updateCartItem, removeCartItem } from '@daffodil/cart/driver/magento';
+import { DaffMagentoCartTransformer, DaffMagentoCartItemUpdateInputTransformer, MagentoCart, MagentoCartItem, MagentoCartItemInput, MagentoCartItemUpdateInput, MagentoAddSimpleCartItemResponse, MagentoAddBundleCartItemResponse, MagentoAddConfigurableCartItemResponse, MagentoListCartItemsResponse, MagentoUpdateCartItemResponse, MagentoRemoveCartItemResponse, DAFF_CART_MAGENTO_EXTRA_CART_FRAGMENTS, daffMagentoNoopCartFragment } from '@daffodil/cart/driver/magento';
 import {
   MagentoCartFactory,
   MagentoCartItemFactory
@@ -78,7 +78,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
 					useValue: new InMemoryCache({
 						addTypename: true,
 						possibleTypes: schema.possibleTypes,
-						}),
+					}),
 				}
       ]
     });
@@ -205,7 +205,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(listCartItems([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('ListCartItems');
 
       op.flush({
         data: mockListCartItemResponse
@@ -242,7 +242,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
 					done();
 				});
 
-				const op = controller.expectOne(addTypenameToDocument(addBundleCartItem([daffMagentoNoopCartFragment])));
+				const op = controller.expectOne('AddBundleCartItem');
 
 				op.flush({
 					data: mockAddBundleCartItemResponse
@@ -257,7 +257,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
 					done();
 				});
 
-				const op = controller.expectOne(addTypenameToDocument(addSimpleCartItem([daffMagentoNoopCartFragment])));
+				const op = controller.expectOne('AddSimpleCartItem');
 
 				op.flush({
 					data: mockAddSimpleCartItemResponse
@@ -272,7 +272,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
 					done();
 				});
 
-				const op = controller.expectOne(addTypenameToDocument(addConfigurableCartItem([daffMagentoNoopCartFragment])));
+				const op = controller.expectOne('AddConfigurableCartItem');
 
 				op.flush({
 					data: mockAddConfigurableCartItemResponse
@@ -302,7 +302,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(updateCartItem([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('UpdateCartItem');
 
       op.flush({
         data: mockUpdateCartItemResponse
@@ -328,7 +328,7 @@ describe('Driver | Magento | Cart | CartItemService', () => {
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(removeCartItem([daffMagentoNoopCartFragment])));
+      const op = controller.expectOne('RemoveCartItem');
 
       op.flush({
         data: mockRemoveCartItemResponse

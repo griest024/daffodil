@@ -13,8 +13,6 @@ import {
 import {
   MagentoCart,
   daffMagentoNoopCartFragment,
-  updateAddress,
-  updateAddressWithEmail,
   MagentoUpdateAddressResponse,
   MagentoUpdateAddressWithEmailResponse,
   MagentoShippingAddress,
@@ -80,7 +78,7 @@ describe('Driver | Magento | Cart | CartAddressService', () => {
 					useValue: new InMemoryCache({
 						addTypename: true,
 						possibleTypes: schema.possibleTypes,
-						}),
+					}),
 				}
       ]
     });
@@ -118,6 +116,7 @@ describe('Driver | Magento | Cart | CartAddressService', () => {
       setBillingAddressOnCart: {
 				__typename: 'SetBillingAddressOnCart',
         cart: {
+          __typename: 'Cart',
           id: cartId
         }
       },
@@ -130,12 +129,14 @@ describe('Driver | Magento | Cart | CartAddressService', () => {
       setBillingAddressOnCart: {
 				__typename: 'SetBillingAddressOnCart',
         cart: {
+          __typename: 'Cart',
           id: cartId
         }
       },
       setShippingAddressesOnCart: {
         __typename: 'SetShippingAddresses',
         cart: {
+          __typename: 'Cart',
           id: cartId
         }
       },
@@ -174,7 +175,7 @@ describe('Driver | Magento | Cart | CartAddressService', () => {
             done();
           });
 
-          const op = controller.expectOne(addTypenameToDocument(updateAddressWithEmail([daffMagentoNoopCartFragment])));
+          const op = controller.expectOne('UpdateAddressWithEmail');
 
           op.flush({
             data: mockUpdateAddressWithEmailResponse
@@ -200,7 +201,7 @@ describe('Driver | Magento | Cart | CartAddressService', () => {
             done();
           });
 
-          const op = controller.expectOne(addTypenameToDocument(updateAddress([daffMagentoNoopCartFragment])));
+          const op = controller.expectOne('UpdateAddress');
 
           op.flush({
             data: mockUpdateAddressResponse
@@ -219,7 +220,7 @@ describe('Driver | Magento | Cart | CartAddressService', () => {
           })
         ).subscribe();
 
-        const op = controller.expectOne(addTypenameToDocument(updateAddressWithEmail([daffMagentoNoopCartFragment])));
+        const op = controller.expectOne('UpdateAddressWithEmail');
 
         op.graphqlErrors([new GraphQLError(
           'Can\'t find a cart with that ID.',
