@@ -1,7 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { StoreModule, combineReducers, Store } from '@ngrx/store';
 import { of } from 'rxjs';
 
 import { DaffAddress } from '@daffodil/core';
@@ -34,8 +33,8 @@ class WrapperComponent {
   paymentInfoValue: PaymentInfo = stubPaymentInfo;
   billingAddressValue: DaffAddress = stubBillingAddress;
   billingAddressIsShippingAddressValue: boolean = stubBillingAddressIsShippingAddress;
-  updatePaymentInfoFunction = () => {};
-  updateBillingAddressFunction = () => {};
+  updatePaymentInfoFunction = e => {};
+  updateBillingAddressFunction = e => {};
   toggleBillingAddressIsShippingAddressFunction = () => {};
 }
 
