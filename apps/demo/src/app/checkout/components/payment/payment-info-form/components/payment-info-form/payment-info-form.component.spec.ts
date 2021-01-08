@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, AbstractControl, FormBuilder } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { 
-  DaffNativeSelectModule, 
+import {
+  DaffNativeSelectModule,
   DaffNativeSelectComponent,
-  DaffInputModule, 
+  DaffInputModule,
   DaffInputComponent,
   DaffFormFieldModule
 } from '@daffodil/design';
@@ -14,7 +14,7 @@ import { PaymentInfoFormComponent } from './payment-info-form.component';
 import { PaymentInfoFormFactory } from '../../factories/payment-info-form.factory';
 
 @Component({
-  template: '<demo-payment-info-form [formGroup]="formGroupValue" ' + 
+  template: '<demo-payment-info-form [formGroup]="formGroupValue" ' +
                 '[submitted]="submittedValue"></demo-payment-info-form>'
 })
 class WrapperComponent {
@@ -28,8 +28,8 @@ describe('PaymentInfoFormComponent', () => {
   let paymentInfoForm: PaymentInfoFormComponent;
   const paymentInfoFormFactory = new PaymentInfoFormFactory(new FormBuilder());
   const paymentInfoGroup = paymentInfoFormFactory.create(null);
-  
-  beforeEach(async(() => {
+
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -38,14 +38,14 @@ describe('PaymentInfoFormComponent', () => {
         DaffInputModule,
         DaffFormFieldModule
       ],
-      declarations: [ 
+      declarations: [
         WrapperComponent,
         PaymentInfoFormComponent
       ]
     })
     .compileComponents();
   }));
-  
+
   beforeEach(() => {
     fixture = TestBed.createComponent(WrapperComponent);
     wrapper = fixture.componentInstance;
@@ -77,7 +77,7 @@ describe('PaymentInfoFormComponent', () => {
     beforeEach(() => {
       input = fixture.debugElement.queryAll(By.css('[daff-input]'))[0].componentInstance;
     });
-    
+
     it('should set formControl', () => {
       expect(input.ngControl.control).toEqual(<AbstractControl> paymentInfoForm.formGroup.controls['name']);
     });
@@ -94,7 +94,7 @@ describe('PaymentInfoFormComponent', () => {
     beforeEach(() => {
       monthSelect = fixture.debugElement.queryAll(By.css('[daff-native-select]'))[0].componentInstance;
     });
-    
+
     it('should set formControl', () => {
       expect(monthSelect.ngControl.control).toEqual(paymentInfoForm.formGroup.controls['month']);
     });
@@ -111,7 +111,7 @@ describe('PaymentInfoFormComponent', () => {
     beforeEach(() => {
       yearSelect = fixture.debugElement.queryAll(By.css('[daff-native-select]'))[1].componentInstance;
     });
-    
+
     it('should set formControl', () => {
       expect(yearSelect.ngControl.control).toEqual(paymentInfoForm.formGroup.controls['year']);
     });

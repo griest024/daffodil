@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of, BehaviorSubject } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -23,7 +23,7 @@ describe('PlaceOrderComponent', () => {
 	let stubCart: DaffCart;
 	let cartFacade: MockDaffCartFacade;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         PlaceOrderComponent

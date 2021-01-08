@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -35,7 +35,7 @@ describe('SidebarContainer', () => {
   const daffNavigationTreeFactory: DaffNavigationTreeFactory = new DaffNavigationTreeFactory();
   const tree: DaffNavigationTree = daffNavigationTreeFactory.create();
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         DaffSidebarModule,

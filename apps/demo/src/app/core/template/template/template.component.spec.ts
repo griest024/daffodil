@@ -1,10 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { TemplateComponent } from './template.component';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { NewsletterModule } from '../../../newsletter/newsletter.module';
-import { StoreModule } from '@ngrx/store';
 
 @Component({selector: 'demo-header-container', template: ''})
 class MockHeaderViewComponent {}
@@ -20,9 +17,9 @@ describe('TemplateComponent', () => {
   let component: TemplateComponent;
   let fixture: ComponentFixture<TemplateComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
+      declarations: [
         TemplateComponent
       ],
       schemas: [
