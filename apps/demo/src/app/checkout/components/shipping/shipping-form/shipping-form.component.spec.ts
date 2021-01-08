@@ -10,9 +10,12 @@ import { ShippingOptionFormService } from '../shipping-options/components/servic
 import { AddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
 
 @Component({
-  'template': '<demo-shipping-form [shippingAddress]="shippingAddressValue" ' +
-                '[editMode]="editModeValue" ' +
-                '(submitted)="submittedFunction($event)"></demo-shipping-form>'
+  template: `
+    <demo-shipping-form [shippingAddress]="shippingAddressValue"
+                [editMode]="editModeValue"
+                (submitted)="submittedFunction($event)"></demo-shipping-form>
+                `
+
 })
 class WrapperComponent {
   shippingAddressValue: DaffAddress;

@@ -22,13 +22,13 @@ const stubShowPaymentForm = true;
 const stubBillingAddressIsShippingAddress = false;
 
 @Component({
-  template: '<demo-payment ' +
-              '[paymentInfo]="paymentInfoValue" ' +
-              '[billingAddress]="billingAddressValue" ' +
-              '[billingAddressIsShippingAddress]="billingAddressIsShippingAddressValue" ' +
-              '(updatePaymentInfo)="updatePaymentInfoFunction($event)" ' +
-              '(updateBillingAddress)="updateBillingAddressFunction($event)" ' +
-              '(toggleBillingAddressIsShippingAddress)="toggleBillingAddressIsShippingAddressFunction()"></demo-payment>'
+  template: `<demo-payment
+              [paymentInfo]="paymentInfoValue"
+              [billingAddress]="billingAddressValue"
+              [billingAddressIsShippingAddress]="billingAddressIsShippingAddressValue"
+              (updatePaymentInfo)="updatePaymentInfoFunction($event)"
+              (updateBillingAddress)="updateBillingAddressFunction($event)"
+              (toggleBillingAddressIsShippingAddress)="toggleBillingAddressIsShippingAddressFunction()"></demo-payment>`
 })
 class WrapperComponent {
   paymentInfoValue: PaymentInfo = stubPaymentInfo;

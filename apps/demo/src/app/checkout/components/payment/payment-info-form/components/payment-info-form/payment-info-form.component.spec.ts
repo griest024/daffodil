@@ -14,8 +14,8 @@ import { PaymentInfoFormComponent } from './payment-info-form.component';
 import { PaymentInfoFormFactory } from '../../factories/payment-info-form.factory';
 
 @Component({
-  template: '<demo-payment-info-form [formGroup]="formGroupValue" ' +
-                '[submitted]="submittedValue"></demo-payment-info-form>'
+  template: `<demo-payment-info-form [formGroup]="formGroupValue"
+                [submitted]="submittedValue"></demo-payment-info-form>`
 })
 class WrapperComponent {
   formGroupValue: FormGroup;

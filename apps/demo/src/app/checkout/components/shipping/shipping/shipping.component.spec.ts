@@ -25,12 +25,16 @@ const stubSelectedShippingOptionId = '0';
 const stubShowPaymentView = false;
 
 @Component({
-  template: '<demo-shipping [isShippingAddressValid]="isShippingAddressValidValue" ' +
-              '[shippingAddress]="shippingAddressValue" ' +
-              '[selectedShippingOptionId]="selectedShippingOptionIdValue" ' +
-              '[showPaymentView]="showPaymentViewValue" ' +
-              '(updateShippingAddress)="updateShippingAddressFunction($event)" ' +
-              '(selectShippingOption)="selectShippingOptionFunction($event)"></demo-shipping>'
+  template: `
+    <demo-shipping
+      [isShippingAddressValid]="isShippingAddressValidValue"
+      [shippingAddress]="shippingAddressValue"
+      [selectedShippingOptionId]="selectedShippingOptionIdValue"
+      [showPaymentView]="showPaymentViewValue"
+      (updateShippingAddress)="updateShippingAddressFunction($event)"
+      (selectShippingOption)="selectShippingOptionFunction($event)"
+    ></demo-shipping>
+  `
 })
 class WrapperComponent {
   isShippingAddressValidValue = stubIsShippingAddressValidValue;

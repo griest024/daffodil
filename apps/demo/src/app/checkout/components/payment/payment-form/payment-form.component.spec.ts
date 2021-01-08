@@ -14,13 +14,13 @@ import { AddressFormFactory } from '../../forms/address-form/factories/address-f
 import { PaymentInfoFormFactory } from '../payment-info-form/factories/payment-info-form.factory';
 
 @Component({
-  'template': '<demo-payment-form ' +
-                '[paymentInfo]="paymentInfoValue" ' +
-                '[billingAddress]="billingAddressValue" ' +
-                '[billingAddressIsShippingAddress]="billingAddressIsShippingAddressValue" ' +
-                '(updatePaymentInfo)="updatePaymentInfoFunction($event)" ' +
-                '(updateBillingAddress)="updatePaymentInfoFunction($event)" ' +
-                '(toggleBillingAddressIsShippingAddress)="toggleBillingAddressIsShippingAddressFunction($event)"></demo-payment-form>'
+  template: `<demo-payment-form
+                [paymentInfo]="paymentInfoValue"
+                [billingAddress]="billingAddressValue"
+                [billingAddressIsShippingAddress]="billingAddressIsShippingAddressValue"
+                (updatePaymentInfo)="updatePaymentInfoFunction($event)"
+                (updateBillingAddress)="updatePaymentInfoFunction($event)"
+                (toggleBillingAddressIsShippingAddress)="toggleBillingAddressIsShippingAddressFunction($event)"></demo-payment-form>`
 })
 class WrapperComponent {
   paymentInfoValue: PaymentInfo;
