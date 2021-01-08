@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, AbstractControl, FormBuilder } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, AbstractControl, FormBuilder } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import {

@@ -1,16 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { TemplateComponent } from './template.component';
-
-@Component({selector: 'demo-header-container', template: ''})
-class MockHeaderViewComponent {}
-
-@Component({selector: 'demo-sidebar-viewport-container', template: ''})
-class MockSidebarViewComponent {}
-
-@Component({selector: 'demo-footer', template: ''})
-class MockFooterComponent {}
 
 
 describe('TemplateComponent', () => {
