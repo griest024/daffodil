@@ -51,7 +51,7 @@ import {
 
 import { DaffOrderMagentoService } from './order.service';
 
-describe('Driver | Magento | Order | OrderService', () => {
+describe('Order | Driver | Magento | 2.4.0 | OrderService', () => {
   let service: DaffOrderMagentoService;
   let controller: ApolloTestingController;
 
