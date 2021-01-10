@@ -27,9 +27,6 @@ export interface CustomClassElement<T> {
         DaffCheckboxModule,
         ReactiveFormsModule,
         CommonModule,
-    ],
-    entryComponents: [
-        ...CHECKBOX_EXAMPLES
     ]
 })
 export class CheckboxModule {
