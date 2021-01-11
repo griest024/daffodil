@@ -109,11 +109,29 @@ describe('DaffConfigurableProductFacade', () => {
   describe('getMinimumPrice', () => {
 
     it('should return the minimum possible price for a configurable product', () => {
-			stubConfigurableProduct.variants[0].price = 2;
-			stubConfigurableProduct.variants[1].price = 1;
-			stubConfigurableProduct.variants[2].price = 4;
-			stubConfigurableProduct.variants[3].price = 3;
-			const expected = cold('a', { a: 1 });
+      store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            price: 2
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            price: 1
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            price: 4
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            price: 3
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
+      const expected = cold('a', { a: 1 });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
 				stubConfigurableProduct.id,
@@ -127,10 +145,28 @@ describe('DaffConfigurableProductFacade', () => {
   describe('getMaximumPrice', () => {
 
     it('should return the minimum possible price for a configurable product', () => {
-			stubConfigurableProduct.variants[0].price = 2;
-			stubConfigurableProduct.variants[1].price = 1;
-			stubConfigurableProduct.variants[2].price = 4;
-			stubConfigurableProduct.variants[3].price = 3;
+			store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            price: 2
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            price: 1
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            price: 4
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            price: 3
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: 4 });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
@@ -145,14 +181,44 @@ describe('DaffConfigurableProductFacade', () => {
   describe('getMinimumDiscountedPrice', () => {
 
     it('should return the minimum possible discounted price for a configurable product', () => {
-			stubConfigurableProduct.variants[0].price = 4;
-			stubConfigurableProduct.variants[1].price = 4;
-			stubConfigurableProduct.variants[2].price = 4;
-			stubConfigurableProduct.variants[3].price = 4;
-			stubConfigurableProduct.variants[0].discount.amount = 3;
-			stubConfigurableProduct.variants[1].discount.amount = 2;
-			stubConfigurableProduct.variants[2].discount.amount = 1;
-			stubConfigurableProduct.variants[3].discount.amount = 3;
+      store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[0].discount,
+              amount: 3
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[1].discount,
+              amount: 2
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[2].discount,
+              amount: 1
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[3].discount,
+              amount: 3
+            }
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: 1 });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
@@ -167,14 +233,44 @@ describe('DaffConfigurableProductFacade', () => {
   describe('getMaximumDiscountedPrice', () => {
 
     it('should return the maximum possible discounted price for a configurable product', () => {
-			stubConfigurableProduct.variants[0].price = 4;
-			stubConfigurableProduct.variants[1].price = 4;
-			stubConfigurableProduct.variants[2].price = 4;
-			stubConfigurableProduct.variants[3].price = 4;
-			stubConfigurableProduct.variants[0].discount.amount = 3;
-			stubConfigurableProduct.variants[1].discount.amount = 2;
-			stubConfigurableProduct.variants[2].discount.amount = 1;
-			stubConfigurableProduct.variants[3].discount.amount = 3;
+			store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[0].discount,
+              amount: 3
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[1].discount,
+              amount: 2
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[2].discount,
+              amount: 1
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            price: 4,
+            discount: {
+              ...stubConfigurableProduct.variants[3].discount,
+              amount: 3
+            }
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: 3 });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
@@ -189,10 +285,40 @@ describe('DaffConfigurableProductFacade', () => {
   describe('getMinimumPercentDiscount', () => {
 
     it('should return the minimum possible percent discount for a configurable product', () => {
-			stubConfigurableProduct.variants[0].discount.percent = 3;
-			stubConfigurableProduct.variants[1].discount.percent = 2;
-			stubConfigurableProduct.variants[2].discount.percent = 1;
-			stubConfigurableProduct.variants[3].discount.percent = 3;
+			store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            discount: {
+              ...stubConfigurableProduct.variants[0].discount,
+              percent: 3
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            discount: {
+              ...stubConfigurableProduct.variants[1].discount,
+              percent: 2
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            discount: {
+              ...stubConfigurableProduct.variants[2].discount,
+              percent: 1
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            discount: {
+              ...stubConfigurableProduct.variants[3].discount,
+              percent: 3
+            }
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: 1 });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
@@ -207,10 +333,40 @@ describe('DaffConfigurableProductFacade', () => {
   describe('getMaximumPercentDiscount', () => {
 
     it('should return the maximum possible percent discount for a configurable product', () => {
-			stubConfigurableProduct.variants[0].discount.percent = 3;
-			stubConfigurableProduct.variants[1].discount.percent = 2;
-			stubConfigurableProduct.variants[2].discount.percent = 1;
-			stubConfigurableProduct.variants[3].discount.percent = 3;
+			store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            discount: {
+              ...stubConfigurableProduct.variants[0].discount,
+              percent: 3
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            discount: {
+              ...stubConfigurableProduct.variants[1].discount,
+              percent: 2
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            discount: {
+              ...stubConfigurableProduct.variants[2].discount,
+              percent: 1
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            discount: {
+              ...stubConfigurableProduct.variants[3].discount,
+              percent: 3
+            }
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: 3 });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
@@ -225,10 +381,28 @@ describe('DaffConfigurableProductFacade', () => {
   describe('isPriceRanged', () => {
 
     it('should return whether the possible price is a range of prices', () => {
-			stubConfigurableProduct.variants[0].price = 2;
-			stubConfigurableProduct.variants[1].price = 1;
-			stubConfigurableProduct.variants[2].price = 4;
-			stubConfigurableProduct.variants[3].price = 3;
+			store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            price: 2
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            price: 1
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            price: 4
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            price: 3
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: true });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
@@ -243,10 +417,40 @@ describe('DaffConfigurableProductFacade', () => {
   describe('hasDiscount', () => {
 
     it('should return whether a variant of the configurable product has a discount', () => {
-			stubConfigurableProduct.variants[0].discount.amount = 3;
-			stubConfigurableProduct.variants[1].discount.amount = 2;
-			stubConfigurableProduct.variants[2].discount.amount = 1;
-			stubConfigurableProduct.variants[3].discount.amount = 3;
+			store.dispatch(new DaffProductLoadSuccess({
+        ...stubConfigurableProduct,
+        variants: [
+          {
+            ...stubConfigurableProduct.variants[0],
+            discount: {
+              ...stubConfigurableProduct.variants[0].discount,
+              amount: 3
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[1],
+            discount: {
+              ...stubConfigurableProduct.variants[1].discount,
+              amount: 2
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[2],
+            discount: {
+              ...stubConfigurableProduct.variants[2].discount,
+              amount: 1
+            }
+          },
+          {
+            ...stubConfigurableProduct.variants[3],
+            discount: {
+              ...stubConfigurableProduct.variants[3].discount,
+              amount: 3
+            }
+          },
+          ...stubConfigurableProduct.variants.slice(4)
+        ]
+      }));
 			const expected = cold('a', { a: true });
 
       store.dispatch(new DaffConfigurableProductApplyAttribute(
