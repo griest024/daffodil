@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { DaffOrder, DaffOrderTotal } from '@daffodil/order';
 import { DaffOrderFacadeInterface } from '@daffodil/order/state';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MockDaffOrderFacade implements DaffOrderFacadeInterface {
   loading$: BehaviorSubject<boolean> = new BehaviorSubject(null);
   errors$: BehaviorSubject<string[]> = new BehaviorSubject([]);
