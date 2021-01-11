@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { DaffNewsletterFacadeInterface } from '@daffodil/newsletter';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MockDaffNewsletterFacade implements DaffNewsletterFacadeInterface {
   success$ : BehaviorSubject<boolean> = new BehaviorSubject(false);
   error$: BehaviorSubject<string> = new BehaviorSubject(null);
