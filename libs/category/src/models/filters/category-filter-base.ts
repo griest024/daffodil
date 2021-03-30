@@ -1,3 +1,5 @@
+import { Dict } from '@daffodil/core';
+
 import { DaffCategoryFilterType } from './type/category-filter-type';
 
 /**
@@ -24,5 +26,5 @@ export interface DaffCategoryFilterBase {
 	 * The available options by which to filter a category, e.g. "red", "blue", or "green".
 	 * The type of options changes per type of filter.
 	 */
-	options: { applied: boolean}[];
+	options: Dict<{ applied: boolean}>;
 }

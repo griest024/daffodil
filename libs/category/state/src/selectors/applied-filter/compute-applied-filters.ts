@@ -4,6 +4,6 @@ export const computeAppliedFilters = (filters: DaffCategoryFilter[]) => filters.
   (filter: DaffCategoryFilter) => ({
     ...filter,
     //TODO(damienwebdev): revisit `filter.options.filter` in Typescript 4.0 for generic narrowing of union types.
-    options: (<any[]>filter.options).filter((option: DaffCategoryFilter['options'][number]) => option.applied) ?? [],
+    options: Object.values(filter.options).filter((option: DaffCategoryFilter['options'][string]) => option.applied) ?? {},
   }),
-).filter((filter: DaffCategoryFilter) => filter.options.length);
+).filter((filter: DaffCategoryFilter) => Object.values(filter.options).length);

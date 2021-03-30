@@ -4,7 +4,7 @@ import { DaffCategoryFilter } from '@daffodil/category';
 
 import { DaffCategoryFilterFactory } from './category-filter.factory';
 
-fdescribe('Category | Testing | Factories | DaffCategoryFilterFactory', () => {
+describe('Category | Testing | Factories | DaffCategoryFilterFactory', () => {
 
   let categoryFilterFactory;
 

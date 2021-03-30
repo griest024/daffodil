@@ -1,3 +1,5 @@
+import { Dict } from '@daffodil/core';
+
 import { DaffCategoryFilter } from './category-filter';
 
 /**
@@ -7,5 +9,5 @@ export interface DaffCategoryFilterable {
 	/**
 	 * The filters available on the category.
 	 */
-	filters: DaffCategoryFilter[];
+	filters: Dict<DaffCategoryFilter>;
 }

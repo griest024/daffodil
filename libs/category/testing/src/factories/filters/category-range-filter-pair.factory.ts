@@ -12,6 +12,7 @@ export class MockCategoryFilterRangePair implements DaffCategoryFilterRangePair 
     min: this._min,
     max: this._min + faker.random.number({ min: 1, max: 1000 }),
   }).toString();
+  label = `${this.min} - ${this.max}`;
 }
 
 @Injectable({

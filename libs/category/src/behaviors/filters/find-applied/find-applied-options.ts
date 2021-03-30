@@ -9,5 +9,5 @@ import {
  * Finds the applied options in the filter.
  */
 export function daffCategoryFindAppliedFilterOptions(filter: DaffCategoryFilter): DaffCategoryFilterOption[] {
-  return (<any[]>filter.options).filter((option: DaffCategoryFilterRangePair | DaffCategoryFilterEqualOption) => option.applied);
+  return Object.values(filter.options).filter((option: DaffCategoryFilterRangePair | DaffCategoryFilterEqualOption) => option.applied);
 }

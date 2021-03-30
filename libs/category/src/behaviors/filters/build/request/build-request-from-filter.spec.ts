@@ -38,28 +38,35 @@ describe('@daffodil/category | daffCategoryBuildRequestFromFilter', () => {
     rangeFilterFactory = TestBed.inject(DaffCategoryRangeFilterFactory);
     rangeFilterPairFactory = TestBed.inject(DaffCategoryFilterRangePairFactory);
 
+    const rangeFilterPair = rangeFilterPairFactory.create({
+      applied: true,
+    });
+
     appliedRangeFilter = rangeFilterFactory.create({
-      options: [
-        rangeFilterPairFactory.create({
-          applied: true,
-        }),
-      ],
+      options: {
+        [rangeFilterPair.label]: rangeFilterPair,
+      },
     });
     unappliedRangeFilter = rangeFilterFactory.create({
-      options: [],
+      options: {},
     });
 
     [appliedEqualFilterOption0, appliedEqualFilterOption1] = equalFilterOptionFactory.createMany(2, {
       applied: true,
     });
     appliedEqualFilter = equalFilterFactory.create({
-      options: [appliedEqualFilterOption0, appliedEqualFilterOption1],
+      options: {
+        [appliedEqualFilterOption0.label]: appliedEqualFilterOption0,
+        [appliedEqualFilterOption1.label]: appliedEqualFilterOption1,
+      },
     });
     unappliedEqualFilterOption = equalFilterOptionFactory.create({
       applied: false,
     });
     unappliedEqualFilter = equalFilterFactory.create({
-      options: [unappliedEqualFilterOption],
+      options: {
+        [unappliedEqualFilterOption.label]: unappliedEqualFilterOption,
+      },
     });
   });
 

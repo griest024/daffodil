@@ -11,7 +11,7 @@ export class MockCategoryEqualFilter implements DaffCategoryEqualFilter {
   type: DaffCategoryFilterType.Equal = DaffCategoryFilterType.Equal;
   label = faker.random.words();
   name = faker.random.word();
-  options = [];
+  options = {};
 }
 
 @Injectable({

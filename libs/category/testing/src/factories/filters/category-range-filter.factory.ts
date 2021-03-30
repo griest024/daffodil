@@ -19,7 +19,7 @@ export class MockCategoryRangeFilter implements DaffCategoryRangeFilter {
     min: this._min,
     max: this._min + faker.random.number({ min: 1, max: 1000 }),
   }).toString();
-  options = [];
+  options = {};
 }
 
 @Injectable({
