@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import {
   Observable,
   combineLatest,
+  of,
 } from 'rxjs';
 import {
   map,
@@ -13,6 +14,7 @@ import {
   DaffCategoryIdRequest,
   DaffGetCategoryResponse,
   daffApplyRequestsToFilters,
+  DaffCategoryUriRequest,
 } from '@daffodil/category';
 import { DaffCategoryServiceInterface } from '@daffodil/category/driver';
 
@@ -95,6 +97,11 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
         },
       })),
     );
+  }
+
+  getByUri(request: DaffCategoryUriRequest): Observable<DaffGetCategoryResponse> {
+    // TODO: implement
+    return of(null);
   }
 
   private getProductsQueryVariables(request: DaffCategoryIdRequest): MagentoGetProductsByCategoriesRequest {

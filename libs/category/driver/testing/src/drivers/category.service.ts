@@ -34,4 +34,12 @@ export class DaffTestingCategoryService implements DaffCategoryServiceInterface 
       products: this.productFactory.createMany(3),
     });
   }
+
+  getByUri(categoryRequest: DaffCategoryRequest): Observable<DaffGetCategoryResponse> {
+    return of({
+      category: this.categoryFactory.create(),
+      categoryPageMetadata: this.categoryPageMetadataFactory.create(),
+      products: this.productFactory.createMany(3),
+    });
+  }
 }
