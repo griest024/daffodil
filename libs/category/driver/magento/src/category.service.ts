@@ -10,7 +10,7 @@ import {
 } from 'rxjs/operators';
 
 import {
-  DaffCategoryRequest,
+  DaffCategoryIdRequest,
   DaffGetCategoryResponse,
   daffApplyRequestsToFilters,
 } from '@daffodil/category';
@@ -55,9 +55,9 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
   /**
    * Gets a category based on parameters. Default current_page is 1, and default page_size is 20.
    *
-   * @param categoryRequest A DaffCategoryRequest object.
+   * @param categoryRequest A DaffCategoryIdRequest object.
    */
-  get(categoryRequest: DaffCategoryRequest): Observable<DaffGetCategoryResponse> {
+  get(categoryRequest: DaffCategoryIdRequest): Observable<DaffGetCategoryResponse> {
     return combineLatest([
       this.apollo.query<MagentoGetACategoryResponse>({
         query: MagentoGetCategoryQuery,
@@ -97,7 +97,7 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
     );
   }
 
-  private getProductsQueryVariables(request: DaffCategoryRequest): MagentoGetProductsByCategoriesRequest {
+  private getProductsQueryVariables(request: DaffCategoryIdRequest): MagentoGetProductsByCategoriesRequest {
     const queryVariables = {
       filter: this.magentoAppliedFiltersTransformer.transform(request.id, request.filter_requests),
     };

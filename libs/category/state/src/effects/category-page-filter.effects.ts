@@ -22,11 +22,12 @@ import {
 } from 'rxjs/operators';
 
 import {
-  DaffCategoryRequest,
   DaffGenericCategory,
   DaffGetCategoryResponse,
   DAFF_CATEGORY_ERROR_MATCHER,
   daffCategoryFiltersToRequests,
+  DaffCategoryPageRequestKind,
+  DaffCategoryIdRequest,
 } from '@daffodil/category';
 import {
   DaffCategoryDriver,
@@ -83,7 +84,8 @@ export class DaffCategoryPageFilterEffects<
       DaffCategoryPageFilterActionTypes.CategoryPageToggleFilterAction,
     ),
     switchMapTo(this.facade.metadata$),
-    map((metadata): DaffCategoryRequest => ({
+    map((metadata): DaffCategoryIdRequest => ({
+      kind: DaffCategoryPageRequestKind.ID,
       id: metadata.id,
       filter_requests: daffCategoryFiltersToRequests(metadata.filters),
       applied_sort_option: metadata.applied_sort_option,

@@ -23,10 +23,11 @@ import {
 } from 'rxjs/operators';
 
 import {
-  DaffCategoryRequest,
   DaffGenericCategory,
   DaffGetCategoryResponse,
   DAFF_CATEGORY_ERROR_MATCHER,
+  DaffCategoryPageRequestKind,
+  DaffCategoryIdRequest,
 } from '@daffodil/category';
 import {
   DaffCategoryDriver,
@@ -79,6 +80,7 @@ export class DaffCategoryPageEffects<
       [action, categoryRequest],
     ) => this.processCategoryGetRequest({
       ...categoryRequest,
+      kind: DaffCategoryPageRequestKind.ID,
       page_size: action.pageSize,
     })),
   );
@@ -93,6 +95,7 @@ export class DaffCategoryPageEffects<
       [action, categoryRequest],
     ) => this.processCategoryGetRequest({
       ...categoryRequest,
+      kind: DaffCategoryPageRequestKind.ID,
       current_page: action.currentPage,
     })),
   );
@@ -107,12 +110,13 @@ export class DaffCategoryPageEffects<
       [action, categoryRequest],
     ) => this.processCategoryGetRequest({
       ...categoryRequest,
+      kind: DaffCategoryPageRequestKind.ID,
       applied_sort_option: action.sort.option,
       applied_sort_direction: action.sort.direction,
     })),
   );
 
-  private processCategoryGetRequest(payload: DaffCategoryRequest) {
+  private processCategoryGetRequest(payload: DaffCategoryIdRequest) {
     return this.driver.get(payload).pipe(
       switchMap((resp: DaffGetCategoryResponse<V, W>) => [
         new DaffProductGridLoadSuccess(resp.products),

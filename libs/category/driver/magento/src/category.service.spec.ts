@@ -6,14 +6,14 @@ import {
 import { Observable } from 'rxjs';
 
 import {
-  DaffCategoryRequest,
+  DaffCategoryIdRequest,
   DaffCategory,
   DaffCategoryFilterEqualRequest,
   DaffCategoryFilterRangeRequestOption,
   daffCategoryComputeFilterRangePairLabel,
   DaffGetCategoryResponse,
   DaffCategoryPageMetadata,
-  DaffCategoryFilterRangeNumericRequest,
+  DaffCategoryPageRequestKind,
 } from '@daffodil/category';
 import {
   DaffCategoryFactory,
@@ -37,7 +37,7 @@ xdescribe('Driver | Magento | Category | CategoryService', () => {
   let rangeFilterRequestFactory: DaffCategoryFilterRequestRangeNumericFactory;
   let rangeFilterRequestOptionFactory: DaffCategoryFilterRangeNumericRequestOptionFactory;
 
-  let mockCategoryRequest: DaffCategoryRequest;
+  let mockCategoryRequest: DaffCategoryIdRequest;
   let mockCategory: DaffCategory;
   let equalFilterRequest: DaffCategoryFilterEqualRequest;
   let rangeFilterRequest: DaffCategoryFilterRangeNumericRequest;
@@ -102,6 +102,7 @@ xdescribe('Driver | Magento | Category | CategoryService', () => {
         rangeFilterRequestOptionLabel = daffCategoryComputeFilterRangePairLabel(rangeFilterRequestOption.min, rangeFilterRequestOption.max);
         mockCategoryRequest = {
           ...mockCategoryRequest,
+          kind: DaffCategoryPageRequestKind.ID,
           filter_requests: [
             equalFilterRequest,
             rangeFilterRequest,
