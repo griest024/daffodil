@@ -25,3 +25,6 @@ export { MagentoSortDirectionEnum } from './requests/sort';
 export { MagentoGetCategoryAggregationsResponse } from './get-category-aggregations-response';
 export { MagentoCustomAttributeMetadataResponse } from './custom-attribute-metadata-response';
 export { MagentoCustomMetadataAttribute } from './requests/custom-metadata-attribute';
+export { MagentoCategoryFilterTypeField } from './filter-type-field.interface';
+export { MagentoCategoryFilterType } from './filter-type.enum';
+export { MagentoGetCategoryFilterTypesResponse } from './get-filter-types-response.interface';
