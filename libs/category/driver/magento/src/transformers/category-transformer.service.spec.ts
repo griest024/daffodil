@@ -9,13 +9,11 @@ import { DaffCategoryFactory } from '@daffodil/category/testing';
 
 import { DaffMagentoCategoryTransformerService } from './category-transformer.service';
 
-xdescribe('DaffMagentoCategoryTransformerService', () => {
+describe('DaffMagentoCategoryTransformerService', () => {
 
   let service: DaffMagentoCategoryTransformerService;
-  const categoryFactory: DaffCategoryFactory = new DaffCategoryFactory();
-  const stubCategory: DaffCategory = categoryFactory.create({
-    id: '1',
-  });
+  let categoryFactory: DaffCategoryFactory;
+  let stubCategory: DaffCategory;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,7 +21,13 @@ xdescribe('DaffMagentoCategoryTransformerService', () => {
         DaffMagentoCategoryTransformerService,
       ],
     });
+
     service = TestBed.inject(DaffMagentoCategoryTransformerService);
+    categoryFactory = TestBed.inject(DaffCategoryFactory);
+
+    stubCategory = categoryFactory.create({
+      id: '1',
+    });
   });
 
   it('should be created', () => {

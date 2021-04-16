@@ -15,6 +15,10 @@ import {
   MagentoSortFields,
 } from '@daffodil/category/driver/magento';
 import {
+  DaffCategoryDriverMagentoAggregationSelectFactory,
+  DaffCategoryDriverMagentoAggregationPriceFactory,
+} from '@daffodil/category/driver/magento/testing';
+import {
   DaffCategoryFactory,
   DaffCategoryPageMetadataFactory,
 } from '@daffodil/category/testing';
@@ -23,20 +27,18 @@ import { MagentoProductFactory } from '@daffodil/product/driver/magento/testing'
 
 import { DaffMagentoCategoryPageConfigTransformerService } from './category-page-config-transformer.service';
 
-xdescribe('DaffMagentoCategoryPageConfigTransformerService', () => {
+describe('DaffMagentoCategoryPageConfigTransformerService', () => {
 
   let service: DaffMagentoCategoryPageConfigTransformerService;
-  const categoryFactory: DaffCategoryFactory = new DaffCategoryFactory();
-  const stubCategory: DaffCategory = categoryFactory.create({
-    id: '1',
-  });
 
-  const categoryPageMetadataFactory: DaffCategoryPageMetadataFactory = new DaffCategoryPageMetadataFactory();
-  const stubCategoryPageMetadata: DaffCategoryPageMetadata = categoryPageMetadataFactory.create();
-  delete stubCategoryPageMetadata.filters;
-  delete stubCategoryPageMetadata.applied_sort_direction;
-  delete stubCategoryPageMetadata.applied_sort_option;
-  stubCategoryPageMetadata.id = stubCategory.id;
+  let stubCategory: DaffCategory;
+  let stubCategoryPageMetadata: DaffCategoryPageMetadata;
+  let aggregation: MagentoAggregation;
+
+  let priceAggregateFactory: DaffCategoryDriverMagentoAggregationPriceFactory;
+  let selectAggregateFactory: DaffCategoryDriverMagentoAggregationSelectFactory;
+  let categoryFactory: DaffCategoryFactory;
+  let categoryPageMetadataFactory: DaffCategoryPageMetadataFactory;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,7 +46,22 @@ xdescribe('DaffMagentoCategoryPageConfigTransformerService', () => {
         DaffMagentoCategoryPageConfigTransformerService,
       ],
     });
+
     service = TestBed.inject(DaffMagentoCategoryPageConfigTransformerService);
+    categoryPageMetadataFactory = TestBed.inject(DaffCategoryPageMetadataFactory);
+    categoryFactory = TestBed.inject(DaffCategoryFactory);
+    selectAggregateFactory = TestBed.inject(DaffCategoryDriverMagentoAggregationSelectFactory);
+    priceAggregateFactory = TestBed.inject(DaffCategoryDriverMagentoAggregationPriceFactory);
+
+    stubCategory = categoryFactory.create({
+      id: '1',
+    });
+    stubCategoryPageMetadata = categoryPageMetadataFactory.create();
+
+    delete stubCategoryPageMetadata.filters;
+    delete stubCategoryPageMetadata.applied_sort_direction;
+    delete stubCategoryPageMetadata.applied_sort_option;
+    stubCategoryPageMetadata.id = stubCategory.id;
   });
 
   it('should be created', () => {
@@ -58,6 +75,7 @@ xdescribe('DaffMagentoCategoryPageConfigTransformerService', () => {
     let page_info: MagentoPageInfo;
     let sort_fields: MagentoSortFields;
     let products: MagentoProduct[];
+    let result: DaffCategoryPageMetadata;
 
     beforeEach(() => {
       category = {
@@ -71,12 +89,6 @@ xdescribe('DaffMagentoCategoryPageConfigTransformerService', () => {
         }],
         children_count: stubCategory.children_count,
       };
-
-      aggregates = [{
-        attribute_code: stubCategoryPageMetadata.filters[0].name,
-        label: stubCategoryPageMetadata.filters[0].label,
-        options: [],
-      }];
 
       page_info = {
         page_size: stubCategoryPageMetadata.page_size,
@@ -93,7 +105,7 @@ xdescribe('DaffMagentoCategoryPageConfigTransformerService', () => {
 
       completeCategoryResponse = {
         category,
-        aggregates,
+        aggregates: [],
         page_info,
         sort_fields,
         products,
@@ -111,63 +123,32 @@ xdescribe('DaffMagentoCategoryPageConfigTransformerService', () => {
       });
     });
 
-    describe('when the filter type is select', () => {
+    describe('when the aggregate is a select', () => {
+      beforeEach(() => {
+        aggregation = selectAggregateFactory.create();
+        result = service.transform({
+          ...completeCategoryResponse,
+          aggregates: [aggregation],
+        });
+      });
 
-      // it('should return a DaffCategoryPageMetadata with an equal filter type', () => {
-      //   aggregates[0].type = 'select';
-      //   stubCategoryPageMetadata.filters[0].type = DaffCategoryFilterType.Equal;
-
-      //   expect(service.transform(completeCategoryResponse)).toEqual(stubCategoryPageMetadata);
-      // });
+      it('should return a DaffCategoryPageMetadata with an equal filter type', () => {
+        expect(result.filters[aggregation.attribute_code].type).toEqual(DaffCategoryFilterType.Equal);
+      });
     });
 
-    describe('when the filter type is boolean', () => {
+    describe('when the aggregate is a price', () => {
+      beforeEach(() => {
+        aggregation = priceAggregateFactory.create();
+        result = service.transform({
+          ...completeCategoryResponse,
+          aggregates: [aggregation],
+        });
+      });
 
-      // it('should return a DaffCategoryPageMetadata with a equal filter type', () => {
-      //   aggregates[0].type = 'boolean';
-      //   stubCategoryPageMetadata.filters[0].type = DaffCategoryFilterType.Equal;
-
-      //   expect(service.transform(completeCategoryResponse)).toEqual(stubCategoryPageMetadata);
-      // });
-    });
-
-    describe('when the filter type is multiselect', () => {
-
-      // it('should return a DaffCategoryPageMetadata with a equal filter type', () => {
-      //   aggregates[0].type = 'multiselect';
-      //   stubCategoryPageMetadata.filters[0].type = DaffCategoryFilterType.Equal;
-
-      //   expect(service.transform(completeCategoryResponse)).toEqual(stubCategoryPageMetadata);
-      // });
-    });
-
-    describe('when the filter type is price', () => {
-
-      // it('should return a DaffCategoryPageMetadata with a range filter type', () => {
-      //   aggregates[0].type = 'price';
-      //   stubCategoryPageMetadata.filters[0].type = DaffCategoryFilterType.RangeNumeric;
-
-      //   expect(service.transform(completeCategoryResponse)).toEqual(stubCategoryPageMetadata);
-      // });
-
-      // it('should transform the price range', () => {
-      //   aggregates[0].type = 'price';
-      //   aggregates[0].options[0].value = '70_80';
-      //   stubCategoryPageMetadata.filters[0].type = DaffCategoryFilterType.RangeNumeric;
-      //   stubCategoryPageMetadata.filters[0].options[0].value = '70' + DaffCategoryFromToFilterSeparator + '80';
-
-      //   expect(service.transform(completeCategoryResponse)).toEqual(stubCategoryPageMetadata);
-      // });
-    });
-
-    describe('when the filter type is anything else', () => {
-
-      // it('should return a DaffCategoryPageMetadata with a Equal filter type', () => {
-      //   aggregates[0].type = 'textfield';
-      //   stubCategoryPageMetadata.filters[0].type = DaffCategoryFilterType.Equal;
-
-      //   expect(service.transform(completeCategoryResponse)).toEqual(stubCategoryPageMetadata);
-      // });
+      it('should return a DaffCategoryPageMetadata with a range filter type', () => {
+        expect(result.filters[aggregation.attribute_code].type).toEqual(DaffCategoryFilterType.RangeNumeric);
+      });
     });
   });
 });

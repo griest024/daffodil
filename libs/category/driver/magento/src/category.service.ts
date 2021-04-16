@@ -11,26 +11,29 @@ import {
 } from 'rxjs/operators';
 
 import {
-  DaffCategoryIdRequest,
   DaffGetCategoryResponse,
   daffApplyRequestsToFilters,
+  DaffCategoryIdRequest,
   DaffCategoryUriRequest,
+  DaffCategoryPageRequestKind,
+  DaffCategoryFilterRequest,
+  DaffCategoryPageMetadata,
 } from '@daffodil/category';
 import { DaffCategoryServiceInterface } from '@daffodil/category/driver';
 
+import { MagentoGetCategoryFilterTypesResponse } from './models/get-filter-types-response.interface';
 import {
   MagentoGetACategoryResponse,
   MagentoGetCategoryAggregationsResponse,
-  MagentoCustomAttributeMetadataResponse,
   MagentoGetProductsResponse,
   MagentoCompleteCategoryResponse,
   MagentoGetProductsByCategoriesRequest,
 } from './models/public_api';
+import { MagentoGetCategoryFilterTypes } from './queries/get-filter-types';
 import {
   MagentoGetProductsQuery,
   MagentoGetCategoryQuery,
   MagentoGetCategoryAggregations,
-  MagentoGetCustomAttributeMetadata,
 } from './queries/public_api';
 import {
   DaffMagentoCategoryResponseTransformService,
@@ -38,8 +41,14 @@ import {
   DaffMagentoAppliedSortOptionTransformService,
 } from './transformers/public_api';
 import { addMetadataTypesToAggregates } from './transformers/pure/aggregate/add-metadata-types-to-aggregates';
-import { buildCustomMetadataAttribute } from './transformers/pure/aggregate/build-custom-metadata-attribute';
 
+const applyFiltersOnResponse = (requests: DaffCategoryFilterRequest[], response: DaffGetCategoryResponse): DaffGetCategoryResponse => ({
+  ...response,
+  categoryPageMetadata: {
+    ...response.categoryPageMetadata,
+    filters: daffApplyRequestsToFilters(requests, response.categoryPageMetadata.filters),
+  },
+});
 
 @Injectable({
   providedIn: 'root',
@@ -63,45 +72,62 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
     return combineLatest([
       this.apollo.query<MagentoGetACategoryResponse>({
         query: MagentoGetCategoryQuery,
-        variables: { filters: { ids: { eq: categoryRequest.id }}},
+        variables: { filters: { category_uid: { eq: categoryRequest.id }}},
       }),
       this.apollo.query<MagentoGetCategoryAggregationsResponse>({
         query: MagentoGetCategoryAggregations,
         variables: { filter: { category_id: { eq: categoryRequest.id }}},
-      }).pipe(
-        switchMap((aggregationResult): Observable<MagentoGetCategoryAggregationsResponse> =>
-          this.apollo.query<MagentoCustomAttributeMetadataResponse>({
-            query: MagentoGetCustomAttributeMetadata,
-            variables: {
-              attributes: aggregationResult.data.products.aggregations
-                .filter(aggregate => aggregate.attribute_code !== 'category_id')
-                .map(aggregate => buildCustomMetadataAttribute(aggregate)),
-            },
-          }).pipe(
-            map(response => addMetadataTypesToAggregates(response.data, aggregationResult.data)),
-          ),
-        ),
-      ),
+      }),
+      this.apollo.query<MagentoGetCategoryFilterTypesResponse>({
+        query: MagentoGetCategoryFilterTypes,
+      }),
       this.apollo.query<MagentoGetProductsResponse>({
         query: MagentoGetProductsQuery,
         variables: this.getProductsQueryVariables(categoryRequest),
       }),
     ]).pipe(
-      map((result): MagentoCompleteCategoryResponse => this.buildCompleteCategoryResponse(result[0].data, result[1], result[2].data)),
-      map((result: MagentoCompleteCategoryResponse) => this.magentoCategoryResponseTransformer.transform(result)),
-      map((result) => ({
-        ...result,
-        categoryPageMetadata: {
-          ...result.categoryPageMetadata,
-          filters: daffApplyRequestsToFilters(categoryRequest.filter_requests, result.categoryPageMetadata.filters),
-        },
-      })),
+      map(([
+        category,
+        aggregations,
+        filterTypes,
+        products,
+      ]) => this.transformCategory(category.data, aggregations.data, filterTypes.data, products.data)),
+      map(result => applyFiltersOnResponse(categoryRequest.filter_requests, result)),
     );
   }
 
-  getByUri(request: DaffCategoryUriRequest): Observable<DaffGetCategoryResponse> {
-    // TODO: implement
-    return of(null);
+  getByUri(categoryRequest: DaffCategoryUriRequest): Observable<DaffGetCategoryResponse> {
+    const truncatedUri = categoryRequest.uri.replace('.html', '');
+
+    return combineLatest([
+      this.apollo.query<MagentoGetACategoryResponse>({
+        query: MagentoGetCategoryQuery,
+        variables: { filters: { url_path: { eq: truncatedUri }}},
+      }),
+      this.apollo.query<MagentoGetCategoryAggregationsResponse>({
+        query: MagentoGetCategoryAggregations,
+        variables: { filter: { url_path: { eq: truncatedUri }}},
+      }),
+      this.apollo.query<MagentoGetCategoryFilterTypesResponse>({
+        query: MagentoGetCategoryFilterTypes,
+      }),
+    ]).pipe(
+      switchMap(([
+        category,
+        aggregations,
+        filterTypes,
+      ]) => this.apollo.query<MagentoGetProductsResponse>({
+        query: MagentoGetProductsQuery,
+        variables: this.getProductsQueryVariables({
+          ...categoryRequest,
+          id: category.data.categoryList[0]?.id?.toString(),
+          kind: DaffCategoryPageRequestKind.ID,
+        }),
+      }).pipe(
+        map(products => this.transformCategory(category.data, aggregations.data, filterTypes.data, products.data)),
+        map(result => applyFiltersOnResponse(categoryRequest.filter_requests, result)),
+      )),
+    );
   }
 
   private getProductsQueryVariables(request: DaffCategoryIdRequest): MagentoGetProductsByCategoriesRequest {
@@ -121,18 +147,22 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
     return queryVariables;
   }
 
-  private buildCompleteCategoryResponse(
+  private transformCategory(
     categoryResponse: MagentoGetACategoryResponse,
     aggregationsAndSortsResponse: MagentoGetCategoryAggregationsResponse,
+    filterTypesResponse: MagentoGetCategoryFilterTypesResponse,
     productsResponse: MagentoGetProductsResponse,
-  ): MagentoCompleteCategoryResponse {
-    return {
+  ): DaffGetCategoryResponse {
+    const aggregations = addMetadataTypesToAggregates(filterTypesResponse, aggregationsAndSortsResponse);
+    const completeCategory = {
       category: categoryResponse.categoryList[0],
       products: productsResponse.products.items,
-      aggregates: aggregationsAndSortsResponse.products.aggregations,
-      sort_fields: aggregationsAndSortsResponse.products.sort_fields,
+      aggregates: aggregations.products.aggregations,
+      sort_fields: aggregations.products.sort_fields,
       total_count: productsResponse.products.total_count,
       page_info: productsResponse.products.page_info,
     };
+
+    return this.magentoCategoryResponseTransformer.transform(completeCategory);
   }
 }

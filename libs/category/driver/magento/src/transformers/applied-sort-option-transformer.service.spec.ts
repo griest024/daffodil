@@ -9,7 +9,7 @@ import { DaffSortDirectionEnum } from '@daffodil/core/state';
 
 import { DaffMagentoAppliedSortOptionTransformService } from './applied-sort-option-transformer.service';
 
-xdescribe('DaffMagentoAppliedSortOptionTransformService', () => {
+describe('DaffMagentoAppliedSortOptionTransformService', () => {
 
   let service: DaffMagentoAppliedSortOptionTransformService;
 

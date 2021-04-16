@@ -2,12 +2,12 @@ import { TestBed } from '@angular/core/testing';
 
 import {
   MagentoGetCategoryAggregationsResponse,
-  MagentoCustomAttributeMetadataResponse,
+  MagentoGetCategoryFilterTypesResponse,
 } from '@daffodil/category/driver/magento';
 
 import { addMetadataTypesToAggregates } from './add-metadata-types-to-aggregates';
 
-xdescribe('Custom Metadata Attributes Methods', () => {
+describe('Custom Metadata Attributes Methods', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -16,7 +16,7 @@ xdescribe('Custom Metadata Attributes Methods', () => {
   describe('addMetadataTypesToAggregates', () => {
     let initialCategoryResponse: MagentoGetCategoryAggregationsResponse;
     let outputCategoryResponse: MagentoGetCategoryAggregationsResponse;
-    let attributeResponse: MagentoCustomAttributeMetadataResponse;
+    let attributeResponse: MagentoGetCategoryFilterTypesResponse;
 
     it('should add the attribute types to the aggregates', () => {
       initialCategoryResponse = {
@@ -26,10 +26,10 @@ xdescribe('Custom Metadata Attributes Methods', () => {
         },
       };
       attributeResponse = {
-        customAttributeMetadata: {
-          items: [],
+        __type: {
+          inputFields: [],
         },
-      };
+      };;
 
       outputCategoryResponse = {
         products: {

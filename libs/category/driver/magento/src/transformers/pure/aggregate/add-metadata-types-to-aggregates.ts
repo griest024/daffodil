@@ -1,11 +1,11 @@
 import {
-  MagentoCustomAttributeMetadataResponse,
   MagentoGetCategoryAggregationsResponse,
+  MagentoGetCategoryFilterTypesResponse,
 } from '../../../models/public_api';
 import { getMatchedAttributeType } from './get-matched-attribute-type';
 
 export function addMetadataTypesToAggregates(
-  attributeResponse: MagentoCustomAttributeMetadataResponse,
+  attributeResponse: MagentoGetCategoryFilterTypesResponse,
   aggregationResponse: MagentoGetCategoryAggregationsResponse,
 ): MagentoGetCategoryAggregationsResponse {
 

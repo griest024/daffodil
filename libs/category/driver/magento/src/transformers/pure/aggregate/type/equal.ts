@@ -12,7 +12,7 @@ export const transformAggregateEqual = (aggregate: MagentoAggregation): DaffCate
   type: DaffCategoryFilterType.Equal,
   name: aggregate.attribute_code,
   options: aggregate.options.reduce((acc, option) => {
-    acc[option.value.toString()]= {
+    acc[option.value] = {
       applied: false,
       label: option.label,
       count: option.count,

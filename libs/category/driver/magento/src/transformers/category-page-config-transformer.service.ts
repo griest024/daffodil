@@ -21,7 +21,7 @@ export class DaffMagentoCategoryPageConfigTransformerService {
       current_page: categoryResponse.page_info.current_page,
       total_pages: categoryResponse.page_info.total_pages,
       total_products: categoryResponse.total_count,
-      filters: daffCategoryFilterArrayToDict(categoryResponse.aggregates.map((filter) => transformAggregate(filter))),
+      filters: daffCategoryFilterArrayToDict(categoryResponse.aggregates.map(transformAggregate)),
       sort_options: {
         default: categoryResponse.sort_fields.default,
         options: coerceDefaultSortOptionFirst(categoryResponse.sort_fields).options,
