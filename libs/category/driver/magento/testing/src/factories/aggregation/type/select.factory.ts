@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import * as faker from 'faker/locale/en_US';
 
-import { MagentoAggregation } from '@daffodil/category/driver/magento';
+import {
+  MagentoAggregation,
+  MagentoCategoryFilterType,
+} from '@daffodil/category/driver/magento';
 import { DaffModelFactory } from '@daffodil/core/testing';
 
 class MockMagentoAggregationSelect implements MagentoAggregation {
   attribute_code = 'select';
-	type?: 'select';
-	count? = faker.random.number();
-	label? = faker.random.word();
+	type = MagentoCategoryFilterType.Equal;
+	count = faker.random.number();
+	label = faker.random.word();
 	options =  [
 	  {
 	    count: faker.random.number(),

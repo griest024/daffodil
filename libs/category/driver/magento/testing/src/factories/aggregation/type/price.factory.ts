@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import * as faker from 'faker/locale/en_US';
 
-import { MagentoAggregation } from '@daffodil/category/driver/magento';
+import {
+  MagentoAggregation,
+  MagentoCategoryFilterType,
+} from '@daffodil/category/driver/magento';
 import { DaffModelFactory } from '@daffodil/core/testing';
 
 class MockMagentoAggregationPrice implements MagentoAggregation {
   attribute_code = 'price';
-	type?: 'price';
-	count? = faker.random.number();
-	label?: 'Price';
-	options? =  [
+	type = MagentoCategoryFilterType.Range;
+	count = faker.random.number();
+	label = 'Price';
+	options = [
 	  {
 	    value: '0-10',
 	    count: faker.random.number(),
