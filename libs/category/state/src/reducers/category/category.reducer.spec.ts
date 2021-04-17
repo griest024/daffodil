@@ -880,7 +880,6 @@ describe('Category | Category Reducer', () => {
     });
   });
 
-  // TODO: revisit for kinded requests
   describe('when CategoryPageLoadAction is triggered', () => {
     let result;
     let categoryRequest: DaffCategoryIdRequest;
