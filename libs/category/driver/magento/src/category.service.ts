@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import {
+  Injectable,
+  Inject,
+} from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import {
   Observable,
@@ -19,6 +22,10 @@ import {
 } from '@daffodil/category';
 import { DaffCategoryServiceInterface } from '@daffodil/category/driver';
 
+import {
+  MAGENTO_CATEGORY_CONFIG_TOKEN,
+  DaffCategoryMagentoDriverConfig,
+} from './interfaces/public_api';
 import { MagentoGetCategoryFilterTypesResponse } from './models/get-filter-types-response.interface';
 import {
   MagentoGetACategoryResponse,
@@ -55,6 +62,7 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
 		private magentoCategoryResponseTransformer: DaffMagentoCategoryResponseTransformService,
 		private magentoAppliedFiltersTransformer: DaffMagentoAppliedFiltersTransformService,
 		private magentoAppliedSortTransformer: DaffMagentoAppliedSortOptionTransformService,
+    @Inject(MAGENTO_CATEGORY_CONFIG_TOKEN) private config: DaffCategoryMagentoDriverConfig,
   ) {}
 
   //todo the MagentoGetCategoryQuery needs to get its own product ids.
@@ -90,7 +98,15 @@ export class DaffMagentoCategoryService implements DaffCategoryServiceInterface 
   }
 
   getByUri(categoryRequest: DaffCategoryUriRequest): Observable<DaffGetCategoryResponse> {
-    const truncatedUri = categoryRequest.uri.replace('.html', '');
+    let truncatedUri = categoryRequest.uri;
+
+    if (this.config.truncateUri) {
+      const match = truncatedUri.match(this.config.truncatedUriMatcher);
+      // only truncate if we get a match
+      if (match) {
+        truncatedUri = match.groups.uri;
+      }
+    }
 
     return combineLatest([
       this.apollo.query<MagentoGetACategoryResponse>({
