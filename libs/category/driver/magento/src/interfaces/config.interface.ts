@@ -21,5 +21,5 @@ export interface DaffCategoryMagentoDriverConfig {
    * The truncated URI should be a capture group named `uri`.
    * Defaults to capture everything before the last dot: `.`.
    */
-  truncatedUriMatcher: RegExp;
+  truncatedUriMatcher?: RegExp;
 }
