@@ -12,7 +12,7 @@ export const MAGENTO_CATEGORY_CONFIG_TOKEN = new InjectionToken<DaffCategoryMage
 export interface DaffCategoryMagentoDriverConfig {
   /**
    * Whether or not to attempt to truncate the file extension suffix from the category URI
-   * during the {@link DaffMagentoCategoryService#getByUri} call.\
+   * during the {@link DaffMagentoCategoryService#getByUri} call.
    * True by default.
    */
   truncateUri: boolean;
