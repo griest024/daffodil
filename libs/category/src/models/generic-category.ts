@@ -1,4 +1,7 @@
-import { ID } from '@daffodil/core';
+import {
+  ID,
+  Dict,
+} from '@daffodil/core';
 
 import { DaffCategoryBreadcrumb } from './category-breadcrumb';
 
@@ -19,5 +22,10 @@ export interface DaffGenericCategory<T extends DaffGenericCategory<T>> {
   total_products?: number;
   children?: T[];
   product_ids?: string[];
+  categoryProducts?: Dict<DaffCategoryProduct>;
   breadcrumbs?: DaffCategoryBreadcrumb[];
+}
+
+export interface DaffCategoryProduct {
+  uri: string;
 }

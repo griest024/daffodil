@@ -32,6 +32,9 @@ describe('DaffMagentoCategoryTransformerService', () => {
       id: '1',
       uri: `${uri}.html`,
     });
+    stubCategory.categoryProducts[stubCategory.product_ids[0]] = {
+      uri: `${uri}/url_key.html`,
+    };
   });
 
   it('should be created', () => {
@@ -77,6 +80,11 @@ describe('DaffMagentoCategoryTransformerService', () => {
 
     it('should return a DaffCategory', () => {
       expect(service.transform(magentoCategory)).toEqual(stubCategory);
+    });
+
+    it('should build a dict of category product SKUs with the fully nested product URL as the key', () => {
+      const productUri = `${magentoCategory.url_path}/${magentoCategory.products.items[0].url_key}${magentoCategory.products.items[0].url_suffix}`;
+      expect(service.transform(magentoCategory).categoryProducts[magentoCategory.products.items[0].sku].uri).toEqual(productUri);
     });
 
     it('should return breadcrumbs in order of category_level', () => {

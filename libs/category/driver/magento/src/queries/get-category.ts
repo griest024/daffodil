@@ -20,6 +20,8 @@ query ${DAFF_MAGENTO_GET_CATEGORY_QUERY_NAME}($filters: CategoryFilterInput){
 		products {
 			items {
 				sku
+        url_key
+        url_suffix
 			}
 		}
 		children_count

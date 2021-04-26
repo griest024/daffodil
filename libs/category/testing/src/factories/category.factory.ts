@@ -18,6 +18,7 @@ export class MockCategory implements DaffCategory {
   children_count = faker.random.number({ min: 1, max: 10 });
   total_products = 1;
   product_ids = [faker.random.number({ min: 1, max: 100 }).toString()];
+  categoryProducts = {};
 }
 
 @Injectable({

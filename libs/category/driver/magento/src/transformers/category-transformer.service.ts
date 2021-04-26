@@ -26,6 +26,12 @@ export class DaffMagentoCategoryTransformerService {
         ?.map(breadcrumb => this.transformBreadcrumb(breadcrumb))
         .sort((a, b) => a.categoryLevel - b.categoryLevel) || null,
       product_ids: category.products.items.map(product => product.sku),
+      categoryProducts: category.products.items.reduce((acc, product) => {
+        acc[product.sku] = {
+          uri: `${category.url_path}/${product.url_key}${product.url_suffix}`,
+        };
+        return acc;
+      }, {}),
       total_products: category.products.items.length,
     };
   }
