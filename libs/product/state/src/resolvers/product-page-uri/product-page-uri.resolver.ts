@@ -23,7 +23,7 @@ import {
 } from 'rxjs/operators';
 
 import {
-  DaffProductPageLoadByUrl,
+  DaffProductPageLoadByUri,
   DaffProductPageActionTypes,
 } from '../../actions/public_api';
 import { DaffProductReducersState } from '../../reducers/public_api';
@@ -44,7 +44,7 @@ export class DaffProductPageUriResolver implements Resolve<Observable<boolean>> 
   ) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
-    this.store.dispatch(new DaffProductPageLoadByUrl(route.toString()));
+    this.store.dispatch(new DaffProductPageLoadByUri(route.toString()));
 
     return isPlatformBrowser(this.platformId) ? of(true) : this.dispatcher.pipe(
       ofType(DaffProductPageActionTypes.ProductPageLoadSuccessAction, DaffProductPageActionTypes.ProductPageLoadFailureAction),

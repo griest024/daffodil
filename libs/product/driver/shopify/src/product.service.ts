@@ -102,7 +102,7 @@ export class DaffShopifyProductService implements DaffProductServiceInterface {
 
   constructor(private apollo: Apollo) {}
 
-  getByUrl(url: DaffProduct['url']): Observable<DaffProduct> {
+  getByUri(url: DaffProduct['url']): Observable<DaffProduct> {
     // TODO: implement
     return of();
   }

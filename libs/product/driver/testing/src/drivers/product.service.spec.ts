@@ -60,12 +60,12 @@ describe('Driver | Testing | Product | ProductService', () => {
     });
   });
 
-  describe('getByUrl', () => {
+  describe('getByUri', () => {
 
     it('should return a single product with images and the same url', () => {
       const url = 'url';
 
-      productService.getByUrl(url).subscribe(product => {
+      productService.getByUri(url).subscribe(product => {
         expect(isProduct(product)).toBeTruthy();
         expect(product.images).toEqual(stubProductImages);
         expect(product.url).toEqual(url);

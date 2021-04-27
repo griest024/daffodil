@@ -32,5 +32,5 @@ export interface DaffProductServiceInterface<T extends DaffProduct = DaffProduct
    *
    * @param url - A string of the product URL.
    */
-  getByUrl(url: DaffProduct['url']): Observable<T>;
+  getByUri(url: DaffProduct['url']): Observable<T>;
 }

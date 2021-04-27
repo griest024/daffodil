@@ -33,7 +33,7 @@ import {
   DaffProductPageLoad,
   DaffProductPageLoadFailure,
   DaffProductPageLoadSuccess,
-  DaffProductPageLoadByUrl,
+  DaffProductPageLoadByUri,
 } from '../actions/product-page.actions';
 
 /**
@@ -70,10 +70,10 @@ export class DaffProductPageEffects<T extends DaffProduct> {
   );
 
   @Effect()
-  loadByUrl$: Observable<any> = this.actions$.pipe(
-    ofType(DaffProductPageActionTypes.ProductPageLoadByUrlAction),
-    switchMap((action: DaffProductPageLoadByUrl<T>) =>
-      this.driver.getByUrl(action.payload)
+  loadByUri$: Observable<any> = this.actions$.pipe(
+    ofType(DaffProductPageActionTypes.ProductPageLoadByUriAction),
+    switchMap((action: DaffProductPageLoadByUri<T>) =>
+      this.driver.getByUri(action.payload)
         .pipe(
           map((resp) => new DaffProductPageLoadSuccess(resp)),
           catchError((error: DaffError) => of(new DaffProductPageLoadFailure(this.errorMatcher(error)))),

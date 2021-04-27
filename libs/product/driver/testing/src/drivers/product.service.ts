@@ -65,7 +65,7 @@ export class DaffTestingProductService implements DaffProductServiceInterface {
     return of(this.productFactory.create({ images: this.productImageFactory.createMany(5) }));
   }
 
-  getByUrl(url: DaffProduct['url']): Observable<DaffProduct> {
+  getByUri(url: DaffProduct['url']): Observable<DaffProduct> {
     return of(this.productFactory.create({ url, images: this.productImageFactory.createMany(5) }));
   }
 }

@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
 
 import { DaffProduct } from '@daffodil/product';
 import {
-  DaffProductPageLoadByUrl,
+  DaffProductPageLoadByUri,
   DaffProductPageLoadSuccess,
   DaffProductPageLoadFailure,
   daffProductReducers,
@@ -64,11 +64,11 @@ describe('DaffProductPageUriResolver', () => {
       route = TestBed.inject(ActivatedRoute);
     }));
 
-    it('should dispatch a DaffProductPageLoadByUrl action with the correct product id', () => {
+    it('should dispatch a DaffProductPageLoadByUri action with the correct product id', () => {
       spyOn(store, 'dispatch');
       resolver.resolve( route.snapshot );
       expect(store.dispatch).toHaveBeenCalledWith(
-        new DaffProductPageLoadByUrl(route.toString()),
+        new DaffProductPageLoadByUri(route.toString()),
       );
     });
 
@@ -122,11 +122,11 @@ describe('DaffProductPageUriResolver', () => {
       route = TestBed.inject(ActivatedRoute);
     }));
 
-    it('should dispatch a DaffProductPageLoadByUrl action with the correct product id', () => {
+    it('should dispatch a DaffProductPageLoadByUri action with the correct product id', () => {
       spyOn(store, 'dispatch');
       resolver.resolve( route.snapshot );
       expect(store.dispatch).toHaveBeenCalledWith(
-        new DaffProductPageLoadByUrl(route.toString()),
+        new DaffProductPageLoadByUri(route.toString()),
       );
     });
 

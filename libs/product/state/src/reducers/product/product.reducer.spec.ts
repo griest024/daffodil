@@ -8,7 +8,7 @@ import {
 } from '@daffodil/product/state';
 import { DaffProductFactory } from '@daffodil/product/testing';
 
-import { DaffProductPageLoadByUrl } from '../../actions/public_api';
+import { DaffProductPageLoadByUri } from '../../actions/public_api';
 import {
   initialState,
   daffProductReducer,
@@ -38,11 +38,11 @@ describe('Product | Product Reducer', () => {
     });
   });
 
-  describe('when ProductLoadByUrlAction is triggered', () => {
+  describe('when ProductLoadByUriAction is triggered', () => {
     let result;
 
     beforeEach(() => {
-      const productLoadAction = new DaffProductPageLoadByUrl(product.url);
+      const productLoadAction = new DaffProductPageLoadByUri(product.url);
 
       result = daffProductReducer(initialState, productLoadAction);
     });

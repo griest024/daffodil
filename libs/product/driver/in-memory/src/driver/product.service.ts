@@ -46,7 +46,7 @@ export class DaffInMemoryProductService implements DaffProductServiceInterface {
     return this.http.get<DaffProduct>(this.url + productId);
   }
 
-  getByUrl(url: DaffProduct['url']): Observable<DaffProduct> {
+  getByUri(url: DaffProduct['url']): Observable<DaffProduct> {
     return this.http.get<DaffProduct>(`${this.url}${url}`);
   }
 }

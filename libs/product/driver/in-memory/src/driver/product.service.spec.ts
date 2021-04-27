@@ -82,12 +82,12 @@ describe('Driver | InMemory | Product | ProductService', () => {
     });
   });
 
-  describe('getByUrl | getting a single product', () => {
+  describe('getByUri | getting a single product', () => {
 
     it('should send a get request', () => {
       const mockProduct = productFactory.create();
 
-      productService.getByUrl(mockProduct.url).subscribe(product => {
+      productService.getByUri(mockProduct.url).subscribe(product => {
         expect(product).toEqual(mockProduct);
       });
 

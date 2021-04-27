@@ -16,7 +16,7 @@ import { MagentoProductFactory } from '@daffodil/product/driver/magento/testing'
 
 import { MAGENTO_PRODUCT_CONFIG_TOKEN } from './interfaces/public_api';
 import { DaffMagentoProductService } from './product.service';
-import { GetProductByUrlQuery } from './queries/get-product-by-url';
+import { GetProductByUriQuery } from './queries/get-product-by-url';
 
 describe('Product | Magento | ProductService', () => {
   let service: DaffMagentoProductService;
@@ -100,15 +100,15 @@ describe('Product | Magento | ProductService', () => {
     });
   });
 
-  describe('getByUrl | getting a single product by url', () => {
+  describe('getByUri | getting a single product by url', () => {
     it('should return a DaffProduct', done => {
-      service.getByUrl('TESTING_URL').subscribe(r => {
+      service.getByUri('TESTING_URL').subscribe(r => {
         expect(r.id).toEqual(stubSimpleProduct.sku);
         expect(r.name).toBeDefined();
         done();
       });
 
-      const op = controller.expectOne(addTypenameToDocument(GetProductByUrlQuery));
+      const op = controller.expectOne(addTypenameToDocument(GetProductByUriQuery));
 
       op.flush({
         data: {
