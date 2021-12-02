@@ -374,10 +374,11 @@ describe('Driver | Magento | Cart | CartItemService', () => {
       });
 
       describe('because the there is insufficient stock of the requested product', () => {
-        it('should throw a DaffProductOutOfStockError', done => {
+        it('should throw a DaffProductOutOfStockError with the item ID', done => {
           service.update(cartId, mockDaffCartItem.id, mockDaffCartItem).pipe(
             catchError((err: DaffProductOutOfStockError) => {
               expect(err).toEqual(jasmine.any(DaffProductOutOfStockError));
+              expect(err.itemId).toEqual(mockDaffCartItem.id);
               done();
               return [];
             }),
@@ -398,10 +399,11 @@ describe('Driver | Magento | Cart | CartItemService', () => {
       });
 
       describe('because the requested qty exceeds the max allowed', () => {
-        it('should throw a DaffCartItemExceedsMaxQtyError', done => {
+        it('should throw a DaffCartItemExceedsMaxQtyError with the item ID', done => {
           service.update(cartId, mockDaffCartItem.id, mockDaffCartItem).pipe(
             catchError((err: DaffCartItemExceedsMaxQtyError) => {
               expect(err).toEqual(jasmine.any(DaffCartItemExceedsMaxQtyError));
+              expect(err.itemId).toEqual(mockDaffCartItem.id);
               done();
               return [];
             }),

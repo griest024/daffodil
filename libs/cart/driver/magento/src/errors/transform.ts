@@ -1,9 +1,14 @@
 import { ApolloError } from '@apollo/client/core';
 
-import { DaffCartCoupon } from '@daffodil/cart';
+import {
+  DaffCartCoupon,
+  DaffCartItem,
+} from '@daffodil/cart';
 import {
   DaffCartDriverErrorMap,
+  DaffCartItemExceedsMaxQtyError,
   DaffInvalidCouponCodeError,
+  DaffProductOutOfStockError,
 } from '@daffodil/cart/driver';
 import { daffTransformMagentoError } from '@daffodil/driver/magento';
 
@@ -24,6 +29,10 @@ function transformMagentoCartGraphQlError(error: ApolloError, requestPayload?: u
 
       if (errObj instanceof DaffInvalidCouponCodeError) {
         (<DaffInvalidCouponCodeError>errObj).coupon = (<DaffCartCoupon>requestPayload)?.code;
+      } else if (errObj instanceof DaffProductOutOfStockError) {
+        (<DaffProductOutOfStockError>errObj).itemId = <DaffCartItem['id']>requestPayload;
+      } else if (errObj instanceof DaffCartItemExceedsMaxQtyError) {
+        (<DaffCartItemExceedsMaxQtyError>errObj).itemId = <DaffCartItem['id']>requestPayload;
       }
 
       return errObj;
