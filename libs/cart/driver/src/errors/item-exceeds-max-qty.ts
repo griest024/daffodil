@@ -1,3 +1,4 @@
+import { DaffCartItem } from '@daffodil/cart';
 import {
   DaffError,
   DaffInheritableError,
@@ -12,7 +13,7 @@ import { DaffCartDriverErrorCodes } from './codes.enum';
 export class DaffCartItemExceedsMaxQtyError extends DaffInheritableError implements DaffError {
 	public readonly code: string = DaffCartDriverErrorCodes.ITEM_EXCEEDS_MAX_QTY;
 
-	constructor(message?: string) {
+	constructor(message?: string, public itemId?: DaffCartItem['id']) {
 	  super(message);
 	}
 }
