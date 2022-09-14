@@ -30,11 +30,16 @@ import {
   DaffCategoryPageMetadataFactory,
 } from '@daffodil/category/testing';
 import {
-  DaffProductFilterEqualRequest,
-  DaffProductFilterRangeNumericRequest,
-  DaffProductFilterRangeRequestOption,
-  daffProductComputeFilterRangePairLabel,
-} from '@daffodil/product';
+  DaffFilterEqualRequest,
+  DaffFilterRangeNumericRequest,
+  DaffFilterRangeRequestOption,
+  daffFilterComputeRangePairLabel,
+} from '@daffodil/core';
+import {
+  DaffFilterRangeNumericRequestOptionFactory,
+  DaffFilterRequestEqualFactory,
+  DaffFilterRequestRangeNumericFactory,
+} from '@daffodil/core/testing';
 import {
   MagentoAggregation,
   MagentoProduct,
@@ -52,12 +57,7 @@ import {
   MagentoProductPageInfoFactory,
   MagentoSimpleProductFactory,
 } from '@daffodil/product/driver/magento/testing';
-import {
-  DaffProductFactory,
-  DaffProductFilterRangeNumericRequestOptionFactory,
-  DaffProductFilterRequestEqualFactory,
-  DaffProductFilterRequestRangeNumericFactory,
-} from '@daffodil/product/testing';
+import { DaffProductFactory } from '@daffodil/product/testing';
 
 import { DaffMagentoCategoryService } from './category.service';
 
@@ -67,9 +67,9 @@ describe('@daffodil/category/driver/magento | DaffMagentoCategoryService', () =>
   let categoryPageMetadataFactory: DaffCategoryPageMetadataFactory;
   let controller: ApolloTestingController;
   let productFactory: DaffProductFactory;
-  let equalFilterRequestFactory: DaffProductFilterRequestEqualFactory;
-  let rangeFilterRequestFactory: DaffProductFilterRequestRangeNumericFactory;
-  let rangeFilterRequestOptionFactory: DaffProductFilterRangeNumericRequestOptionFactory;
+  let equalFilterRequestFactory: DaffFilterRequestEqualFactory;
+  let rangeFilterRequestFactory: DaffFilterRequestRangeNumericFactory;
+  let rangeFilterRequestOptionFactory: DaffFilterRangeNumericRequestOptionFactory;
   let magentoCategoryFactory: DaffCategoryDriverMagentoCategoryFactory;
   let magentoSortFieldsFactory: MagentoProductSortFieldsFactory;
   let priceAggregateFactory: MagentoProductAggregationPriceFactory;
@@ -80,9 +80,9 @@ describe('@daffodil/category/driver/magento | DaffMagentoCategoryService', () =>
 
   let mockCategoryRequest: DaffCategoryIdRequest;
   let mockCategory: DaffCategory;
-  let equalFilterRequest: DaffProductFilterEqualRequest;
-  let rangeFilterRequest: DaffProductFilterRangeNumericRequest;
-  let rangeFilterRequestOption: DaffProductFilterRangeRequestOption<number>;
+  let equalFilterRequest: DaffFilterEqualRequest;
+  let rangeFilterRequest: DaffFilterRangeNumericRequest;
+  let rangeFilterRequestOption: DaffFilterRangeRequestOption<number>;
   let rangeFilterRequestOptionLabel: string;
   let mockMagentoCategory: MagentoCategory;
   let mockMagentoProductSortFields: MagentoProductSortFields;
@@ -112,14 +112,14 @@ describe('@daffodil/category/driver/magento | DaffMagentoCategoryService', () =>
     categoryFactory = TestBed.inject(DaffCategoryFactory);
     categoryPageMetadataFactory = TestBed.inject(DaffCategoryPageMetadataFactory);
     productFactory = TestBed.inject(DaffProductFactory);
-    equalFilterRequestFactory = TestBed.inject(DaffProductFilterRequestEqualFactory);
-    rangeFilterRequestFactory = TestBed.inject(DaffProductFilterRequestRangeNumericFactory);
-    rangeFilterRequestOptionFactory = TestBed.inject(DaffProductFilterRangeNumericRequestOptionFactory);
+    equalFilterRequestFactory = TestBed.inject(DaffFilterRequestEqualFactory);
+    rangeFilterRequestFactory = TestBed.inject(DaffFilterRequestRangeNumericFactory);
+    rangeFilterRequestOptionFactory = TestBed.inject(DaffFilterRangeNumericRequestOptionFactory);
     magentoCategoryFactory = TestBed.inject(DaffCategoryDriverMagentoCategoryFactory);
     magentoSortFieldsFactory = TestBed.inject(MagentoProductSortFieldsFactory);
     selectAggregateFactory = TestBed.inject(MagentoProductAggregationSelectFactory);
     priceAggregateFactory = TestBed.inject(MagentoProductAggregationPriceFactory);
-    rangeFilterRequestOptionFactory = TestBed.inject(DaffProductFilterRangeNumericRequestOptionFactory);
+    rangeFilterRequestOptionFactory = TestBed.inject(DaffFilterRangeNumericRequestOptionFactory);
     magentoProductFactory = TestBed.inject(MagentoSimpleProductFactory);
     magentoPageInfoFactory = TestBed.inject(MagentoProductPageInfoFactory);
     magentoFilterTypeFieldFactory = TestBed.inject(MagentoProductFilterTypeFieldFactory);
@@ -228,7 +228,7 @@ describe('@daffodil/category/driver/magento | DaffMagentoCategoryService', () =>
           name: mockMagentoPriceFilterTypeField.name,
           value: rangeFilterRequestOption,
         });
-        rangeFilterRequestOptionLabel = daffProductComputeFilterRangePairLabel(rangeFilterRequestOption.min, rangeFilterRequestOption.max);
+        rangeFilterRequestOptionLabel = daffFilterComputeRangePairLabel(rangeFilterRequestOption.min, rangeFilterRequestOption.max);
         mockCategoryRequest = {
           ...mockCategoryRequest,
           kind: DaffCategoryRequestKind.ID,
@@ -343,7 +343,7 @@ describe('@daffodil/category/driver/magento | DaffMagentoCategoryService', () =>
           name: mockMagentoPriceFilterTypeField.name,
           value: rangeFilterRequestOption,
         });
-        rangeFilterRequestOptionLabel = daffProductComputeFilterRangePairLabel(rangeFilterRequestOption.min, rangeFilterRequestOption.max);
+        rangeFilterRequestOptionLabel = daffFilterComputeRangePairLabel(rangeFilterRequestOption.min, rangeFilterRequestOption.max);
         mockCategoryUrlRequest = {
           ...mockCategoryUrlRequest,
           filterRequests: [
