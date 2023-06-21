@@ -13,6 +13,7 @@ import {
 } from '@ngrx/store';
 import {
   combineLatest,
+  iif,
   of,
 } from 'rxjs';
 import {
@@ -22,6 +23,7 @@ import {
   debounceTime,
   mergeMap,
   take,
+  withLatestFrom,
 } from 'rxjs/operators';
 
 import {
@@ -57,10 +59,12 @@ import {
   DaffCartItemDeleteOutOfStock,
   DaffCartItemDeleteOutOfStockSuccess,
   DaffCartItemDeleteOutOfStockFailure,
+  DaffCartItemActions,
 } from '../actions/public_api';
 import { DaffCartItemStateDebounceTime } from '../injection-tokens/cart-item-state-debounce-time';
 import { DaffStatefulCartItem } from '../models/public_api';
 import { getDaffCartSelectors } from '../selectors/public_api';
+import { DaffCartSafeLoadService } from '../services/safe-load.service';
 
 @Injectable()
 export class DaffCartItemEffects<
@@ -69,12 +73,13 @@ export class DaffCartItemEffects<
   V extends DaffCart,
 > {
   constructor(
-    private actions$: Actions,
+    private actions$: Actions<DaffCartItemActions<T, U, V>>,
     @Inject(DAFF_CART_ERROR_MATCHER) private errorMatcher: ErrorTransformer,
     @Inject(DaffCartItemDriver) private driver: DaffCartItemServiceInterface<T, U, V>,
     private storage: DaffCartStorageService,
     @Inject(DaffCartItemStateDebounceTime) private cartItemStateDebounceTime: number,
     private store: Store,
+    private safeLoadService: DaffCartSafeLoadService,
   ) {}
 
 
@@ -99,16 +104,29 @@ export class DaffCartItemEffects<
     ),
   ));
 
+  private addCartItem$(
+    cartId: DaffCart['id'],
+    input: U,
+  ) {
+    return this.driver.add(
+      cartId,
+      input,
+    ).pipe(
+      map((resp: V) => new DaffCartItemAddSuccess(resp)),
+      catchError(error => of(new DaffCartItemAddFailure(this.errorMatcher(error)))),
+    );
+  }
 
   add$ = createEffect(() => this.actions$.pipe(
     ofType(DaffCartItemActionTypes.CartItemAddAction),
-    switchMap((action: DaffCartItemAdd<U>) =>
-      this.driver.add(
-        this.storage.getCartId(),
-        action.input,
-      ).pipe(
-        map((resp: V) => new DaffCartItemAddSuccess(resp)),
-        catchError(error => of(new DaffCartItemAddFailure(this.errorMatcher(error)))),
+    mergeMap((action) =>
+      this.safeLoadService.safeLoadCart2$().pipe(
+        switchMap((cart) =>
+          this.addCartItem$(
+            cart.id,
+            action.input,
+          ),
+        ),
       ),
     ),
   ));
