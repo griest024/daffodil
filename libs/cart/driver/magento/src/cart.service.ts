@@ -109,7 +109,7 @@ export class DaffMagentoCartService implements DaffCartServiceInterface<DaffCart
     throw new Error('Method is deprecated. Use DaffCartItemServiceInterface#add instead.');
   }
 
-  clear(cartId: DaffCart['id']): Observable<Partial<DaffCart>> {
+  clear(cartId: DaffCart['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return this.cartItemDriver.list(cartId).pipe(
       switchMap(items =>
         forkJoin(...items.map(item =>
