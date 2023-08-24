@@ -40,7 +40,7 @@ export class DaffCartCouponApply<T extends DaffCartCoupon = DaffCartCoupon> impl
 export class DaffCartCouponApplySuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartCouponActionTypes.CartCouponApplySuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -92,7 +92,7 @@ export class DaffCartCouponRemove<T extends DaffCartCoupon = DaffCartCoupon> imp
 export class DaffCartCouponRemoveSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartCouponActionTypes.CartCouponRemoveSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -117,7 +117,7 @@ export class DaffCartCouponRemoveAll implements Action {
 export class DaffCartCouponRemoveAllSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartCouponActionTypes.CartCouponRemoveAllSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**

@@ -39,7 +39,7 @@ export class DaffMagentoCartOrderService implements DaffCartOrderServiceInterfac
   ) {}
 
   placeOrder(cartId: DaffCart['id'], payment?: any): Observable<DaffCartOrderResult> {
-    return this.mutationQueue.mutate<MagentoPlaceOrderResponse>({
+    return this.mutationQueue.mutate({
       mutation: placeOrder,
       variables: {
         cartId,

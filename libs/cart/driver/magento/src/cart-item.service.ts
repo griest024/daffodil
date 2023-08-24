@@ -25,6 +25,8 @@ import {
 } from '@daffodil/cart';
 import { DaffCartItemServiceInterface } from '@daffodil/cart/driver';
 import { DaffQueuedApollo } from '@daffodil/core/graphql';
+import { DaffDriverResponse } from '@daffodil/driver';
+import { daffDriverMagentoResponse } from '@daffodil/driver/magento';
 
 import {
   magentoCartTransformUserError,
@@ -38,15 +40,11 @@ import {
 import { DaffCartMagentoCartItemTransform } from './interfaces/public_api';
 import { MagentoCartItemInput } from './models/requests/cart-item';
 import {
-  MagentoAddCartItemResponse,
-  MagentoListCartItemsResponse,
-  MagentoRemoveCartItemResponse,
   addCartItem,
   listCartItems,
   removeCartItem,
   updateCartItem,
 } from './queries/public_api';
-import { MagentoUpdateCartItemResponse } from './queries/public_api';
 import {
   transformCompositeCartItem,
   transformSimpleCartItem,
@@ -78,7 +76,7 @@ export class DaffMagentoCartItemService implements DaffCartItemServiceInterface 
   ) {}
 
   list(cartId: DaffCart['id']): Observable<DaffCartItem[]> {
-    return this.apollo.query<MagentoListCartItemsResponse>({
+    return this.apollo.query({
       query: listCartItems(this.extraCartFragments),
       variables: { cartId },
       fetchPolicy: 'network-only',
@@ -95,7 +93,7 @@ export class DaffMagentoCartItemService implements DaffCartItemServiceInterface 
     );
   }
 
-  add(cartId: DaffCart['id'], cartItemInput: DaffCartItemInput): Observable<Partial<DaffCart>> {
+  add(cartId: DaffCart['id'], cartItemInput: DaffCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     switch(cartItemInput.type) {
       case (DaffCartItemInputType.Composite):
         return this.addBundledProduct(cartId, <DaffCompositeCartItemInput>cartItemInput);
@@ -106,8 +104,8 @@ export class DaffMagentoCartItemService implements DaffCartItemServiceInterface 
     }
   }
 
-  update(cartId: DaffCart['id'], itemId: DaffCartItem['id'], changes: Partial<DaffCartItem>): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoUpdateCartItemResponse>({
+  update(cartId: DaffCart['id'], itemId: DaffCartItem['id'], changes: Partial<DaffCartItem>): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: updateCartItem(this.extraCartFragments),
       variables: {
         cartId,
@@ -117,51 +115,64 @@ export class DaffMagentoCartItemService implements DaffCartItemServiceInterface 
         }),
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(result => this.cartTransformer.transform(result.data.updateCartItems.cart)),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.updateCartItems.cart),
+        (error) => transformCartMagentoError(error),
+      ),
       catchError(err => throwError(() => transformCartMagentoError(err))),
     );
   }
 
-  delete(cartId: DaffCart['id'], itemId: DaffCartItem['id']): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoRemoveCartItemResponse>({
+  delete(cartId: DaffCart['id'], itemId: DaffCartItem['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: removeCartItem(this.extraCartFragments),
       variables: {
         cartId,
-        itemId,
+        itemId: Number(itemId),
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(result => this.cartTransformer.transform(result.data.removeItemFromCart.cart)),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.removeItemFromCart.cart),
+        (error) => transformCartMagentoError(error),
+      ),
       catchError(error => throwError(() => transformCartMagentoError(error))),
     );
   }
 
-  private addBundledProduct(cartId: DaffCart['id'], cartItemInput: DaffCompositeCartItemInput): Observable<Partial<DaffCart>> {
+  private addBundledProduct(cartId: DaffCart['id'], cartItemInput: DaffCompositeCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return this.addCartItemRequest(cartId, transformCompositeCartItem(cartItemInput));
   }
 
-  private addConfigurableProduct(cartId: DaffCart['id'], cartItemInput: DaffConfigurableCartItemInput): Observable<Partial<DaffCart>> {
+  private addConfigurableProduct(cartId: DaffCart['id'], cartItemInput: DaffConfigurableCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return this.addCartItemRequest(cartId, transformConfigurableCartItem(cartItemInput));
   }
 
-  private addSimpleProduct(cartId: DaffCart['id'], cartItemInput: DaffCartItemInput): Observable<Partial<DaffCart>> {
+  private addSimpleProduct(cartId: DaffCart['id'], cartItemInput: DaffCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return this.addCartItemRequest(cartId, transformSimpleCartItem(cartItemInput));
   }
 
-  private addCartItemRequest(cartId: DaffCart['id'], input: MagentoCartItemInput): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoAddCartItemResponse>({
+  private addCartItemRequest(cartId: DaffCart['id'], input: MagentoCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: addCartItem(this.extraCartFragments),
       variables: {
         cartId,
         input,
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
       switchMap((result) =>
         result.data.addProductsToCart.user_errors.length > 0
           ? throwError(() => magentoCartTransformUserError(result.data.addProductsToCart.user_errors[0]))
-          : of(this.cartTransformer.transform(result.data.addProductsToCart.cart)),
+          : of(result),
+      ),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.addProductsToCart.cart),
+        (error) => transformCartMagentoError(error),
       ),
       catchError(err => throwError(() => transformCartMagentoError(err))),
     );

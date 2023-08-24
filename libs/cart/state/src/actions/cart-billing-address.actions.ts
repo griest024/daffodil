@@ -58,7 +58,7 @@ export class DaffCartBillingAddressUpdate<T extends DaffCartAddress = DaffCartAd
 export class DaffCartBillingAddressUpdateSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartBillingAddressActionTypes.CartBillingAddressUpdateSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**

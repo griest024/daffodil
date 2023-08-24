@@ -56,7 +56,7 @@ describe('@daffodil/driver/magento | daffTransformMagentoError', () => {
 
   describe('if the passed error is a Daffodil error', () => {
     let daffError: MockError;
-    let result: DaffError;
+    let result: DaffError[];
 
     beforeEach(() => {
       daffError = new MockError('A Daffodil error');
@@ -64,7 +64,7 @@ describe('@daffodil/driver/magento | daffTransformMagentoError', () => {
     });
 
     it('should return the passed error', () => {
-      expect(result).toEqual(daffError);
+      expect(result).toEqual([daffError]);
     });
   });
 
@@ -86,13 +86,13 @@ describe('@daffodil/driver/magento | daffTransformMagentoError', () => {
     });
     const result = daffTransformMagentoError(error, map);
 
-    expect(result.code).toEqual(DAFF_DRIVER_NETWORK_ERROR_CODE);
+    expect(result[0].code).toEqual(DAFF_DRIVER_NETWORK_ERROR_CODE);
   });
 
   describe('when there are no GraphQL error', () => {
     it('should fall back to the generic driver Magento error', () => {
       const error = new Error('an error');
-      expect(daffTransformMagentoError(error, map)).toEqual(new DaffDriverMagentoError('an error'));
+      expect(daffTransformMagentoError(error, map)).toEqual([new DaffDriverMagentoError('an error')]);
     });
   });
 });

@@ -27,13 +27,13 @@ export function transformMagentoCartGraphQlError(error: GraphQLError, requestPay
     }
   }
 
-  return daffTransformMagentoError(error, {});
+  return daffTransformMagentoError(error, {})[0];
 };
 
-export function transformMagentoReviewsError(error: any, requestPayload?: unknown) {
+export function transformMagentoReviewsError(error: any, requestPayload?: unknown): DaffError {
   if (error.graphQLErrors?.length) {
     return transformMagentoCartGraphQlError((<ApolloError>error).graphQLErrors[0], requestPayload);
   } else {
-    return daffTransformMagentoError(error, {}) || new DaffCustomerStoreCreditInvalidAPIResponseError(error.message);
+    return daffTransformMagentoError(error, {})[0] || new DaffCustomerStoreCreditInvalidAPIResponseError(error.message);
   }
 }

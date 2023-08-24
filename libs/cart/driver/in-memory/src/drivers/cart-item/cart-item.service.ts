@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  map,
+} from 'rxjs';
 
 import {
   DaffCartItem,
@@ -8,6 +11,7 @@ import {
   DaffCart,
 } from '@daffodil/cart';
 import { DaffCartItemServiceInterface } from '@daffodil/cart/driver';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * @inheritdoc
@@ -35,19 +39,34 @@ DaffCart
     return this.http.get<DaffCartItem>(`${this.url}/${cartId}/${itemId}`);
   }
 
-  add(cartId: DaffCart['id'], input: DaffCartItemInput): Observable<Partial<DaffCart>> {
-    return this.http.post<Partial<DaffCart>>(`${this.url}/${cartId}/`, input);
+  add(cartId: DaffCart['id'], input: DaffCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.http.post<Partial<DaffCart>>(`${this.url}/${cartId}/`, input).pipe(
+      map(result => ({
+        response: result,
+        errors: [],
+      })),
+    );
   }
 
   update(
     cartId: DaffCart['id'],
     itemId: DaffCartItem['id'],
     item: Partial<DaffCartItem>,
-  ): Observable<Partial<DaffCart>> {
-    return this.http.put<Partial<DaffCart>>(`${this.url}/${cartId}/${itemId}`, item);
+  ): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.http.put<Partial<DaffCart>>(`${this.url}/${cartId}/${itemId}`, item).pipe(
+      map(result => ({
+        response: result,
+        errors: [],
+      })),
+    );
   }
 
-  delete(cartId: DaffCart['id'], itemId: DaffCartItem['id']): Observable<Partial<DaffCart>> {
-    return this.http.delete<Partial<DaffCart>>(`${this.url}/${cartId}/${itemId}`);
+  delete(cartId: DaffCart['id'], itemId: DaffCartItem['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.http.delete<Partial<DaffCart>>(`${this.url}/${cartId}/${itemId}`).pipe(
+      map(result => ({
+        response: result,
+        errors: [],
+      })),
+    );
   }
 }

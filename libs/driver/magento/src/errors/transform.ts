@@ -13,15 +13,14 @@ import { daffMagentoTransformGraphQlError } from './transform-graphql';
 /**
  * Transforms the passed error according to the lookup in the passed map.
  */
-// TODO: return array of errors
-export function daffTransformMagentoError<T extends DaffErrorCodeMap>(error: any, map: T): DaffError {
-  if (error.graphQLErrors?.length > 0) {
-    return (<ApolloError>error).graphQLErrors.map(err => daffMagentoTransformGraphQlError<T>(err, map))[0];
-  } else if (error.networkError) {
-    return new DaffDriverNetworkError((<ApolloError>error).networkError.message);
+export function daffTransformMagentoError<T extends DaffErrorCodeMap>(error: ApolloError | DaffError | Error, map: T): DaffError[] {
+  if ((<ApolloError>error).graphQLErrors?.length > 0) {
+    return (<ApolloError>error).graphQLErrors.map(err => daffMagentoTransformGraphQlError<T>(err, map));
+  } else if ((<ApolloError>error).networkError) {
+    return [new DaffDriverNetworkError((<ApolloError>error).networkError.message)];
   } else if (daffIsError(error)) {
-    return error;
+    return [<DaffError>error];
   } else {
-    return new DaffDriverMagentoError(error.message);
+    return [new DaffDriverMagentoError(error.message)];
   }
 };

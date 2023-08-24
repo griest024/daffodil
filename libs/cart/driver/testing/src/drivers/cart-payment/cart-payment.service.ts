@@ -14,6 +14,7 @@ import {
   DaffCartFactory,
   DaffCartPaymentFactory,
 } from '@daffodil/cart/testing';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * @inheritdoc
@@ -31,16 +32,22 @@ export class DaffTestingCartPaymentService implements DaffCartPaymentServiceInte
     return of(this.paymentFactory.create());
   }
 
-  update(cartId: DaffCart['id'], payment: Partial<DaffCartPaymentMethod>): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  update(cartId: DaffCart['id'], payment: Partial<DaffCartPaymentMethod>): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
   updateWithBilling(
     cartId: DaffCart['id'],
     payment: Partial<DaffCartPaymentMethod>,
     address: Partial<DaffCartAddress>,
-  ): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  ): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
   remove(cartId: DaffCart['id']): Observable<void> {

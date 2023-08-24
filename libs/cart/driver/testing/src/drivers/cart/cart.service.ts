@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Observable,
+  map,
   of,
 } from 'rxjs';
 
@@ -31,8 +32,11 @@ export class DaffTestingCartService implements DaffCartServiceInterface {
     return of(this.cartFactory.create());
   }
 
-  clear(id: DaffCart['id']): Observable<DaffCart> {
-    return of(this.cartFactory.create());
+  clear(id: DaffCart['id']): Observable<DaffDriverResponse<DaffCart>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
   create() {

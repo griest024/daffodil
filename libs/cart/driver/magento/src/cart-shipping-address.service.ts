@@ -19,6 +19,8 @@ import {
 } from '@daffodil/cart';
 import { DaffCartShippingAddressServiceInterface } from '@daffodil/cart/driver';
 import { DaffQueuedApollo } from '@daffodil/core/graphql';
+import { DaffDriverResponse } from '@daffodil/driver';
+import { daffDriverMagentoResponse } from '@daffodil/driver/magento';
 
 import { transformCartMagentoError } from './errors/transform';
 import { DAFF_MAGENTO_CART_MUTATION_QUEUE } from './injection-tokens/cart-mutation-queue.token';
@@ -54,7 +56,7 @@ export class DaffMagentoCartShippingAddressService implements DaffCartShippingAd
   ) {}
 
   get(cartId: DaffCart['id']): Observable<DaffCartAddress> {
-    return this.apollo.query<MagentoGetShippingAddressResponse>({
+    return this.apollo.query({
       query: getShippingAddress(this.extraCartFragments),
       variables: { cartId },
       fetchPolicy: 'network-only',
@@ -70,26 +72,30 @@ export class DaffMagentoCartShippingAddressService implements DaffCartShippingAd
     );
   }
 
-  update(cartId: DaffCart['id'], address: Partial<DaffCartAddress>): Observable<Partial<DaffCart>> {
+  update(cartId: DaffCart['id'], address: Partial<DaffCartAddress>): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return address.email ? this.updateAddressWithEmail(cartId, address) : this.updateAddress(cartId, address);
   }
 
-  private updateAddress(cartId: DaffCart['id'], address: Partial<DaffCartAddress>): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoUpdateShippingAddressResponse>({
+  private updateAddress(cartId: DaffCart['id'], address: Partial<DaffCartAddress>): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: updateShippingAddress(this.extraCartFragments),
       variables: {
         cartId,
         address: this.shippingAddressInputTransformer.transform(address),
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(resp => this.cartTransformer.transform(resp.data.setShippingAddressesOnCart.cart)),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.setShippingAddressesOnCart.cart),
+        (error) => transformCartMagentoError(error),
+      ),
       catchError(error => throwError(() => transformCartMagentoError(error))),
     );
   }
 
-  private updateAddressWithEmail(cartId: DaffCart['id'], address: Partial<DaffCartAddress>): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoUpdateShippingAddressWithEmailResponse>({
+  private updateAddressWithEmail(cartId: DaffCart['id'], address: Partial<DaffCartAddress>): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: updateShippingAddressWithEmail(this.extraCartFragments),
       variables: {
         cartId,
@@ -97,11 +103,15 @@ export class DaffMagentoCartShippingAddressService implements DaffCartShippingAd
         address: this.shippingAddressInputTransformer.transform(address),
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(resp => this.cartTransformer.transform({
-        ...resp.data.setShippingAddressesOnCart.cart,
-        email: resp.data.setGuestEmailOnCart.cart.email,
-      })),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform({
+          ...data.setShippingAddressesOnCart.cart,
+          email: data.setGuestEmailOnCart.cart.email,
+        }),
+        (error) => transformCartMagentoError(error),
+      ),
       catchError(error => throwError(() => transformCartMagentoError(error))),
     );
   }

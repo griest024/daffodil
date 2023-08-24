@@ -6,6 +6,7 @@ import {
   DaffCartItemInput,
   DaffCart,
 } from '@daffodil/cart';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * The interface responsible for managing the items of a cart.
@@ -28,7 +29,7 @@ export interface DaffCartItemServiceInterface<
   /**
    * Add something to a cart.
    */
-  add(id: V['id'], product: U): Observable<Partial<V>>;
+  add(id: V['id'], product: U): Observable<DaffDriverResponse<Partial<V>>>;
 
   /**
    * Update an existing item in a cart
@@ -37,12 +38,12 @@ export interface DaffCartItemServiceInterface<
     cartId: V['id'],
     itemId: T['id'],
     changes: Partial<T>,
-  ): Observable<Partial<V>>;
+  ): Observable<DaffDriverResponse<Partial<V>>>;
 
   /**
    * Remove an item from a cart.
    */
-  delete(cartId: V['id'], itemId: T['id']): Observable<Partial<V>>;
+  delete(cartId: V['id'], itemId: T['id']): Observable<DaffDriverResponse<Partial<V>>>;
 }
 
 export const DaffCartItemDriver = new InjectionToken<

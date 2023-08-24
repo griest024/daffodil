@@ -53,6 +53,7 @@ export function cartBillingAddressReducer<T extends DaffCart>(
       return {
         ...state,
         ...resetErrors(state.errors),
+        ...addError(state.errors, ...action.errors),
         cart: {
           ...state.cart,
           ...action.payload,

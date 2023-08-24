@@ -111,7 +111,7 @@ export class DaffCartItemEffects<
       cartId,
       input,
     ).pipe(
-      map((resp: V) => new DaffCartItemAddSuccess(resp)),
+      map((resp) => new DaffCartItemAddSuccess(resp.response, resp.errors)),
       catchError(error => of(new DaffCartItemAddFailure(this.errorMatcher(error)))),
     );
   }
@@ -141,7 +141,7 @@ export class DaffCartItemEffects<
         action.itemId,
         action.changes,
       ).pipe(
-        map((resp: V) => new DaffCartItemUpdateSuccess(resp, action.itemId)),
+        map((resp) => new DaffCartItemUpdateSuccess(resp.response, action.itemId, resp.errors)),
         catchError(error => of(new DaffCartItemUpdateFailure(this.errorMatcher(error), action.itemId))),
       ),
     ),
@@ -169,7 +169,7 @@ export class DaffCartItemEffects<
     ofType(DaffCartItemActionTypes.CartItemDeleteAction),
     mergeMap((action: DaffCartItemDelete<T>) =>
       this.driver.delete(this.storage.getCartId(), action.itemId).pipe(
-        map((resp: V) => new DaffCartItemDeleteSuccess(resp)),
+        map((resp) => new DaffCartItemDeleteSuccess(resp.response, resp.errors)),
         catchError(error => of(new DaffCartItemDeleteFailure(this.errorMatcher(error), action.itemId))),
       ),
     ),

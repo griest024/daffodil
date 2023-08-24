@@ -134,7 +134,7 @@ export class DaffCartClear implements Action {
 export class DaffCartClearSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartActionTypes.CartClearSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**

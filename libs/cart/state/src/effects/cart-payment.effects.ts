@@ -72,7 +72,7 @@ export class DaffCartPaymentEffects<
     ofType(DaffCartPaymentActionTypes.CartPaymentUpdateAction),
     switchMap((action: DaffCartPaymentUpdate<T>) =>
       this.driver.update(this.storage.getCartId(), action.payload).pipe(
-        map((resp: V) => new DaffCartPaymentUpdateSuccess(resp)),
+        map((resp) => new DaffCartPaymentUpdateSuccess(resp.response, resp.errors)),
         catchError(error => of(new DaffCartPaymentUpdateFailure(this.errorMatcher(error)))),
       ),
     ),
@@ -83,7 +83,7 @@ export class DaffCartPaymentEffects<
     ofType(DaffCartPaymentActionTypes.CartPaymentUpdateWithBillingAction),
     switchMap((action: DaffCartPaymentUpdateWithBilling<T, R>) =>
       this.driver.updateWithBilling(this.storage.getCartId(), action.payment, action.address).pipe(
-        map(resp => new DaffCartPaymentUpdateWithBillingSuccess(resp)),
+        map(resp => new DaffCartPaymentUpdateWithBillingSuccess(resp.response, resp.errors)),
         catchError(error => of(new DaffCartPaymentUpdateWithBillingFailure(this.errorMatcher(error)))),
       ),
     ),

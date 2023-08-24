@@ -5,6 +5,7 @@ import {
   DaffCartShippingRate,
   DaffCart,
 } from '@daffodil/cart';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * The interface responsible for mediating the interaction of the shipping
@@ -22,12 +23,12 @@ export interface DaffCartShippingInformationServiceInterface<
   /**
    * Update the currently selected shipping method of a cart.
    */
-  update(cartId: V['id'], shippingInfo: Partial<T>): Observable<Partial<V>>;
+  update(cartId: V['id'], shippingInfo: Partial<T>): Observable<DaffDriverResponse<Partial<V>>>;
 
   /**
    * Remove the currently selected shipping method from a cart.
    */
-  delete(cartId: V['id'], id?: T['id']): Observable<Partial<V>>;
+  delete(cartId: V['id'], id?: T['id']): Observable<DaffDriverResponse<Partial<V>>>;
 }
 
 export const DaffCartShippingInformationDriver = new InjectionToken<

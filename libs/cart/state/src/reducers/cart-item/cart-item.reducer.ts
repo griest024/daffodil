@@ -70,10 +70,21 @@ export function cartItemReducer<T extends DaffCart>(
 
     case DaffCartItemActionTypes.CartItemUpdateSuccessAction:
     case DaffCartItemActionTypes.CartItemAddSuccessAction:
+      return {
+        ...state,
+        ...resetErrors(state.errors),
+        cart: {
+          ...state.cart,
+          ...action.payload,
+        },
+        ...setLoading(state.loading, DaffState.Complete),
+      };
+
     case DaffCartItemActionTypes.CartItemDeleteSuccessAction:
       return {
         ...state,
         ...resetErrors(state.errors),
+        ...addError(state.errors, ...action.errors),
         cart: {
           ...state.cart,
           ...action.payload,
@@ -86,7 +97,7 @@ export function cartItemReducer<T extends DaffCart>(
         ...state,
         errors: {
           ...state.errors,
-          [DaffCartOperationType.Item]: [],
+          [DaffCartOperationType.Item]: action.errors,
           // out of stock errors can be in the main cart, remove them here
           [DaffCartOperationType.Cart]: state.errors[DaffCartOperationType.Cart].filter(({ code }) => code !== DaffCartDriverErrorCodes.PRODUCT_OUT_OF_STOCK),
         },

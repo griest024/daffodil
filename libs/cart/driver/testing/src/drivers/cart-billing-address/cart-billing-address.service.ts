@@ -13,6 +13,7 @@ import {
   DaffCartAddressFactory,
   DaffCartFactory,
 } from '@daffodil/cart/testing';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * @inheritdoc
@@ -30,7 +31,10 @@ export class DaffTestingCartBillingAddressService implements DaffCartBillingAddr
     return of(this.addressFactory.create());
   }
 
-  update(cartId: DaffCart['id'], address: DaffCartAddress): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  update(cartId: DaffCart['id'], address: DaffCartAddress): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 }

@@ -43,7 +43,7 @@ export class DaffMagentoCartPaymentMethodsService implements DaffCartPaymentMeth
   ) {}
 
   list(cartId: DaffCart['id']): Observable<DaffCartPaymentMethod[]> {
-    return this.apollo.query<MagentoListPaymentMethodsResponse>({
+    return this.apollo.query({
       query: listPaymentMethods(this.extraCartFragments),
       variables: { cartId },
       fetchPolicy: 'network-only',

@@ -13,6 +13,7 @@ import {
   DaffCartFactory,
   DaffCartCouponFactory,
 } from '@daffodil/cart/testing';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * @inheritdoc
@@ -30,15 +31,24 @@ export class DaffTestingCartCouponService implements DaffCartCouponServiceInterf
     return of(this.couponFactory.createMany(3));
   }
 
-  apply(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  apply(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
-  remove(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  remove(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
-  removeAll(cartId: DaffCart['id']): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  removeAll(cartId: DaffCart['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 }

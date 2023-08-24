@@ -6,6 +6,7 @@ import {
   DaffCart,
   DaffCartAddress,
 } from '@daffodil/cart';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * The interface responsible for managing the selected payment method of a cart.
@@ -25,14 +26,14 @@ export interface DaffCartPaymentServiceInterface<
    *
    * If a billing address is provided, the driver will update that simultaneously.
    */
-  update(cartId: V['id'], payment: Partial<T>, billingAddress?: Partial<R>): Observable<Partial<V>>;
+  update(cartId: V['id'], payment: Partial<T>, billingAddress?: Partial<R>): Observable<DaffDriverResponse<Partial<V>>>;
 
   /**
    * Update the billing address and payment method applied to a cart.
    *
    * @deprecated use `update` with the `billingAddress` parameter instead.
    */
-  updateWithBilling(cartId: V['id'], payment: Partial<T>, address: Partial<R>): Observable<Partial<V>>;
+  updateWithBilling(cartId: V['id'], payment: Partial<T>, address: Partial<R>): Observable<DaffDriverResponse<Partial<V>>>;
 
   /**
    * Remove the payment method applied to a cart.

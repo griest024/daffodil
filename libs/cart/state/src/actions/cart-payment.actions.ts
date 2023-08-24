@@ -66,7 +66,7 @@ export class DaffCartPaymentUpdate<T extends DaffCartPaymentMethod = DaffCartPay
 export class DaffCartPaymentUpdateSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartPaymentActionTypes.CartPaymentUpdateSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -101,7 +101,7 @@ export class DaffCartPaymentUpdateWithBilling<
 export class DaffCartPaymentUpdateWithBillingSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartPaymentActionTypes.CartPaymentUpdateWithBillingSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**

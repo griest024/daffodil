@@ -103,7 +103,7 @@ export class DaffCartItemUpdateSuccess<
 > implements Action {
   readonly type = DaffCartItemActionTypes.CartItemUpdateSuccessAction;
 
-  constructor(public payload: Partial<T>, public itemId: V['id']) {}
+  constructor(public payload: Partial<T>, public itemId: V['id'], public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -130,7 +130,7 @@ export class DaffCartItemAdd<T extends DaffCartItemInput = DaffCartItemInput> im
 export class DaffCartItemAddSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartItemActionTypes.CartItemAddSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -157,7 +157,7 @@ export class DaffCartItemDelete<T extends DaffStatefulCartItem = DaffStatefulCar
 export class DaffCartItemDeleteSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartItemActionTypes.CartItemDeleteSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -182,7 +182,7 @@ export class DaffCartItemDeleteOutOfStock implements Action {
 export class DaffCartItemDeleteOutOfStockSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartItemActionTypes.CartItemDeleteOutOfStockSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**

@@ -1,12 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  map,
+} from 'rxjs';
 
 import {
   DaffCart,
   DaffCartCoupon,
 } from '@daffodil/cart';
 import { DaffCartCouponServiceInterface } from '@daffodil/cart/driver';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * @inheritdoc
@@ -26,15 +30,30 @@ export class DaffInMemoryCartCouponService implements DaffCartCouponServiceInter
     return this.http.get<DaffCartCoupon[]>(`${this.url}/${cartId}/`);
   }
 
-  apply(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<Partial<DaffCart>> {
-    return this.http.post<Partial<DaffCart>>(`${this.url}/${cartId}/`, coupon);
+  apply(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.http.post<Partial<DaffCart>>(`${this.url}/${cartId}/`, coupon).pipe(
+      map(result => ({
+        response: result,
+        errors: [],
+      })),
+    );
   }
 
-  remove(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<Partial<DaffCart>> {
-    return this.http.delete<Partial<DaffCart>>(`${this.url}/${cartId}/${coupon.code}`);
+  remove(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.http.delete<Partial<DaffCart>>(`${this.url}/${cartId}/${coupon.code}`).pipe(
+      map(result => ({
+        response: result,
+        errors: [],
+      })),
+    );
   }
 
-  removeAll(cartId: DaffCart['id']): Observable<Partial<DaffCart>> {
-    return this.http.delete<Partial<DaffCart>>(`${this.url}/${cartId}/`);
+  removeAll(cartId: DaffCart['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.http.delete<Partial<DaffCart>>(`${this.url}/${cartId}/`).pipe(
+      map(result => ({
+        response: result,
+        errors: [],
+      })),
+    );
   }
 }

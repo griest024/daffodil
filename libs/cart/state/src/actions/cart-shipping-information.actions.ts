@@ -61,7 +61,7 @@ export class DaffCartShippingInformationUpdate<T extends DaffCartShippingRate = 
 export class DaffCartShippingInformationUpdateSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartShippingInformationActionTypes.CartShippingInformationUpdateSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 /**
@@ -85,7 +85,7 @@ export class DaffCartShippingInformationDelete<T extends DaffCartShippingRate = 
 export class DaffCartShippingInformationDeleteSuccess<T extends DaffCart = DaffCart> implements Action {
   readonly type = DaffCartShippingInformationActionTypes.CartShippingInformationDeleteSuccessAction;
 
-  constructor(public payload: Partial<T>) {}
+  constructor(public payload: Partial<T>, public errors: DaffStateError[] = []) {}
 }
 
 export class DaffCartShippingInformationDeleteFailure implements Action {

@@ -43,7 +43,7 @@ export class DaffMagentoCartShippingMethodsService implements DaffCartShippingMe
   ) {}
 
   list(cartId: DaffCart['id']): Observable<DaffCartShippingRate[]> {
-    return this.apollo.query<MagentoListShippingMethodsResponse>({
+    return this.apollo.query({
       query: listShippingMethods(this.extraCartFragments),
       variables: { cartId },
       fetchPolicy: 'network-only',

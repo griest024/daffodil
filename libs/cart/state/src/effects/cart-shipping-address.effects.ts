@@ -61,7 +61,7 @@ export class DaffCartShippingAddressEffects<T extends DaffCartAddress, V extends
     ofType(DaffCartShippingAddressActionTypes.CartShippingAddressUpdateAction),
     switchMap((action: DaffCartShippingAddressUpdate<T>) =>
       this.driver.update(this.storage.getCartId(), action.payload).pipe(
-        map((resp: V) => new DaffCartShippingAddressUpdateSuccess(resp)),
+        map((resp) => new DaffCartShippingAddressUpdateSuccess(resp.response, resp.errors)),
         catchError(error => of(new DaffCartShippingAddressUpdateFailure(this.errorMatcher(error)))),
       ),
     ),

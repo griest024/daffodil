@@ -5,6 +5,7 @@ import {
   DaffCartAddress,
   DaffCart,
 } from '@daffodil/cart';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * The interface responsible for managing the shipping address of a cart.
@@ -21,7 +22,7 @@ export interface DaffCartShippingAddressServiceInterface<
   /**
    * Update the shipping address of a cart.
    */
-  update(cartId: V['id'], address: Partial<T>): Observable<Partial<V>>;
+  update(cartId: V['id'], address: Partial<T>): Observable<DaffDriverResponse<Partial<V>>>;
 }
 
 export const DaffCartShippingAddressDriver = new InjectionToken<

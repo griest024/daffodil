@@ -72,7 +72,7 @@ export class DaffMagentoCartService implements DaffCartServiceInterface<DaffCart
   ) {}
 
   get(cartId: DaffCart['id']): Observable<DaffDriverResponse<DaffCart>> {
-    return this.apollo.query<MagentoGetCartResponse>({
+    return this.apollo.query({
       fetchPolicy: 'network-only',
       query: getCart(this.extraCartFragments),
       variables: { cartId },
@@ -99,7 +99,9 @@ export class DaffMagentoCartService implements DaffCartServiceInterface<DaffCart
   }
 
   create(): Observable<{id: DaffCart['id']}> {
-    return this.mutationQueue.mutate<MagentoCreateCartResponse>({ mutation: createCart }).pipe(
+    return this.mutationQueue.mutate({
+      mutation: createCart,
+    }).pipe(
       map(result => ({ id: result.data.createEmptyCart })),
       catchError(err => throwError(() => transformCartMagentoError(err))),
     );
@@ -111,18 +113,15 @@ export class DaffMagentoCartService implements DaffCartServiceInterface<DaffCart
 
   clear(cartId: DaffCart['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return this.cartItemDriver.list(cartId).pipe(
-      switchMap(items =>
-        forkJoin(...items.map(item =>
-          this.cartItemDriver.delete(cartId, item.id),
-        )),
-      ),
+      switchMap(items => forkJoin(items.map(item =>
+        this.cartItemDriver.delete(cartId, item.id),
+      ))),
       switchMap(() => this.get(cartId)),
-      map(({ response }) => response),
     );
   }
 
   merge(guestCart: DaffCart['id'], customerCart?: DaffCart['id']): Observable<DaffDriverResponse<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoMergeCartsResponse>({
+    return this.mutationQueue.mutate({
       mutation: magentoMergeCartsMutation(this.extraCartFragments),
       variables: {
         source: guestCart,

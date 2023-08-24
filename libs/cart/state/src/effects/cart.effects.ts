@@ -120,7 +120,7 @@ export class DaffCartEffects<T extends DaffCart> {
     ofType(DaffCartActionTypes.CartClearAction),
     switchMap((action: DaffCartClear) => defer(() => of(this.storage.getCartId())).pipe(
       switchMap(cartId => this.driver.clear(cartId)),
-      map((resp: T) => new DaffCartClearSuccess(resp)),
+      map((resp) => new DaffCartClearSuccess(resp.response, resp.errors)),
       catchError(error => of(error instanceof DaffStorageServiceError
         ? new DaffCartStorageFailure(this.errorMatcher(error))
         : new DaffCartClearFailure(this.errorMatcher(error)),

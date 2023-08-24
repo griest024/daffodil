@@ -18,6 +18,8 @@ import {
 } from '@daffodil/cart';
 import { DaffCartCouponServiceInterface } from '@daffodil/cart/driver';
 import { DaffQueuedApollo } from '@daffodil/core/graphql';
+import { DaffDriverResponse } from '@daffodil/driver';
+import { daffDriverMagentoResponse } from '@daffodil/driver/magento';
 
 import { transformCartMagentoError } from './errors/transform';
 import { DAFF_MAGENTO_CART_MUTATION_QUEUE } from './injection-tokens/cart-mutation-queue.token';
@@ -26,9 +28,6 @@ import {
   listCartCoupons,
   applyCoupon,
   removeAllCoupons,
-  MagentoListCartCouponsResponse,
-  MagentoApplyCouponResponse,
-  MagentoRemoveAllCouponsResponse,
 } from './queries/public_api';
 import { daffMagentoCouponTransform } from './transforms/outputs/cart-coupon';
 import { DaffMagentoCartTransformer } from './transforms/outputs/cart.service';
@@ -48,22 +47,26 @@ export class DaffMagentoCartCouponService implements DaffCartCouponServiceInterf
     private cartTransformer: DaffMagentoCartTransformer,
   ) {}
 
-  apply(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoApplyCouponResponse>({
+  apply(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: applyCoupon(this.extraCartFragments),
       variables: {
         cartId,
         couponCode: coupon.code,
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(result => this.cartTransformer.transform(result.data.applyCouponToCart.cart)),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.applyCouponToCart.cart),
+        (error) => transformCartMagentoError(error, coupon),
+      ),
       catchError(err => throwError(() => transformCartMagentoError(err, coupon))),
     );
   }
 
   list(cartId: DaffCart['id']): Observable<DaffCartCoupon[]> {
-    return this.mutationQueue.mutate<MagentoListCartCouponsResponse>({
+    return this.mutationQueue.mutate({
       mutation: listCartCoupons(this.extraCartFragments),
       variables: {
         cartId,
@@ -75,19 +78,23 @@ export class DaffMagentoCartCouponService implements DaffCartCouponServiceInterf
     );
   }
 
-  remove(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<Partial<DaffCart>> {
+  remove(cartId: DaffCart['id'], coupon: DaffCartCoupon): Observable<DaffDriverResponse<Partial<DaffCart>>> {
     return this.removeAll(cartId);
   }
 
-  removeAll(cartId: DaffCart['id']): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoRemoveAllCouponsResponse>({
+  removeAll(cartId: DaffCart['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: removeAllCoupons(this.extraCartFragments),
       variables: {
         cartId,
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(result => this.cartTransformer.transform(result.data.removeCouponFromCart.cart)),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.removeCouponFromCart.cart),
+        (error) => transformCartMagentoError(error),
+      ),
       catchError(err => throwError(() => transformCartMagentoError(err))),
     );
   }

@@ -49,9 +49,9 @@ export function transformMagentoCartGraphQlError(error: GraphQLError, requestPay
  * Transforms only the first GraphQL error with the cart magento error transformer,
  * otherwise falls back to a standard Magento error transform.
  */
-export function transformCartMagentoError(error, requestPayload?: unknown) {
+export function transformCartMagentoError(error, requestPayload?: unknown): DaffError[] {
   if (error.graphQLErrors?.length) {
-    return transformMagentoCartGraphQlError((<ApolloError>error).graphQLErrors[0], requestPayload);
+    return (<ApolloError>error).graphQLErrors.map((err) => transformMagentoCartGraphQlError(err, requestPayload));
   } else {
     return daffTransformMagentoError(error, DaffCartMagentoErrorMap);
   }

@@ -20,6 +20,8 @@ import {
 } from '@daffodil/cart';
 import { DaffCartShippingInformationServiceInterface } from '@daffodil/cart/driver';
 import { DaffQueuedApollo } from '@daffodil/core/graphql';
+import { DaffDriverResponse } from '@daffodil/driver';
+import { daffDriverMagentoResponse } from '@daffodil/driver/magento';
 
 import { transformCartMagentoError } from './errors/transform';
 import { DAFF_MAGENTO_CART_MUTATION_QUEUE } from './injection-tokens/cart-mutation-queue.token';
@@ -28,9 +30,6 @@ import {
   getSelectedShippingMethod,
   setSelectedShippingMethod,
   listShippingMethods,
-  MagentoGetSelectedShippingMethodResponse,
-  MagentoSetSelectedShippingMethodResponse,
-  MagentoListShippingMethodsResponse,
 } from './queries/public_api';
 import { DaffMagentoShippingMethodInputTransformer } from './transforms/inputs/shipping-method.service';
 import { DaffMagentoCartShippingRateTransformer } from './transforms/outputs/cart-shipping-rate.service';
@@ -55,7 +54,7 @@ export class DaffMagentoCartShippingInformationService implements DaffCartShippi
   ) {}
 
   get(cartId: DaffCart['id']): Observable<DaffCartShippingRate> {
-    return this.apollo.query<MagentoGetSelectedShippingMethodResponse>({
+    return this.apollo.query({
       query: getSelectedShippingMethod(this.extraCartFragments),
       variables: { cartId },
       fetchPolicy: 'network-only',
@@ -68,38 +67,51 @@ export class DaffMagentoCartShippingInformationService implements DaffCartShippi
     );
   }
 
-  update(cartId: DaffCart['id'], shippingInfo: Partial<DaffCartShippingRate>): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoSetSelectedShippingMethodResponse>({
+  update(cartId: DaffCart['id'], shippingInfo: Partial<DaffCartShippingRate>): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: setSelectedShippingMethod(this.extraCartFragments),
       variables: {
         cartId,
         method: this.shippingMethodInputTransformer.transform(shippingInfo),
       },
       fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
       switchMap(result =>
         // because Magento only returns the selected shipping method for the mutation
         // we have to manually refetch the available shipping methods
         // with fetchPolicy: 'network-only' in order to skip the cache
-        this.apollo.query<MagentoListShippingMethodsResponse>({
+        this.apollo.query({
           query: listShippingMethods(this.extraCartFragments),
           variables: { cartId },
           fetchPolicy: 'network-only',
+          errorPolicy: 'all',
         }).pipe(
           map(shippingMethods => ({
-            ...this.cartTransformer.transform(result.data.setShippingMethodsOnCart.cart),
-            available_shipping_methods: shippingMethods.data.cart.shipping_addresses[0].available_shipping_methods.map(item =>
-              this.shippingRateTransformer.transform(item),
-            ),
+            ...shippingMethods,
+            ...result,
+            data: {
+              ...result.data,
+              ...shippingMethods.data,
+            },
           })),
         ),
+      ),
+      daffDriverMagentoResponse(
+        (data) => ({
+          ...this.cartTransformer.transform(data.setShippingMethodsOnCart.cart),
+          available_shipping_methods: data.cart.shipping_addresses[0].available_shipping_methods.map(item =>
+            this.shippingRateTransformer.transform(item),
+          ),
+        }),
+        (error) => transformCartMagentoError(error),
       ),
       catchError(error => throwError(() => transformCartMagentoError(error))),
     );
   }
 
-  delete(cartId: DaffCart['id'], id?: DaffCartShippingRate['id']): Observable<Partial<DaffCart>> {
-    return this.mutationQueue.mutate<MagentoSetSelectedShippingMethodResponse>({
+  delete(cartId: DaffCart['id'], id?: DaffCartShippingRate['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return this.mutationQueue.mutate({
       mutation: setSelectedShippingMethod(this.extraCartFragments),
       variables: {
         cartId,
@@ -108,8 +120,13 @@ export class DaffMagentoCartShippingInformationService implements DaffCartShippi
           method_code: '',
         },
       },
+      fetchPolicy: 'network-only',
+      errorPolicy: 'all',
     }).pipe(
-      map(result => this.cartTransformer.transform(result.data.setShippingMethodsOnCart.cart)),
+      daffDriverMagentoResponse(
+        (data) => this.cartTransformer.transform(data.setShippingMethodsOnCart.cart),
+        (error) => transformCartMagentoError(error),
+      ),
       catchError(error => throwError(() => transformCartMagentoError(error))),
     );
   }

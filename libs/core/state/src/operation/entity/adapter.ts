@@ -29,7 +29,7 @@ export interface DaffOperationEntityStateAdapter<T extends DaffIdentifiable = Da
   /**
    * Upserts the entity into state and resets operation state and errors.
    */
-  load<S extends DaffOperationEntityState<T> = DaffOperationEntityState<T>>(entity: T, state: S): S;
+  load<S extends DaffOperationEntityState<T> = DaffOperationEntityState<T>>(entity: T, state: S, errors?: DaffStateError[]): S;
   /**
    * Adds a placeholder entity into state if `placeholderId` is specified and sets state to adding.
    */
@@ -37,7 +37,7 @@ export interface DaffOperationEntityStateAdapter<T extends DaffIdentifiable = Da
   /**
    * Adds the entity into state, sets operation state to added, and resets errors.
    */
-  add<S extends DaffOperationEntityState<T> = DaffOperationEntityState<T>>(entity: T, state: S, placeholderId?: string): S;
+  add<S extends DaffOperationEntityState<T> = DaffOperationEntityState<T>>(entity: T, state: S, placeholderId?: string, errors?: DaffStateError[]): S;
   /**
    * Sets the entity's operation state to mutating.
    */
@@ -45,7 +45,7 @@ export interface DaffOperationEntityStateAdapter<T extends DaffIdentifiable = Da
   /**
    * Upserts the entity into state, sets operation state to mutated, and resets errors.
    */
-  update<S extends DaffOperationEntityState<T> = DaffOperationEntityState<T>>(entity: Partial<T> & DaffIdentifiable, state: S): S;
+  update<S extends DaffOperationEntityState<T> = DaffOperationEntityState<T>>(entity: Partial<T> & DaffIdentifiable, state: S, errors?: DaffStateError[]): S;
   /**
    * Sets the entity's operation state to deleting.
    */
@@ -91,11 +91,11 @@ export function daffCreateOperationEntityStateAdapter<T extends DaffIdentifiable
         daffErrors: [],
         daffTemp: !state.entities[key],
       }, state),
-    load: (entity, state) =>
+    load: (entity, state, errors = []) =>
       adapter.upsertOne({
         ...entity,
         daffState: DaffState.Stable,
-        daffErrors: [],
+        daffErrors: errors,
         daffTemp: false,
       }, state),
     preadd: (entity, state, placeholderId) =>
@@ -109,11 +109,11 @@ export function daffCreateOperationEntityStateAdapter<T extends DaffIdentifiable
           daffTemp: true,
         }, state)
         : state,
-    add: (entity, state, placeholderId) =>
+    add: (entity, state, placeholderId, errors = []) =>
       adapter.upsertOne({
         ...entity,
         daffState: DaffState.Added,
-        daffErrors: [],
+        daffErrors: errors,
         daffTemp: false,
       }, placeholderId ? adapter.removeOne(placeholderId, state) : state),
     preupdate: (entity, state) =>
@@ -122,13 +122,13 @@ export function daffCreateOperationEntityStateAdapter<T extends DaffIdentifiable
         daffState: DaffState.Mutating,
         daffErrors: [],
       }, state),
-    update: (entity, state) =>
+    update: (entity, state, errors = []) =>
       adapter.updateOne({
         id: entity.id,
         changes: <Partial<DaffOperationEntity<T>>>{
           ...entity,
           daffState: DaffState.Mutated,
-          daffErrors: [],
+          daffErrors: errors,
           daffTemp: false,
         },
       }, state),

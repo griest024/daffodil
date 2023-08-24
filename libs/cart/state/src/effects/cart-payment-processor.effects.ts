@@ -77,7 +77,7 @@ export class DaffCartPaymentProcessorEffects<
               method: response.method,
               payment_info: response.data,
             }, <R>act.address).pipe(
-              map((resp: V) => new DaffCartPaymentUpdateSuccess(resp)),
+              map((resp) => new DaffCartPaymentUpdateSuccess(resp.response, resp.errors)),
               catchError(error => of(new DaffCartPaymentUpdateFailure(this.errorMatcher(error)))),
             ),
           ),

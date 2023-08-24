@@ -37,10 +37,10 @@ export function transformMagentoSearchProductGraphQlError(error: GraphQLError, r
  * Transforms only the first GraphQL error with the cart magento error transformer,
  * otherwise falls back to a standard Magento error transform.
  */
-export function transformSearchProductMagentoError(error, requestPayload?: unknown) {
+export function transformSearchProductMagentoError(error, requestPayload?: unknown): DaffError {
   if (error.graphQLErrors?.length) {
     return transformMagentoSearchProductGraphQlError((<ApolloError>error).graphQLErrors[0], requestPayload);
   } else {
-    return daffTransformMagentoError(error, MagentoSearchProductErrorMap);
+    return daffTransformMagentoError(error, MagentoSearchProductErrorMap)[0];
   }
 }

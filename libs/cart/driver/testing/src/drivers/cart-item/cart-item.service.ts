@@ -14,6 +14,7 @@ import {
   DaffCartFactory,
   DaffCartItemFactory,
 } from '@daffodil/cart/testing';
+import { DaffDriverResponse } from '@daffodil/driver';
 
 /**
  * @inheritdoc
@@ -35,19 +36,28 @@ export class DaffTestingCartItemService implements DaffCartItemServiceInterface 
     return of(this.cartItemFactory.create());
   }
 
-  add(cartId: DaffCart['id'], input: DaffCartItemInput): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  add(cartId: DaffCart['id'], input: DaffCartItemInput): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
   update(
     cartId: DaffCart['id'],
     itemId: DaffCartItem['id'],
     item: Partial<DaffCartItem>,
-  ): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  ): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 
-  delete(cartId: DaffCart['id'], itemId: DaffCartItem['id']): Observable<Partial<DaffCart>> {
-    return of(this.cartFactory.create());
+  delete(cartId: DaffCart['id'], itemId: DaffCartItem['id']): Observable<DaffDriverResponse<Partial<DaffCart>>> {
+    return of({
+      response: this.cartFactory.create(),
+      errors: [],
+    });
   }
 }

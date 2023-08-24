@@ -37,7 +37,7 @@ export class DaffMagentoCartCustomerPaymentService implements DaffCartPaymentSer
     payment: Partial<DaffCartPaymentMethod>,
     billingAddress?: Partial<DaffCartAddress>,
   ): Observable<Partial<DaffCart>> {
-    if(!billingAddress){
+    if (!billingAddress) {
       return this.guestDriver.update(cartId, payment);
     }
 
