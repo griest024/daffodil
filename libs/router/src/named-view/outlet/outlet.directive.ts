@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges,
   OnDestroy,
+  HostBinding,
 } from '@angular/core';
 import {
   BehaviorSubject,
@@ -37,6 +38,8 @@ export class DaffRouterNamedViewOutletDirective implements OnInit, OnChanges, On
    */
   private _outlet$ = new BehaviorSubject<string>('');
   private _namedViews$!: Observable<DaffRouterNamedViews>;
+
+  @HostBinding('ngSkipHydration') skipHydration = true;
 
   /**
    * The router named view to attempt to render.

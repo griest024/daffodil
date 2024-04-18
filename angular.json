@@ -847,7 +847,6 @@
               ]
             },
             "scripts": [],
-            "aot": false,
             "extractLicenses": false,
             "sourceMap": true,
             "optimization": false,

@@ -5,7 +5,7 @@
   <div class="daffio-api-list__list">
     <a *ngFor="let childDoc of doc.items" [routerLink]="childDoc.path" class="daffio-api-list__item" >
       <div class="daffio-api-list__item-name">{{ childDoc.title }}</div>
-      <label class="daffio-api-list__item-label" [ngClass]="childDoc.docType">{{ childDoc.docType }}</label>
+      <label class="daffio-api-list__item-label" [ngClass]="{[childDoc.docType]: true}">{{ childDoc.docType }}</label>
     </a>
   </div>
 </div>

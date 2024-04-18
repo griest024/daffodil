@@ -1,9 +1,16 @@
-import { HttpClientModule } from '@angular/common/http';
+import {
+  HttpClientModule,
+  provideHttpClient,
+  withFetch,
+} from '@angular/common/http';
 import {
   APP_ID,
   NgModule,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { EffectsModule } from '@ngrx/effects';
@@ -77,6 +84,8 @@ import { environment } from '../environments/environment';
       provide: APP_ID,
       useValue: 'serverApp',
     },
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
   ],
 })
 export class AppModule {}
