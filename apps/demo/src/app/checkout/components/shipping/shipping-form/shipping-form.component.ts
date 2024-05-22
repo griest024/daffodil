@@ -5,45 +5,50 @@ import {
   EventEmitter,
   OnInit,
 } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { DaffCartShippingRate } from '@daffodil/cart';
+import { DaffButtonModule } from '@daffodil/design/button';
+
+import { DemoCheckoutAddressFormComponent } from '../../forms/address-form/components/address-form/address-form.component';
+import { DemoCheckoutShippingOptionsComponent } from '../shipping-options/components/shipping-options/shipping-options.component';
+import { DemoCheckoutShippingFormFactory } from '../shipping-options/factories/shipping-option-form.factory';
 import {
-  UntypedFormGroup,
-  UntypedFormBuilder,
-} from '@angular/forms';
-
-import { DaffAddress } from '@daffodil/core';
-
-import { AddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
-import { ShippingOptionFormService } from '../shipping-options/components/services/shipping-option-form.service';
+  DemoCheckoutShippingForm,
+  DemoCheckoutShippingFormGroup,
+} from '../shipping-options/models/shipping-form.type';
 
 @Component({
   selector: 'demo-shipping-form',
   templateUrl: './shipping-form.component.html',
   styleUrls: ['./shipping-form.component.scss'],
+  standalone: true,
+  imports: [
+    DemoCheckoutAddressFormComponent,
+    DemoCheckoutShippingOptionsComponent,
+    ReactiveFormsModule,
+    DaffButtonModule,
+  ],
 })
 export class ShippingFormComponent implements OnInit {
+  @Input() selectedOption: DaffCartShippingRate;
+  @Input() options: Array<DaffCartShippingRate>;
 
-  @Input() shippingAddress: DaffAddress;
-  @Input() editMode: boolean;
-  @Output() submitted: EventEmitter<any> = new EventEmitter();
+  @Output() submitted = new EventEmitter<DemoCheckoutShippingForm>();
 
-  form: UntypedFormGroup;
+  form: DemoCheckoutShippingFormGroup;
 
   constructor(
-    private fb: UntypedFormBuilder,
-    private addressFormFactory: AddressFormFactory,
-    private shippingOptionFormService: ShippingOptionFormService,
+    private shippingOptionFormFactory: DemoCheckoutShippingFormFactory,
   ) {}
 
   ngOnInit() {
-    this.form = this.fb.group({
-      address: this.addressFormFactory.create(this.shippingAddress),
-      shippingOption: this.shippingOptionFormService.getShippingOptionFormGroup(),
+    this.form = this.shippingOptionFormFactory.create({
+      id: this.selectedOption?.id,
     });
-  }
+    console.log(this.options);
 
-  isEditMode() {
-    return this.editMode;
-  };
+  }
 
   onSubmit(form) {
     if(this.form.valid) {

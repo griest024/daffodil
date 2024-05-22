@@ -26,7 +26,7 @@ import { DaffAddress } from '@daffodil/core';
 import { PaymentFormComponent } from './payment-form.component';
 import { EnablePlaceOrderButton } from '../../../actions/checkout.actions';
 import * as fromDemoCheckout from '../../../reducers';
-import { AddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
+import { DemoCheckoutAddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
 import { PaymentInfoFormFactory } from '../payment-info-form/factories/payment-info-form.factory';
 
 @Component({
@@ -49,8 +49,8 @@ class WrapperComponent {
   toggleBillingAddressIsShippingAddressFunction = () => {};
 }
 
-@Component({ selector: 'demo-address-form', template: '' })
-class MockAddressFormComponent {
+@Component({ selector: 'demo-checkout-address-form', template: '' })
+class MockDemoCheckoutAddressFormComponent {
   @Input() formGroup: UntypedFormGroup;
   @Input() submitted: boolean;
 }
@@ -69,9 +69,9 @@ describe('PaymentFormComponent', () => {
   let stubBillingAddressIsShippingAddress;
   let store;
   let paymentFormComponent: PaymentFormComponent;
-  let addressFormComponent: MockAddressFormComponent;
+  let addressFormComponent: MockDemoCheckoutAddressFormComponent;
   let paymentInfoFormComponent: MockPaymentInfoFormComponent;
-  let addressFormFactory: AddressFormFactory;
+  let addressFormFactory: DemoCheckoutAddressFormFactory;
   let paymentInfoFormFactory: PaymentInfoFormFactory;
 
   beforeEach(waitForAsync(() => {
@@ -85,7 +85,7 @@ describe('PaymentFormComponent', () => {
       ],
       declarations: [
         WrapperComponent,
-        MockAddressFormComponent,
+        MockDemoCheckoutAddressFormComponent,
         MockPaymentInfoFormComponent,
         PaymentFormComponent,
       ],
@@ -95,7 +95,7 @@ describe('PaymentFormComponent', () => {
 
   beforeEach(() => {
     store = TestBed.inject(Store);
-    addressFormFactory = TestBed.inject(AddressFormFactory);
+    addressFormFactory = TestBed.inject(DemoCheckoutAddressFormFactory);
     paymentInfoFormFactory = TestBed.inject(PaymentInfoFormFactory);
 
     stubPaymentInfo = null;
@@ -113,7 +113,7 @@ describe('PaymentFormComponent', () => {
     fixture.detectChanges();
 
     paymentFormComponent = fixture.debugElement.query(By.css('demo-payment-form')).componentInstance;
-    addressFormComponent = fixture.debugElement.query(By.css('demo-address-form')).componentInstance;
+    addressFormComponent = fixture.debugElement.query(By.css('demo-checkout-address-form')).componentInstance;
     paymentInfoFormComponent = fixture.debugElement.query(By.css('demo-payment-info-form')).componentInstance;
     spyOn(paymentFormComponent.updatePaymentInfo, 'emit').and.callThrough();
     spyOn(paymentFormComponent.updateBillingAddress, 'emit').and.callThrough();
@@ -135,7 +135,7 @@ describe('PaymentFormComponent', () => {
     expect(paymentFormComponent.billingAddressIsShippingAddress).toEqual(stubBillingAddressIsShippingAddress);
   });
 
-  describe('on <demo-address-form>', () => {
+  describe('on <demo-checkout-address-form>', () => {
 
     it('should set formGroup', () => {
       expect(addressFormComponent.formGroup).toEqual(paymentFormComponent.form.controls.address);

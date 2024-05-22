@@ -1,5 +1,8 @@
 <daff-container size="md">
-  <div order-container #OrderContainer="OrderContainer">
+  <div
+    daff-checkout-order-container
+    #OrderContainer="DaffCheckoutOrderContainer"
+  >
     <div class="demo-thank-you-view" *ngIf="(OrderContainer.loading$ | async) === false">
       <daff-accordion class="demo-thank-you-view__mobile-cart">
         <daff-accordion-item [initiallyActive]="false">

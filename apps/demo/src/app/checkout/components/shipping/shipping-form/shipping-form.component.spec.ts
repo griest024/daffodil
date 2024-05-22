@@ -18,7 +18,7 @@ import { By } from '@angular/platform-browser';
 import { DaffAddress } from '@daffodil/core';
 
 import { ShippingFormComponent } from './shipping-form.component';
-import { AddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
+import { DemoCheckoutAddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
 import { ShippingOptionFormService } from '../shipping-options/components/services/shipping-option-form.service';
 
 @Component({
@@ -36,13 +36,13 @@ class WrapperComponent {
   submittedFunction(e) {};
 }
 
-@Component({ selector: 'demo-address-form', template: '' })
-class MockAddressFormComponent {
+@Component({ selector: 'demo-checkout-address-form', template: '' })
+class MockDemoCheckoutAddressFormComponent {
   @Input() formGroup: UntypedFormGroup;
   @Input() submitted: boolean;
 }
 
-@Component({ selector: 'demo-shipping-options', template: '' })
+@Component({ selector: 'demo-checkout-shipping-options', template: '' })
 class MockShippingOptionsComponent {
   @Input() formGroup: UntypedFormGroup;
   @Input() submitted: boolean;
@@ -52,10 +52,10 @@ describe('ShippingFormComponent', () => {
   let wrapper: WrapperComponent;
   let fixture: ComponentFixture<WrapperComponent>;
   let shippingFormComponent: ShippingFormComponent;
-  let addressFormComponent: MockAddressFormComponent;
+  let addressFormComponent: MockDemoCheckoutAddressFormComponent;
   let shippingOptionsComponent: MockShippingOptionsComponent;
-  const addressFormFactorySpy = jasmine.createSpyObj('AddressFormFactory', ['create']);
-  let stubAddressFormGroup: UntypedFormGroup;
+  const addressFormFactorySpy = jasmine.createSpyObj('DemoCheckoutAddressFormFactory', ['create']);
+  let stubDemoCheckoutAddressFormGroup: UntypedFormGroup;
   let shippingOptionFormService: ShippingOptionFormService;
   let stubShippingAddress;
 
@@ -68,11 +68,11 @@ describe('ShippingFormComponent', () => {
       declarations: [
         WrapperComponent,
         ShippingFormComponent,
-        MockAddressFormComponent,
+        MockDemoCheckoutAddressFormComponent,
         MockShippingOptionsComponent,
       ],
       providers: [
-        { provide: AddressFormFactory, useValue: addressFormFactorySpy },
+        { provide: DemoCheckoutAddressFormFactory, useValue: addressFormFactorySpy },
         ShippingOptionFormService,
       ],
     })
@@ -95,14 +95,14 @@ describe('ShippingFormComponent', () => {
     wrapper.editModeValue = false;
     wrapper.shippingAddressValue = stubShippingAddress;
 
-    stubAddressFormGroup = TestBed.inject(AddressFormFactory).create(stubShippingAddress);
-    addressFormFactorySpy.create.and.returnValue(stubAddressFormGroup);
+    stubDemoCheckoutAddressFormGroup = TestBed.inject(DemoCheckoutAddressFormFactory).create(stubShippingAddress);
+    addressFormFactorySpy.create.and.returnValue(stubDemoCheckoutAddressFormGroup);
 
     fixture.detectChanges();
 
     shippingFormComponent = fixture.debugElement.query(By.css('demo-shipping-form')).componentInstance;
-    addressFormComponent = fixture.debugElement.query(By.css('demo-address-form')).componentInstance;
-    shippingOptionsComponent = fixture.debugElement.query(By.css('demo-shipping-options')).componentInstance;
+    addressFormComponent = fixture.debugElement.query(By.css('demo-checkout-address-form')).componentInstance;
+    shippingOptionsComponent = fixture.debugElement.query(By.css('demo-checkout-shipping-options')).componentInstance;
   });
 
   it('should create', () => {
@@ -117,7 +117,7 @@ describe('ShippingFormComponent', () => {
     expect(shippingFormComponent.editMode).toEqual(wrapper.editModeValue);
   });
 
-  describe('on <demo-address-form>', () => {
+  describe('on <demo-checkout-address-form>', () => {
 
     it('should set formGroup', () => {
       expect(<UntypedFormGroup> addressFormComponent.formGroup).toEqual(<UntypedFormGroup> shippingFormComponent.form.controls['address']);
@@ -128,7 +128,7 @@ describe('ShippingFormComponent', () => {
     });
   });
 
-  describe('on <demo-shipping-options>', () => {
+  describe('on <demo-checkout-shipping-options>', () => {
 
     it('should set formGroup', () => {
       expect(<UntypedFormGroup> shippingOptionsComponent.formGroup).toEqual(<UntypedFormGroup> shippingFormComponent.form.controls.shippingOption);

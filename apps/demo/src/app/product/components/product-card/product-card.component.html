@@ -1,5 +1,5 @@
 <div class="demo-product-card" (click)="navigateToProduct()">
-  <img class="demo-product-card__image" src="{{product.images[0].url}}">
+  <img class="demo-product-card__image" src="{{product.thumbnail.url}}">
   <div class="demo-product-card__details">
     <p class="demo-product-card__brand single-line-ellipsis">
       {{product.brand}}
@@ -11,4 +11,4 @@
       ${{product.price}}
     </p>
   </div>
-</div>      
+</div>

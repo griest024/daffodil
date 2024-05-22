@@ -3,21 +3,23 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EffectsModule } from '@ngrx/effects';
+import { provideRouterStore } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import { daffCartProvideRetrievalActions } from '@daffodil/cart/state';
 import { DaffProgressIndicatorModule } from '@daffodil/design';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DemoCartRootModule } from './cart/cart-root.module';
 import { CategoryModule } from './category/category.module';
+import { DemoCheckoutStepActionTypes } from './checkout/actions/checkout-step.actions';
 import { TemplateModule } from './core/template/template/template.module';
 import { DemoDriverMap } from './drivers/map';
 import { NotFoundModule } from './misc/not-found/not-found.module';
 import { ProductModule } from './product/product.module';
 import { DemoRoutingComponentModule } from './routing/routing-component.module';
-import { ThankYouModule } from './thank-you/thank-you.module';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -46,12 +48,16 @@ import { environment } from '../environments/environment';
     DemoCartRootModule,
     ProductModule,
     CategoryModule,
-    ThankYouModule,
     TemplateModule,
     NotFoundModule,
     DaffProgressIndicatorModule,
   ],
-  providers: [],
+  providers: [
+    daffCartProvideRetrievalActions({
+      type: DemoCheckoutStepActionTypes.CompleteAddressStepSuccessAction,
+    }),
+    provideRouterStore(),
+  ],
   bootstrap: [AppComponent],
 })
 export class DemoModule {}

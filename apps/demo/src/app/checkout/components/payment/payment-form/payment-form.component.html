@@ -2,7 +2,7 @@
   <div class="demo-payment-form__title">
     Payment Details
   </div>
-  
+
   <div class="demo-payment-form__subtitle">Payment Method</div>
   <demo-payment-info-form class="demo-payment-form__payment-info" [formGroup]="form.controls.paymentInfo" [submitted]="ngForm.submitted"></demo-payment-info-form>
 
@@ -14,8 +14,8 @@
       (click)="toggleBillingAddressIsShippingAddress.emit()">
     <label for="sameAsShipping">Same as shipping address</label>
   </div>
-  <demo-address-form *ngIf="!billingAddressIsShippingAddress" class="demo-payment-form__address" [formGroup]="form.controls.address" [submitted]="ngForm.submitted"></demo-address-form>
-  
+  <demo-checkout-address-form *ngIf="!billingAddressIsShippingAddress" class="demo-payment-form__address" [formGroup]="form.controls.address" [submitted]="ngForm.submitted"></demo-checkout-address-form>
+
   <button type="submit" daff-button color="black" class="demo-payment-form__button">Save & Review Order</button>
   <div class="demo-payment-form__note">
     You can review this order before it's final.

@@ -1,0 +1,12 @@
+<div class="demo-product-added" *ngIf="product">
+  @if (product.thumbnail) {
+    <img src="{{product.thumbnail.url}}">
+  }
+  <div class="demo-product-added__description">
+    <div class="demo-product-added__name">{{product.name}}</div>
+    <div class="demo-product-added__price">{{product.price | currency}}</div>
+    <div class="demo-product-added__info">
+      Qty: {{qty}}
+    </div>
+  </div>
+</div>

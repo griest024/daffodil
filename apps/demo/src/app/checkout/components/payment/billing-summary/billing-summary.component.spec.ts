@@ -24,7 +24,7 @@ class WrapperComponent {
   billingAddressIsShippingAddressValue: boolean = stubBillingAddressIsShippingAddress;
 }
 
-@Component({ selector: 'demo-address-summary', template: '' })
+@Component({ selector: 'demo-geography-address-summary', template: '' })
 class MockAddressSummaryComponent {
   @Input() address: DaffAddress;
 }
@@ -54,7 +54,7 @@ describe('BillingSummaryComponent', () => {
     fixture.detectChanges();
 
     billingSummary = fixture.debugElement.query(By.css('demo-billing-summary')).componentInstance;
-    addressSummary = fixture.debugElement.query(By.css('demo-address-summary')).componentInstance;
+    addressSummary = fixture.debugElement.query(By.css('demo-geography-address-summary')).componentInstance;
   });
 
   it('should create', () => {
@@ -83,8 +83,8 @@ describe('BillingSummaryComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should not render demo-address-summary', () => {
-      addressSummaryElement = fixture.debugElement.query(By.css('demo-address-summary'));
+    it('should not render demo-geography-address-summary', () => {
+      addressSummaryElement = fixture.debugElement.query(By.css('demo-geography-address-summary'));
 
       expect(addressSummaryElement).toBeNull();
     });
@@ -98,11 +98,11 @@ describe('BillingSummaryComponent', () => {
 
     describe('and billingAddressIsShippingAddress is false', () => {
 
-      it('should render demo-address-summary', () => {
+      it('should render demo-geography-address-summary', () => {
         billingSummary.billingAddressIsShippingAddress = false;
         fixture.detectChanges();
 
-        addressSummaryElement = fixture.debugElement.query(By.css('demo-address-summary'));
+        addressSummaryElement = fixture.debugElement.query(By.css('demo-geography-address-summary'));
 
         expect(addressSummaryElement).not.toBeNull();
       });
@@ -110,11 +110,11 @@ describe('BillingSummaryComponent', () => {
 
     describe('and billingAddressIsShippingAddress is true', () => {
 
-      it('should not render demo-address-summary', () => {
+      it('should not render demo-geography-address-summary', () => {
         billingSummary.billingAddressIsShippingAddress = true;
         fixture.detectChanges();
 
-        addressSummaryElement = fixture.debugElement.query(By.css('demo-address-summary'));
+        addressSummaryElement = fixture.debugElement.query(By.css('demo-geography-address-summary'));
 
         expect(addressSummaryElement).toBeNull();
       });

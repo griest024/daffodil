@@ -18,11 +18,14 @@ import {
   DaffCartFacade,
   DaffCartItemAdd,
 } from '@daffodil/cart/state';
+import { daffOperationEntityCreateFakeId } from '@daffodil/core/state';
 import { DaffProduct } from '@daffodil/product';
 import {
   DaffProductPageFacade,
   DaffProductLoad,
 } from '@daffodil/product/state';
+
+export const DEMO_PRODUCT_VIEW_CART_ITEM_PLACEHOLDER_ID = daffOperationEntityCreateFakeId('demo-product-view__cart-item');
 
 @Component({
   selector: 'demo-product-view',
@@ -59,6 +62,6 @@ export class ProductViewComponent implements OnInit {
   }
 
   onAddToCart(cartItem: DaffCartItemInput) {
-    this.cartFacade.dispatch(new DaffCartItemAdd(cartItem));
+    this.cartFacade.dispatch(new DaffCartItemAdd(cartItem, DEMO_PRODUCT_VIEW_CART_ITEM_PLACEHOLDER_ID));
   }
 }

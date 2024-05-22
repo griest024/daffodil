@@ -1,15 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { combineReducers } from '@ngrx/store';
 
-import { DaffCartStateModule } from '@daffodil/cart/state';
-
-import { DemoAddToCartNotificationModule } from './components/add-to-cart-notification/add-to-cart-notification.module';
+import {
+  DaffCartStateModule,
+  daffCartProvideExtraReducers,
+  daffCartReducers,
+} from '@daffodil/cart/state';
 
 @NgModule({
   imports: [
     CommonModule,
     DaffCartStateModule,
-    DemoAddToCartNotificationModule,
+  ],
+  providers: [
+    daffCartProvideExtraReducers(
+      combineReducers(daffCartReducers),
+    ),
   ],
 })
 export class DemoCartRootModule { }

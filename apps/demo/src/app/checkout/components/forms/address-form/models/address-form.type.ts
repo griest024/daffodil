@@ -8,7 +8,18 @@ import {
   DaffSubdivision,
 } from '@daffodil/geography';
 
-export type AddressFormGroup = FormGroup<{
+export interface DemoCheckoutAddressForm {
+  firstname: string;
+  lastname: string;
+  street: string;
+  city: string;
+  country: DaffCountry['id'];
+  state: DaffSubdivision['id'];
+  postcode: string;
+  telephone: string;
+};
+
+export type DemoCheckoutAddressFormGroup = FormGroup<{
   firstname: FormControl<string>;
   lastname: FormControl<string>;
   street: FormControl<string>;

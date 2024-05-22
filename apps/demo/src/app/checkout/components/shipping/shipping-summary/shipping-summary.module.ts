@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { ShippingSummaryComponent } from './shipping-summary.component';
-import { AddressSummaryModule } from '../../payment/address-summary/address-summary.module';
+import { DemoGeographyAddressSummaryComponent } from '../../../../geography/components/address-summary/address-summary.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    AddressSummaryModule,
+    DemoGeographyAddressSummaryComponent,
   ],
   declarations: [
     ShippingSummaryComponent,

@@ -14,8 +14,8 @@ import {
 } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { ShippingOptionsComponent } from './shipping-options.component';
-import { ShippingOptionsFactory } from '../factories/shipping-options.factory';
+import { DemoCheckoutShippingOptionsComponent } from './shipping-options.component';
+import { ShippingOptionsFactory } from '../../factories/shipping-options.factory';
 import { ShippingOptionsService } from '../services/shipping-options.service';
 
 const formBuilder: UntypedFormBuilder = new UntypedFormBuilder();
@@ -26,19 +26,19 @@ const stubFormGroupValue = formBuilder.group({
 const stubSubmitted = false;
 
 @Component({
-  template: '<demo-shipping-options ' +
+  template: '<demo-checkout-shipping-options ' +
               '[formGroup]="formGroupValue" ' +
-              '[submitted]="submittedValue"></demo-shipping-options>',
+              '[submitted]="submittedValue"></demo-checkout-shipping-options>',
 })
 class WrapperComponent {
   formGroupValue: UntypedFormGroup = stubFormGroupValue;
   submittedValue: boolean = stubSubmitted;
 };
 
-describe('ShippingOptionsComponent', () => {
+describe('DemoCheckoutShippingOptionsComponent', () => {
   let wrapper: WrapperComponent;
   let fixture: ComponentFixture<WrapperComponent>;
-  let shippingOptionsComponent: ShippingOptionsComponent;
+  let shippingOptionsComponent: DemoCheckoutShippingOptionsComponent;
   let shippingOptionsService: ShippingOptionsService;
 
   beforeEach(waitForAsync(() => {
@@ -49,7 +49,7 @@ describe('ShippingOptionsComponent', () => {
       ],
       declarations: [
         WrapperComponent,
-        ShippingOptionsComponent,
+        DemoCheckoutShippingOptionsComponent,
       ],
       providers: [
         ShippingOptionsService,
@@ -65,7 +65,7 @@ describe('ShippingOptionsComponent', () => {
     wrapper = fixture.componentInstance;
     fixture.detectChanges();
 
-    shippingOptionsComponent = fixture.debugElement.query(By.css('demo-shipping-options')).componentInstance;
+    shippingOptionsComponent = fixture.debugElement.query(By.css('demo-checkout-shipping-options')).componentInstance;
   });
 
   it('should create', () => {

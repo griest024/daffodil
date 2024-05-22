@@ -4,40 +4,40 @@ import {
   OnInit,
   DoCheck,
 } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { DaffCartShippingRate } from '@daffodil/cart';
 import {
-  UntypedFormGroup,
-  UntypedFormControl,
-} from '@angular/forms';
+  DaffErrorStateMatcher,
+  DaffRadioModule,
+} from '@daffodil/design';
 
-import { ShippingOption } from '@daffodil/checkout';
-import { DaffErrorStateMatcher } from '@daffodil/design';
-
-import { ShippingOptionsService } from '../services/shipping-options.service';
+import { DemoCheckoutShippingFormGroup } from '../../models/shipping-form.type';
 
 @Component({
-  selector: 'demo-shipping-options',
+  selector: 'demo-checkout-shipping-options',
   templateUrl: './shipping-options.component.html',
   styleUrls: ['./shipping-options.component.scss'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    DaffRadioModule,
+  ],
 })
-export class ShippingOptionsComponent implements OnInit, DoCheck {
-  @Input() formGroup: UntypedFormGroup;
-  @Input() submitted: boolean;
-
-  shippingOptions: ShippingOption[];
-  errorState: boolean;
+export class DemoCheckoutShippingOptionsComponent implements OnInit, DoCheck {
   private errorStateMatcher: DaffErrorStateMatcher;
 
-  constructor(
-    private shippingOptionsService: ShippingOptionsService,
-  ) {
-    this.shippingOptions = shippingOptionsService.getShippingOptions();
-  }
+  @Input() formGroup: DemoCheckoutShippingFormGroup;
+  @Input() submitted: boolean;
+  @Input() options: DaffCartShippingRate[];
+
+  errorState: boolean;
 
   ngOnInit() {
     this.errorStateMatcher = new DaffErrorStateMatcher();
   }
 
   ngDoCheck() {
-    this.errorState = this.errorStateMatcher.isErrorState(<UntypedFormControl> this.formGroup.controls['id'], this.submitted);
+    this.errorState = this.errorStateMatcher.isErrorState(this.formGroup.controls.id, this.submitted);
   }
 }

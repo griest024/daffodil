@@ -4,9 +4,9 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
-import { AddressFormFactory } from './address-form.factory';
+import { DemoCheckoutAddressFormFactory } from './address-form.factory';
 
-describe('@daffodil/demo | AddressFormFactory', () => {
+describe('@daffodil/demo | DemoCheckoutAddressFormFactory', () => {
 
   let addressFormFactory;
 
@@ -15,10 +15,10 @@ describe('@daffodil/demo | AddressFormFactory', () => {
       imports: [
         ReactiveFormsModule,
       ],
-      providers: [AddressFormFactory],
+      providers: [DemoCheckoutAddressFormFactory],
     });
 
-    addressFormFactory = TestBed.inject(AddressFormFactory);
+    addressFormFactory = TestBed.inject(DemoCheckoutAddressFormFactory);
   });
 
   it('should be created', () => {

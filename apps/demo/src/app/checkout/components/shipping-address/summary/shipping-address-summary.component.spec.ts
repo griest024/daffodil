@@ -1,0 +1,128 @@
+import {
+  Component,
+  Input,
+} from '@angular/core';
+import {
+  waitForAsync,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+
+import { DaffAddress } from '@daffodil/core';
+import { DaffAddressFactory } from '@daffodil/core/testing';
+
+import { DemoCheckoutShippingAddressSummaryComponent } from './shipping-address-summary.component';
+import { ShippingOptionsFactory } from '../shipping-options/components/factories/shipping-options.factory';
+import { ShippingOptionsService } from '../shipping-options/components/services/shipping-options.service';
+
+const daffodilAddressFactory = new DaffAddressFactory();
+const stubDaffodilAddress = daffodilAddressFactory.create();
+
+@Component({
+  template: `
+    <demo-checkout-shipping-address-summary
+      [selectedShippingOptionId]="selectedShippingOptionIdValue"
+      [shippingAddress]="shippingAddressValue"
+      (editShippingInfo)="editShippingInfoFunction()"></demo-checkout-shipping-address-summary>
+  `,
+})
+class WrapperComponent {
+  shippingAddressValue: DaffAddress = stubDaffodilAddress;
+  selectedShippingOptionIdValue = '0';
+  editShippingInfoFunction() {};
+}
+
+@Component({ selector: 'demo-geography-address-summary', template: '' })
+class MockAddressSummaryComponent {
+  @Input() address: DaffAddress;
+}
+
+describe('DemoCheckoutShippingAddressSummaryComponent', () => {
+  let wrapper: WrapperComponent;
+  let fixture: ComponentFixture<WrapperComponent>;
+  let shippingSummaryComponent: DemoCheckoutShippingAddressSummaryComponent;
+  let addressSummaryComponent: MockAddressSummaryComponent;
+  let shippingOptionsService: ShippingOptionsService;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        WrapperComponent,
+        DemoCheckoutShippingAddressSummaryComponent,
+        MockAddressSummaryComponent,
+      ],
+      providers: [
+        ShippingOptionsService,
+        ShippingOptionsFactory,
+      ],
+    })
+      .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(WrapperComponent);
+    shippingOptionsService = TestBed.inject(ShippingOptionsService);
+    wrapper = fixture.componentInstance;
+    fixture.detectChanges();
+
+    shippingSummaryComponent = fixture.debugElement.query(By.css('demo-checkout-shipping-address-summary')).componentInstance;
+    addressSummaryComponent = fixture.debugElement.query(By.css('demo-geography-address-summary')).componentInstance;
+  });
+
+  it('should create', () => {
+    expect(shippingSummaryComponent).toBeTruthy();
+  });
+
+  it('should be able to take shippingAddress', () => {
+    expect(shippingSummaryComponent.shippingAddress).toEqual(stubDaffodilAddress);
+  });
+
+  it('should be able to take selectedShippingOptionId', () => {
+    expect(shippingSummaryComponent.selectedShippingOptionId).toEqual(wrapper.selectedShippingOptionIdValue);
+  });
+
+  it('should set shippingOptions', () => {
+    expect(shippingSummaryComponent.shippingOptions).toEqual(shippingOptionsService.getShippingOptions());
+  });
+
+  describe('on <demo-geography-address-summary>', () => {
+
+    it('should set address', () => {
+      expect(addressSummaryComponent.address).toEqual(stubDaffodilAddress);
+    });
+  });
+
+  describe('when edit anchor tag is clicked', () => {
+
+    it('should call onEdit', () => {
+      spyOn(shippingSummaryComponent, 'onEdit');
+
+      fixture.debugElement.query(By.css('a')).nativeElement.click();
+
+      expect(shippingSummaryComponent.onEdit).toHaveBeenCalled();
+    });
+  });
+
+  describe('onEdit', () => {
+
+    it('should call editShippingInfo.emit', () => {
+      spyOn(shippingSummaryComponent.editShippingInfo, 'emit');
+
+      shippingSummaryComponent.onEdit();
+
+      expect(shippingSummaryComponent.editShippingInfo.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('when editShippingInfo is emitted', () => {
+
+    it('should call editShippingInfoFunction', () => {
+      spyOn(wrapper, 'editShippingInfoFunction');
+
+      shippingSummaryComponent.editShippingInfo.emit();
+
+      expect(wrapper.editShippingInfoFunction).toHaveBeenCalled();
+    });
+  });
+});

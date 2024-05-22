@@ -1,0 +1,9 @@
+@for (item of cartItemsWithState$ | async; track item.id) {
+  <demo-add-to-cart-notification
+    [qty]="item.qty"
+    [state]="item.daffState"
+    [product]="getProduct(item.product_id) | async"
+    [count]="cartItemCount$ | async"
+    (hide)="onHide(item.id)"
+  ></demo-add-to-cart-notification>
+}

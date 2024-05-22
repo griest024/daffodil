@@ -5,16 +5,15 @@ import {
   EventEmitter,
 } from '@angular/core';
 
-import { PaymentInfo } from '@daffodil/checkout';
-
 @Component({
   selector: 'demo-payment-summary',
   templateUrl: './payment-summary.component.html',
   styleUrls: ['./payment-summary.component.scss'],
+  standalone: true,
 })
 export class PaymentSummaryComponent {
 
-  @Input() paymentInfo: PaymentInfo;
+  @Input() paymentInfo: any;
   @Output() editPaymentInfo: EventEmitter<any> = new EventEmitter();
 
   constructor() { }

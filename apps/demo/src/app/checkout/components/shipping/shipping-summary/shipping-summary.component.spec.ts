@@ -13,8 +13,8 @@ import { DaffAddress } from '@daffodil/core';
 import { DaffAddressFactory } from '@daffodil/core/testing';
 
 import { ShippingSummaryComponent } from './shipping-summary.component';
-import { ShippingOptionsFactory } from '../shipping-options/components/factories/shipping-options.factory';
 import { ShippingOptionsService } from '../shipping-options/components/services/shipping-options.service';
+import { ShippingOptionsFactory } from '../shipping-options/factories/shipping-options.factory';
 
 const daffodilAddressFactory = new DaffAddressFactory();
 const stubDaffodilAddress = daffodilAddressFactory.create();
@@ -33,7 +33,7 @@ class WrapperComponent {
   editShippingInfoFunction() {};
 }
 
-@Component({ selector: 'demo-address-summary', template: '' })
+@Component({ selector: 'demo-geography-address-summary', template: '' })
 class MockAddressSummaryComponent {
   @Input() address: DaffAddress;
 }
@@ -67,7 +67,7 @@ describe('ShippingSummaryComponent', () => {
     fixture.detectChanges();
 
     shippingSummaryComponent = fixture.debugElement.query(By.css('demo-shipping-summary')).componentInstance;
-    addressSummaryComponent = fixture.debugElement.query(By.css('demo-address-summary')).componentInstance;
+    addressSummaryComponent = fixture.debugElement.query(By.css('demo-geography-address-summary')).componentInstance;
   });
 
   it('should create', () => {
@@ -86,7 +86,7 @@ describe('ShippingSummaryComponent', () => {
     expect(shippingSummaryComponent.shippingOptions).toEqual(shippingOptionsService.getShippingOptions());
   });
 
-  describe('on <demo-address-summary>', () => {
+  describe('on <demo-geography-address-summary>', () => {
 
     it('should set address', () => {
       expect(addressSummaryComponent.address).toEqual(stubDaffodilAddress);

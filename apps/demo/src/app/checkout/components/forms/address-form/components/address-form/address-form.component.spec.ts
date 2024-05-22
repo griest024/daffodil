@@ -34,27 +34,27 @@ import {
 } from '@daffodil/geography/state/testing';
 import { DaffCountryFactory } from '@daffodil/geography/testing';
 
-import { AddressFormComponent } from './address-form.component';
-import { AddressFormFactory } from '../../factories/address-form.factory';
-import { AddressFormGroup } from '../../models/address-form.type';
+import { DemoCheckoutAddressFormComponent } from './address-form.component';
+import { DemoCheckoutAddressFormFactory } from '../../factories/address-form.factory';
+import { DemoCheckoutAddressFormGroup } from '../../models/address-form.type';
 
 @Component({
   template: `
-    <demo-address-form
+    <demo-checkout-address-form
       [formGroup]="formGroupValue"
       [submitted]="submittedValue"
-    ></demo-address-form>
+    ></demo-checkout-address-form>
   `,
 })
 class WrapperComponent {
-  formGroupValue: AddressFormGroup;
+  formGroupValue: DemoCheckoutAddressFormGroup;
   submittedValue: boolean;
 }
 
-describe('AddressFormComponent', () => {
+describe('DemoCheckoutAddressFormComponent', () => {
   let wrapper: WrapperComponent;
   let fixture: ComponentFixture<WrapperComponent>;
-  let component: AddressFormComponent;
+  let component: DemoCheckoutAddressFormComponent;
   let geographyFacade: MockDaffGeographyFacade;
   let countryFactory: DaffCountryFactory;
   let mockCountry: DaffCountry;
@@ -71,7 +71,7 @@ describe('AddressFormComponent', () => {
       ],
       declarations: [
         WrapperComponent,
-        AddressFormComponent,
+        DemoCheckoutAddressFormComponent,
       ],
     })
       .compileComponents();
@@ -87,13 +87,13 @@ describe('AddressFormComponent', () => {
 
     fixture = TestBed.createComponent(WrapperComponent);
     wrapper = fixture.componentInstance;
-    wrapper.formGroupValue = TestBed.inject(AddressFormFactory).create({});
+    wrapper.formGroupValue = TestBed.inject(DemoCheckoutAddressFormFactory).create({});
 
     wrapper.submittedValue = false;
 
     fixture.detectChanges();
 
-    component = fixture.debugElement.query(By.css('demo-address-form')).componentInstance;
+    component = fixture.debugElement.query(By.css('demo-checkout-address-form')).componentInstance;
   });
 
   it('should create', () => {

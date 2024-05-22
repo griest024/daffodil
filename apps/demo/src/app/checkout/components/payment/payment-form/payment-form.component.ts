@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -5,27 +6,45 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 
-import { PaymentInfo } from '@daffodil/checkout';
-import { DaffAddress } from '@daffodil/core';
+import {
+  DaffInputModule,
+  DaffNativeSelectModule,
+} from '@daffodil/design';
+import { DaffButtonModule } from '@daffodil/design/button';
+import { DaffPersonalAddress } from '@daffodil/geography';
 
 import { PaymentFormGroup } from './models/payment-form.type';
 import { EnablePlaceOrderButton } from '../../../actions/checkout.actions';
-import * as fromDemoCheckout from '../../../reducers';
-import { AddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
+import { DemoCheckoutAddressFormComponent } from '../../forms/address-form/components/address-form/address-form.component';
+import { DemoCheckoutAddressFormFactory } from '../../forms/address-form/factories/address-form.factory';
 import { PaymentInfoFormFactory } from '../payment-info-form/factories/payment-info-form.factory';
+import { PaymentInfoFormModule } from '../payment-info-form/payment-info-form.module';
 
 @Component({
   selector: 'demo-payment-form',
   templateUrl: './payment-form.component.html',
   styleUrls: ['./payment-form.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DaffInputModule,
+    DaffNativeSelectModule,
+    PaymentInfoFormModule,
+    DaffButtonModule,
+    DemoCheckoutAddressFormComponent,
+  ],
 })
 export class PaymentFormComponent implements OnInit {
 
-  @Input() paymentInfo: PaymentInfo;
-  @Input() billingAddress: DaffAddress;
+  @Input() paymentInfo: any;
+  @Input() billingAddress: DaffPersonalAddress;
   @Input() billingAddressIsShippingAddress: boolean;
   @Output() updatePaymentInfo: EventEmitter<any> = new EventEmitter();
   @Output() updateBillingAddress: EventEmitter<any> = new EventEmitter();
@@ -36,8 +55,7 @@ export class PaymentFormComponent implements OnInit {
   constructor(
     private fb: UntypedFormBuilder,
     private paymentInfoFormFactory: PaymentInfoFormFactory,
-    private addressFormFactory: AddressFormFactory,
-    private store: Store<fromDemoCheckout.State>,
+    private addressFormFactory: DemoCheckoutAddressFormFactory,
   ) { }
 
   ngOnInit() {
@@ -52,7 +70,6 @@ export class PaymentFormComponent implements OnInit {
       this.updatePaymentInfo.emit(
         this.form.value.paymentInfo,
       );
-      this.store.dispatch(new EnablePlaceOrderButton());
     } else if (this.form.valid) {
       this.updatePaymentInfo.emit(
         this.form.value.paymentInfo,
@@ -61,7 +78,6 @@ export class PaymentFormComponent implements OnInit {
       this.updateBillingAddress.emit(
         this.form.value.address,
       );
-      this.store.dispatch(new EnablePlaceOrderButton());
     }
   };
 }

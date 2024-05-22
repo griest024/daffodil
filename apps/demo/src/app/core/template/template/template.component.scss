@@ -9,4 +9,10 @@
 		width: 200px;
 		background-color: demo-theme.$white;
 	}
+
+	&__notifications {
+		position: fixed;
+		bottom: 0;
+		right: 0;
+	}
 }

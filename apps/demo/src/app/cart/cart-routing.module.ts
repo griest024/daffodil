@@ -4,6 +4,8 @@ import {
   Routes,
 } from '@angular/router';
 
+import { DaffCartRoutingModule } from '@daffodil/cart/routing';
+
 import { DemoCartViewComponent } from './pages/cart-view/cart-view.component';
 
 const category: Routes = [
@@ -17,6 +19,7 @@ const category: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(category),
+    DaffCartRoutingModule,
   ],
   exports: [
     RouterModule,

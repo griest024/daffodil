@@ -1,45 +1,78 @@
-<daff-container size="md">
-	<div class="demo-checkout" *ngIf="(loading$ | async) === false">
-		<daff-accordion class="demo-checkout__mobile-cart">
-			<daff-accordion-item [initiallyActive]="false">
-				<h3 daffAccordionItemTitle>Cart Summary ({{(cart$ | async) ? (cart$ | async).items.length : 0}})</h3>
-				<demo-cart-summary-wrapper [cart]="cart$ | async" [loading]="loading$ | async"></demo-cart-summary-wrapper>
-			</daff-accordion-item>
-		</daff-accordion>
+<ng-container *ngrxLet="{loading: loading$, cart: cart$, currentStep: currentStep$, stepCompletion: stepCompletion$} as vm">
+  <daff-container size="md">
+    <div class="demo-checkout" *ngIf="vm.loading === false">
+      <daff-accordion class="demo-checkout__mobile-cart">
+        <daff-accordion-item [initiallyActive]="false">
+          <h3 daffAccordionItemTitle>Cart Summary ({{vm.cart?.items.length || 0}})</h3>
+          <demo-cart-summary-wrapper [cart]="vm.cart" [loading]="vm.loading"></demo-cart-summary-wrapper>
+        </daff-accordion-item>
+      </daff-accordion>
 
-		<div>
-			<div class="demo-checkout__shipping" shipping-container #ShippingContainer="ShippingContainer">
-				<demo-shipping
-					[isShippingAddressValid]="ShippingContainer.isShippingAddressValid$ | async"
-					[shippingAddress]="ShippingContainer.shippingAddress$ | async"
-					[selectedShippingOptionId]="ShippingContainer.selectedShippingOptionId$ | async"
-					[showPaymentView]="showPaymentView$ | async"
-					(updateShippingAddress)="ShippingContainer.updateShippingAddress($event); onUpdateShippingAddress()"
-					(selectShippingOption)="ShippingContainer.selectShippingOption($event)"></demo-shipping>
-			</div>
-			<div class="demo-checkout__payment" *ngIf="(showPaymentView$ | async)" billing-container #BillingContainer="BillingContainer">
-				<demo-payment
-					[paymentInfo]="BillingContainer.paymentInfo$ | async"
-					[billingAddress]="BillingContainer.billingAddress$ | async"
-					[billingAddressIsShippingAddress]="BillingContainer.billingAddressIsShippingAddress$ | async"
-					(updatePaymentInfo)="BillingContainer.updatePaymentInfo($event)"
-					(updateBillingAddress)="BillingContainer.updateBillingAddress($event)"
-					(toggleBillingAddressIsShippingAddress)="BillingContainer.toggleBillingAddressIsShippingAddress()"></demo-payment>
-			</div>
-			<div class="demo-checkout__review" *ngIf="showReviewView$ | async">
-				<demo-cart-summary-wrapper class="demo-checkout__mobile-review" [cartTitle]="'REVIEW ORDER'" [cart]="cart$ | async" [loading]="loading$ | async">
-					<demo-place-order></demo-place-order>
-				</demo-cart-summary-wrapper>
-			</div>
-		</div>
+      <div>
+        <div class="demo-checkout__address" daff-checkout-shipping-address-container #ShippingAddressContainer="DaffCheckoutShippingAddressContainer">
+          @if (vm.stepCompletion[DemoCheckoutStep.ADDRESS]) {
+            <demo-checkout-shipping-address-summary
+              [shippingAddress]="ShippingAddressContainer.shippingAddress$ | async"
+            ></demo-checkout-shipping-address-summary>
+          } @else if (vm.currentStep === DemoCheckoutStep.ADDRESS) {
+            <demo-checkout-shipping-address-form
+              [shippingAddress]="ShippingAddressContainer.shippingAddress$ | async"
+              (submitted)="onUpdateShippingAddress($event)"
+            ></demo-checkout-shipping-address-form>
+          }
+        </div>
+        <div class="demo-checkout__shipping" daff-checkout-shipping-container #ShippingContainer="DaffCheckoutShippingContainer">
+          @if (vm.stepCompletion[DemoCheckoutStep.SHIPPING]) {
+            <demo-shipping-summary
+              [selectedShippingOption]="ShippingContainer.selectedShippingOption$ | async"
+            ></demo-shipping-summary>
+          } @else if (vm.currentStep === DemoCheckoutStep.SHIPPING) {
+            <demo-shipping-form
+              [selectedShippingOption]="ShippingContainer.selectedShippingOption$ | async"
+              [options]="ShippingContainer.shippingOptions$ | async"
+              (submitted)="ShippingContainer.updateShippingMethod($event)"
+            ></demo-shipping-form>
+          }
+        </div>
+        <div class="demo-checkout__payment"
+          daff-checkout-billing-address-container
+          #BillingAddressContainer="DaffCheckoutBillingAddressContainer"
+        >
+          <div
+            daff-checkout-payment-container
+            #PaymentContainer="DaffCheckoutPaymentContainer"
+          >
+            @if (vm.stepCompletion[DemoCheckoutStep.BILLING]) {
+              <demo-payment-summary
+                [paymentInfo]="PaymentContainer.paymentInfo"
+                (editPaymentInfo)="togglePaymentView()"
+              ></demo-payment-summary>
+              <demo-billing-summary
+                [billingAddress]="BillingAddressContainer.billingAddress"
+                [billingAddressIsShippingAddress]="BillingAddressContainer.billingAddressIsShippingAddress"
+              ></demo-billing-summary>
+            } @else if (vm.currentStep === DemoCheckoutStep.BILLING) {
+              <demo-payment-form
+                [hidden]="(showPaymentForm$ | async) === false"
+                [paymentInfo]="paymentInfo"
+                [billingAddress]="billingAddress"
+                [billingAddressIsShippingAddress]="billingAddressIsShippingAddress"
+                (updatePaymentInfo)="onUpdatePaymentInfo($event)"
+                (updateBillingAddress)="onUpdateBillingAddress($event)"
+                (toggleBillingAddressIsShippingAddress)="onToggleBillingAddressIsShippingAddress()"></demo-payment-form>
+            }
+          </div>
+        </div>
+      </div>
 
-		<div class="demo-checkout__cart">
-			<div class="demo-checkout__desktop-cart">
-				<demo-cart-summary-wrapper [cartTitle]="'CART SUMMARY'" [cart]="cart$ | async" [loading]="loading$ | async">
-					<demo-place-order></demo-place-order>
-				</demo-cart-summary-wrapper>
-			</div>
-		</div>
-	</div>
-	<daff-loading-icon *ngIf="(loading$ | async)" class="demo-checkout__loading-icon"></daff-loading-icon>
-</daff-container>
+      <div class="demo-checkout__cart">
+        <div class="demo-checkout__desktop-cart">
+          <demo-cart-summary-wrapper [cartTitle]="'CART SUMMARY'" [cart]="vm.cart" [loading]="vm.loading">
+            <demo-place-order></demo-place-order>
+          </demo-cart-summary-wrapper>
+        </div>
+      </div>
+    </div>
+    <daff-loading-icon *ngIf="vm.loading" class="demo-checkout__loading-icon"></daff-loading-icon>
+  </daff-container>
+</ng-container>

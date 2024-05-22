@@ -156,6 +156,22 @@
                   "with": "apps/demo/src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "magento": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/demo/src/environments/environment.ts",
+                  "with": "apps/demo/src/environments/environment.magento.ts"
+                }
+              ]
+            },
+            "venia": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/demo/src/environments/environment.ts",
+                  "with": "apps/demo/src/environments/environment.venia.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
@@ -171,6 +187,12 @@
           "configurations": {
             "production": {
               "buildTarget": "demo:build:production"
+            },
+            "magento": {
+              "buildTarget": "demo:build:magento"
+            },
+            "venia": {
+              "buildTarget": "demo:build:venia"
             }
           }
         },

@@ -1,11 +1,23 @@
-import { NgModule } from '@angular/core';
 import {
+  NgModule,
+  inject,
+} from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
   RouterModule,
+  RouterStateSnapshot,
   Routes,
 } from '@angular/router';
 
+import {
+  DaffCartInStockItemsGuard,
+  DaffCartItemsGuard,
+  DaffCartRoutingModule,
+  DaffResolveCartGuard,
+} from '@daffodil/cart/routing';
+import { daffRouterComposeGuards } from '@daffodil/router';
+
 import { CheckoutViewComponent } from './pages/checkout-view/checkout-view.component';
-import { EmptyCartResolver } from '../cart/routing-resolvers/resolvers/empty-cart-resolver.service';
 import { ThankYouViewComponent } from '../thank-you/pages/thank-you-view.component';
 
 const routes: Routes = [
@@ -16,15 +28,27 @@ const routes: Routes = [
       { path: '', component: CheckoutViewComponent },
       { path: 'thank-you', component: ThankYouViewComponent },
     ],
-    resolve: {
-      cartItem: EmptyCartResolver,
-    },
+    canActivate: [
+      (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+        const resolveCart = inject(DaffResolveCartGuard);
+        const cartItems = inject(DaffCartItemsGuard);
+        const inStock = inject(DaffCartInStockItemsGuard);
+
+        return daffRouterComposeGuards([
+          resolveCart.canActivate.bind(resolveCart),
+        ], [
+          cartItems.canActivate.bind(cartItems),
+          inStock.canActivate.bind(inStock),
+        ])(route, state);
+      },
+    ],
   },
 ];
 
 @NgModule({
   imports: [
     RouterModule.forChild(routes),
+    DaffCartRoutingModule,
   ],
   exports: [
     RouterModule,

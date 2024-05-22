@@ -15,8 +15,8 @@
       "@daffodil/checkout/state/testing": [
         "libs/checkout/state/testing/src"
       ],
-      "@daffodil/checkout/testing": [
-        "libs/checkout/testing/src"
+      "@daffodil/checkout/pwa": [
+        "libs/checkout/pwa/src"
       ],
     }
   }

@@ -1,0 +1,18 @@
+<daff-notification dismissable="true" (closeNotification)="hide.emit()">
+  <fa-icon daffPrefix [icon]="icon" aria-hidden="true"></fa-icon>
+  <span daffNotificationTitle>{{text}}</span>
+  <demo-product-added
+    daffNotificationSubtitle
+    class="demo-add-to-cart-notification__product-added"
+    [product]="product"
+    [qty]="qty"
+  ></demo-product-added>
+	<div daffNotificationActions>
+		<div daff-button-set class="demo-add-to-cart-notification__button-set">
+      <button type="button" daff-stroked-button demoViewCart>
+        View Cart ({{count}})
+      </button>
+      <button type="button" daff-button color="secondary" demoProceedToCheckout>Checkout</button>
+    </div>
+	</div>
+</daff-notification>

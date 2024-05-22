@@ -28,7 +28,7 @@ export class DemoAuthEffects {
     ofType(
       DaffAuthLoginActionTypes.LoginSuccessAction,
     ),
-    tap(() => this.router.navigateByUrl('/')),
+    // tap(() => this.router.navigateByUrl('/')),
     switchMap(() => EMPTY),
   ), {
     dispatch: false,
