@@ -2,6 +2,7 @@ module.exports = {
   plugins: [
     'modules-newlines',
     'jasmine',
+    'jest',
     "eslint-plugin-import",
     "eslint-plugin-jsdoc",
     "eslint-plugin-prefer-arrow"
@@ -236,6 +237,12 @@ module.exports = {
     "@typescript-eslint/type-annotation-spacing": "error",
 
     // custom
+    "jest/max-nested-describe": [
+      "warn",
+      {
+        "max": 4
+      },
+    ],
     '@typescript-eslint/no-unused-vars': 'off',
     'prefer-arrow/prefer-arrow-functions': [
       'error',
@@ -324,5 +331,12 @@ module.exports = {
     'jasmine/no-suite-dupes': ['warn', 'branch'],
     'jasmine/no-spec-dupes': ['warn', 'branch'],
     'jasmine/new-line-before-expect': 'off',
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "window",
+        "message": "Inject `DOCUMENT` from `@angular/common` and access `window` via `document.defaultView`."
+      },
+    ]
   }
 }
