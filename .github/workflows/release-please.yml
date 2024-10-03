@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [18.19.x]
+        node: [20.17.x]
     steps:
       - uses: google-github-actions/release-please-action@v3
         with:
           token: ${{ secrets.GRAYCORE_GITHUB_TOKEN }}
           command: manifest
           default-branch: develop
-          
+
       - uses: actions/checkout@v4
         with:
           ref: release-please--branches--develop--components--daffodil
