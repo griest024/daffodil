@@ -1,3 +1,5 @@
+console.log(process.env)
+
 module.exports = {
   plugins: [
     'modules-newlines',
