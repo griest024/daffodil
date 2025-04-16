@@ -2,9 +2,6 @@ on:
   pull_request_target:
     branches:
       - develop
-  pull_request:
-    branches:
-      - develop
 
 permissions: 
   actions: read
@@ -25,7 +22,7 @@ jobs:
   build_internal_pull:
     name: Build PR
     uses: ./.github/workflows/build.yml
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     with: 
       cache-mode: 'read-only'
     secrets:
@@ -34,7 +31,7 @@ jobs:
   build_fork_pull:
     name: Build PR (Fork)
     uses: ./.github/workflows/build.yml
-    if: github.event.pull_request.head.repo.full_name != github.repository && github.event_name == 'pull_request_target'
+    if: github.event.pull_request.head.repo.full_name != github.repository
     with: 
       cache-mode: 'read-only'
     secrets:
