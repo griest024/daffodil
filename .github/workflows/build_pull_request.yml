@@ -28,6 +28,6 @@ jobs:
       cache-mode: ${{ github.event.pull_request.head.repo.full_name == github.repository && 'read-write' || 'read-only' }}
     secrets:
       NX_KEY: ${{ secrets.NX_KEY }}
-      AZURE_STORAGE_COAZURE_NX_CACHE_READONLY_CONNECTION_STRINGNNECTION_STRING: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING || secrets.AZURE_NX_CACHE_READONLY_CONNECTION_STRING }}
+      AZURE_STORAGE_CONNECTION_STRING: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING || secrets.AZURE_NX_CACHE_READONLY_CONNECTION_STRING }}
 
   
