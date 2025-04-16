@@ -2,7 +2,9 @@ name: Daffodil PR Preview
 
 on:
   workflow_run:
-    workflows: ["Daffodil Build"]
+    workflows: 
+      - Daffodil Build
+      - Daffodil Build PR
     branches-ignore: ["master", "main", "develop"]
     types:
       - completed
