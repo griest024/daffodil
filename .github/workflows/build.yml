@@ -13,7 +13,7 @@ on:
     secrets:
       NX_KEY:
         required: true
-      AZURE_STORAGE_CONNECTION_STRING:
+      AZURE_NX_CACHE_CONNECTION_STRING:
         required: true
 
 
