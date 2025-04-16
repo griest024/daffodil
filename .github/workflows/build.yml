@@ -15,8 +15,6 @@ on:
         required: true
       AZURE_STORAGE_CONNECTION_STRING:
         required: true
-
-
 env:
   NX_KEY: ${{ secrets.NX_KEY }}
 
@@ -30,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 50
+          fetch-depth: 1
 
       - uses: ./.github/actions/setup-nx-remote-cache
         with:
@@ -38,7 +36,7 @@ jobs:
           read-only-azure-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
           read-write-azure-connection-string: ${{ secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING }}
           event-name: ${{ github.event_name }}
-          
+
       - uses: graycoreio/github-actions/setup-node@main
         with:
           node-version: ${{ matrix.node }}
@@ -52,18 +50,21 @@ jobs:
       matrix:
         node: [20.18.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - uses: graycoreio/github-actions/setup-node@main
         with:
           node-version: ${{ matrix.node }}
           use-stamp-cache: true
       
-      - run: echo "NX_POWERPACK_CACHE_MODE='${{ inputs.cache-mode }}'" >> $GITHUB_ENV
-        name: Set NX Cache Mode
-        if: ${{ inputs.cache-mode }}
+      - uses: ./.github/actions/setup-nx-remote-cache
+        with:
+          cache-mode: ${{ inputs.cache-mode }}
+          read-only-azure-connection-string: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          read-write-azure-connection-string: ${{ secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING }}
+          event-name: ${{ github.event_name }}
 
       - run: npx lerna run build --concurrency=1
 
@@ -82,9 +83,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 200
       - uses: graycoreio/github-actions/setup-node@main
         with:
           node-version: '20.18.x'
@@ -112,14 +113,9 @@ jobs:
       - compute_packages
       - build
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - uses: graycoreio/github-actions/setup-node@main
-        with:
-          node-version: ${{ matrix.node }}
-          use-stamp-cache: true
+          fetch-depth: 1
 
       - run: npx lerna run test --scope="${{ matrix.package }}" --concurrency=1
         name: Test ${{ matrix.package }}
@@ -145,7 +141,7 @@ jobs:
     needs:
       - build
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
 
