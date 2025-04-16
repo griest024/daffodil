@@ -5,15 +5,45 @@ on:
     branches:
       - develop
     tags: ["v*"]
-  pull_request:
-    branches:
-      - develop
+  workflow_call:
+    inputs:
+      cache-mode:
+        required: true
+        type: string
+    secrets:
+      NX_KEY:
+        required: true
+      AZURE_STORAGE_CONNECTION_STRING:
+        required: true
+
 
 env:
   AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_NX_CACHE_CONNECTION_STRING }}
   NX_KEY: ${{ secrets.NX_KEY }}
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20.18.x]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 50
+
+      - uses: nrwl/nx-set-shas@v3
+        name: Derive appropriate SHAs for base and head for `nx affected` commands
+        with:
+          main-branch-name: 'develop'
+
+      - uses: graycoreio/github-actions/setup-node@main
+        with:
+          node-version: ${{ matrix.node }}
+          use-stamp-cache: true
+
+      - run: npx nx affected --target=lint
   build:
     name: Build
     runs-on: ubuntu-latest
