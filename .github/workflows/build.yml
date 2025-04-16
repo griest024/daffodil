@@ -13,12 +13,12 @@ on:
     secrets:
       NX_KEY:
         required: true
-      AZURE_NX_CACHE_CONNECTION_STRING:
+      AZURE_STORAGE_CONNECTION_STRING:
         required: true
 
 
 env:
-  AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_NX_CACHE_CONNECTION_STRING }}
+  AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
   NX_KEY: ${{ secrets.NX_KEY }}
 
 jobs:
