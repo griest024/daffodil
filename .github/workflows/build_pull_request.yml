@@ -25,7 +25,7 @@ jobs:
     name: Build PR
     uses: ./.github/workflows/build.yml
     with: 
-      cache-mode: ${{ github.event.pull_request.head.repo.full_name == github.repository && 'read-write' || 'read-only' }}
+      cache-mode: 'read-only'
     secrets:
       NX_KEY: ${{ secrets.NX_KEY }}
       AZURE_STORAGE_CONNECTION_STRING: ${{ github.event.pull_request.head.repo.full_name == github.repository && secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING || secrets.AZURE_NX_CACHE_READONLY_CONNECTION_STRING }}
