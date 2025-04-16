@@ -24,7 +24,7 @@ permissions:
 jobs:
   build_internal_pull:
     uses: ./.github/workflows/build.yml
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
     with: 
       cache-mode: 'read-only'
     secrets:
@@ -32,7 +32,7 @@ jobs:
       AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_NX_CACHE_READONLY_CONNECTION_STRING }}
   build_fork_pull:
     uses: ./.github/workflows/build.yml
-    if: github.event.pull_request.head.repo.full_name != github.repository
+    if: github.event.pull_request.head.repo.full_name != github.repository && github.event_name == 'pull_request_target'
     with: 
       cache-mode: 'read-only'
     secrets:
