@@ -23,6 +23,7 @@ permissions:
 
 jobs:
   build_internal_pull:
+    name: Build PR
     uses: ./.github/workflows/build.yml
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event_name == 'pull_request'
     with: 
@@ -31,6 +32,7 @@ jobs:
       NX_KEY: ${{ secrets.NX_KEY }}
       AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_NX_CACHE_READONLY_CONNECTION_STRING }}
   build_fork_pull:
+    name: Build PR (Fork)
     uses: ./.github/workflows/build.yml
     if: github.event.pull_request.head.repo.full_name != github.repository && github.event_name == 'pull_request_target'
     with: 
