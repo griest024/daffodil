@@ -34,17 +34,17 @@ jobs:
 
         ## Set the NX Cache Mode. For pull requests, this comes from the `input` and likely `read-only`, 
         ## by default (for `push` events mostly) this is `read-write`. 
-      - run: echo "NX_POWERPACK_CACHE_MODE=\"${{ inputs.cache-mode }}\"" >> $GITHUB_ENV
+      - run: echo NX_POWERPACK_CACHE_MODE='${{ inputs.cache-mode }}' >> $GITHUB_ENV
         name: Set NX Cache Mode
         if: ${{ inputs.cache-mode }}
 
         ## Set the AZURE_STORAGE_CONNECTION_STRING. For pull requests, this comes from passed secret.
         ## by default (for `push` events mostly) this is `AZURE_NX_CACHE_READWRITE_CONNECTION_STRING``. 
-      - run: echo "AZURE_STORAGE_CONNECTION_STRING=\"${{ secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING }}\"" >> $GITHUB_ENV
+      - run: echo AZURE_STORAGE_CONNECTION_STRING='${{ secrets.AZURE_NX_CACHE_READWRITE_CONNECTION_STRING }}' >> $GITHUB_ENV
         name: Set AZURE_STORAGE_CONNECTION_STRING
         if: ${{ github.event_name == 'push' }}
 
-      - run: echo "AZURE_STORAGE_CONNECTION_STRING=\"${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}\"" >> $GITHUB_ENV
+      - run: echo AZURE_STORAGE_CONNECTION_STRING='${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}' >> $GITHUB_ENV
         name: Set AZURE_STORAGE_CONNECTION_STRING
         if: ${{ github.event_name != 'push' }}
 
