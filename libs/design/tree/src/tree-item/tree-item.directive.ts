@@ -1,11 +1,11 @@
-/* eslint-disable quote-props */
-
 import {
   Directive,
-  Inject,
+  effect,
+  input,
   Input,
-  DOCUMENT,
 } from '@angular/core';
+
+import { collect } from '@daffodil/core';
 
 import { DaffTreeNotifierService } from '../tree/tree-notifier.service';
 import { DaffTreeFlatNode } from '../utils/flatten-tree';
@@ -33,10 +33,10 @@ import { DaffTreeFlatNode } from '../utils/flatten-tree';
 @Directive({
   selector: '[daffTreeItem]',
   host: {
-    'class': 'daff-tree-item',
-    '[class.selected]': 'selected',
+    class: 'daff-tree-item',
+    '[class.selected]': 'selected()',
     '[class.parent]': 'isParent',
-    '[class.open]': 'open',
+    '[class.open]': 'open || node.visible',
     '[attr.id]': 'id',
     '[attr.aria-expanded]': 'ariaExpanded',
     '[style.--depth]': 'depth',
@@ -45,29 +45,29 @@ import { DaffTreeFlatNode } from '../utils/flatten-tree';
   },
 })
 export class DaffTreeItemDirective {
-  private isParent = false;
+  isParent = false;
 
   /**
    * The html `id` of the tree item. This is derived from the {@link DaffTreeData}.
    *
    */
-  private id: string;
+  id: string;
 
   /**
    * Accessibility property, notifying users about whether
    * or not the tree item is open.
    */
-  private ariaExpanded: string;
+  ariaExpanded: string;
 
   /**
    * A property indicating the depth of the tree.
    */
-  private depth: number;
+  depth: number;
 
   /**
    * Indicates whether or not the tree is `open`.
    */
-  private open = false;
+  open = false;
 
   /**
    * The {@link DaffTreeFlatNode} associated with this specific tree item.
@@ -97,49 +97,62 @@ export class DaffTreeItemDirective {
    * Whether or not the tree item is the currently active item.
    * Note that there is no requirement there there only be one active item at a time.
    */
-  @Input() selected = false;
+  selected = input<boolean>(false);
 
   constructor(
-    @Inject(DOCUMENT) private document: any,
     private treeNotifier: DaffTreeNotifierService,
-  ) {}
+  ) {
+    effect(() => {
+      if (this.selected()) {
+        this.openAncestors();
+      }
+    });
+  }
 
   /**
    * @docs-private
    */
   onEscape() {
-    this.toggleParent(this.node);
+    this.toggleParent();
   }
 
   /**
    * @docs-private
    */
   onClick() {
-    if(this.node.hasChildren) {
-      this.toggleTree(this.node);
+    if (this.node.hasChildren) {
+      this.toggleTree();
     }
+  }
+
+  /**
+   * Opens parent and parent of parent all the way to the root of the tree.
+   */
+  openAncestors() {
+    collect(this._node._treeRef, (node) => [node.parent], this._node.level - 1).forEach((node) => node.open = true);
     this.treeNotifier.notify();
   }
 
   /**
    * Toggle the open state of the tree's parent.
    */
-  toggleParent(node: DaffTreeFlatNode) {
-    if(node._treeRef?.parent.parent === undefined) {
+  toggleParent() {
+    if (this.node._treeRef?.parent.parent === undefined) {
       return;
     }
-    node._treeRef.parent.open = !node._treeRef.parent.open;
-    (<Document>this.document).getElementById('tree-' + node._treeRef.parent.id).focus();
+    this.node._treeRef.parent.open = !this.node._treeRef.parent.open;
+    this.treeNotifier.notify();
   }
 
   /**
    * Toggle the open state of this specific subtree tree.
    */
-  toggleTree(node: DaffTreeFlatNode) {
-    if(node._treeRef.open === false) {
-      node._treeRef.open = true;
+  toggleTree() {
+    if (this.node._treeRef.open === false) {
+      this.node._treeRef.open = true;
     } else {
-      node._treeRef.open = false;
+      this.node._treeRef.open = false;
     }
+    this.treeNotifier.notify();
   }
 }

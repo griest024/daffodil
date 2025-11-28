@@ -2,8 +2,11 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
+  contentChildren,
+  Injector,
   Input,
   OnChanges,
   OnInit,
@@ -18,6 +21,7 @@ import { DaffTreeNotifierService } from './tree-notifier.service';
 import { DaffTreeData } from '../interfaces/tree-data';
 import { DaffTreeRenderMode } from '../interfaces/tree-render-mode';
 import { DaffTreeUi } from '../interfaces/tree-ui';
+import { DaffTreeItemDirective } from '../tree-item/tree-item.directive';
 import {
   DaffTreeFlatNode,
   flattenTree,
@@ -107,23 +111,28 @@ export class DaffTreeComponent implements OnInit, OnChanges {
    * @docs-private
    */
   @ContentChild('daffTreeItemTpl', { static: true }) treeItemTemplate: TemplateRef<any>;
+  items = contentChildren(DaffTreeItemDirective, { descendants: true, debugName: 'treeItems' });
 
   /**
    * @docs-private
    */
-  constructor(private notifier: DaffTreeNotifierService) {}
+  constructor(
+    private notifier: DaffTreeNotifierService,
+    private injector: Injector,
+    private cd: ChangeDetectorRef,
+  ) {}
 
   /**
    * @docs-private
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if(!changes.tree.currentValue) {
+    if (!changes.tree.currentValue) {
       this._tree = undefined;
       this.flatTree = [];
       return;
     }
 
-    if(changes.renderMode && !changes.tree) {
+    if (changes.renderMode && !changes.tree) {
       this.flatTree = flattenTree(this._tree, changes.renderMode.currentValue === 'not-in-dom');
     } else if(changes.renderMode || changes.tree) {
       this._tree = hydrateTree(changes.tree?.currentValue ?? this.tree);
@@ -139,4 +148,19 @@ export class DaffTreeComponent implements OnInit, OnChanges {
       this.flatTree = flattenTree(this._tree, this.renderMode === 'not-in-dom');
     });
   }
+
+  /**
+   * @docs-private
+   */
+  // ngAfterContentInit(): void {
+  //   runInInjectionContext(this.injector, () => afterNextRender({
+  //     read: () => {
+  //       const activeTreeItem = this.items().find((treeItem) => treeItem.selected);
+  //       if (activeTreeItem) {
+  //         activeTreeItem.openAncestors();
+  //         this.cd.markForCheck();
+  //       }
+  //     },
+  //   }));
+  // }
 }

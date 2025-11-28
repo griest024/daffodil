@@ -4,6 +4,7 @@ import {
   Component,
   Input,
   OnInit,
+  signal,
 } from '@angular/core';
 import {
   RouterLink,
@@ -25,7 +26,10 @@ import {
 import { DaffDocsNavList } from '@daffodil/docs-utils';
 
 const DEFAULT_ROUTER_LINK_ACTIVE_CONFIG: RouterLinkActive['routerLinkActiveOptions'] = {
-  exact: true,
+  fragment: 'ignored',
+  paths: 'exact',
+  queryParams: 'ignored',
+  matrixParams: 'subset',
 };
 
 const visit = (guide: DaffDocsNavList): DaffTreeData<unknown> => ({
@@ -53,6 +57,8 @@ export class DaffioDocsListComponent implements OnInit {
 
   readonly ROUTER_LINK_ACTIVE_CONFIG = DEFAULT_ROUTER_LINK_ACTIVE_CONFIG;
 
+  readonly isActive = signal(false);
+
   /**
    * The guide list to render
    */
@@ -69,5 +75,10 @@ export class DaffioDocsListComponent implements OnInit {
       distinctUntilChanged(),
       map((list) => daffTransformTree(list, visit, 'children')),
     );
+  }
+
+  updateIsActive(isActive: boolean) {
+    console.log(isActive);
+    this.isActive.set(isActive);
   }
 }
