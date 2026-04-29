@@ -1,0 +1,354 @@
+[
+	{
+		"type": "variable",
+		"name": "New Year's Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1767225600000,
+				"end": 1767311999999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Martin Luther King, Jr. Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1768780800000,
+				"end": 1768867199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Lincoln's Birthday",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1770854400000,
+				"end": 1770940799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Washington's Birthday",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1771200000000,
+				"end": 1771286399999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Good Friday",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1775174400000,
+				"end": 1775260799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Good Friday",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1775174400000,
+				"end": 1775260799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Truman Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1778198400000,
+				"end": 1778284799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Memorial Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1779667200000,
+				"end": 1779753599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Juneteenth National Independence Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1781827200000,
+				"end": 1781913599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Independence Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1783036800000,
+				"end": 1783123199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Labor Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1788739200000,
+				"end": 1788825599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Columbus Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1791763200000,
+				"end": 1791849599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Indigenous Peoples' Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1791763200000,
+				"end": 1791849599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Veterans Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1794355200000,
+				"end": 1794441599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Thanksgiving Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1795651200000,
+				"end": 1795737599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Christmas Day",
+		"events": [
+			{
+				"year": 2026,
+				"start": 1798156800000,
+				"end": 1798243199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "New Year's Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1798761600000,
+				"end": 1798847999999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Martin Luther King, Jr. Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1800230400000,
+				"end": 1800316799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Lincoln's Birthday",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1802390400000,
+				"end": 1802476799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Washington's Birthday",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1802649600000,
+				"end": 1802735999999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Good Friday",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1806019200000,
+				"end": 1806105599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Good Friday",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1806019200000,
+				"end": 1806105599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Truman Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1809734400000,
+				"end": 1809820799999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Memorial Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1811721600000,
+				"end": 1811807999999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Juneteenth National Independence Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1813276800000,
+				"end": 1813363199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Independence Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1814745600000,
+				"end": 1814831999999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Labor Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1820188800000,
+				"end": 1820275199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Columbus Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1823212800000,
+				"end": 1823299199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Indigenous Peoples' Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1823212800000,
+				"end": 1823299199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Veterans Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1825891200000,
+				"end": 1825977599999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Thanksgiving Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1827100800000,
+				"end": 1827187199999
+			}
+		]
+	},
+	{
+		"type": "variable",
+		"name": "Christmas Day",
+		"events": [
+			{
+				"year": 2027,
+				"start": 1829606400000,
+				"end": 1829692799999
+			}
+		]
+	}
+]

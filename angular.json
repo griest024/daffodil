@@ -2311,6 +2311,39 @@
           }
         }
       }
+    },
+    "schedule": {
+      "projectType": "library",
+      "root": "libs/schedule",
+      "sourceRoot": "libs/schedule",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "libs/schedule/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/schedule/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/schedule/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/schedule/**/*.ts",
+              "libs/schedule/**/*.html"
+            ],
+            "eslintConfig": "libs/schedule/eslint.config.mjs"
+          }
+        }
+      }
     }
   },
   "schematics": {
