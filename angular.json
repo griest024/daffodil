@@ -2342,6 +2342,14 @@
             ],
             "eslintConfig": "libs/schedule/eslint.config.mjs"
           }
+        },
+				"downloadHolidays": {
+          "builder": "./dist/builders:downloadHolidays",
+          "options": {
+            "numYears": 2,
+						"output": "libs/schedule/holidays.json",
+						"country": "US"
+          }
         }
       }
     }

@@ -9,6 +9,11 @@
       "implementation": "./generate-sitemap",
       "schema": "./generate-sitemap/schema.json",
       "description": "Generates an XML sitemap from a list of routes."
+    },
+		"downloadHolidays": {
+      "implementation": "./download-holidays",
+      "schema": "./download-holidays/schema.json",
+      "description": "Downloads a list of public holidays."
     }
   }
 }
