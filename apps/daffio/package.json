@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@daffodil/branding": "0.0.0-PLACEHOLDER",
+    "@daffodil/commerce": "0.0.0-PLACEHOLDER",
     "@daffodil/core": "0.0.0-PLACEHOLDER",
     "@daffodil/design": "0.0.0-PLACEHOLDER",
     "@daffodil/design-examples": "0.0.0-PLACEHOLDER",

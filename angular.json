@@ -216,7 +216,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "./dist/commerce:application",
           "options": {
             "outputPath": "dist/apps/daffio",
             "index": "apps/daffio/src/index.html",
