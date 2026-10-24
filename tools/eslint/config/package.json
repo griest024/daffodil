@@ -20,7 +20,7 @@
     "typescript-eslint": "0.0.0-PLACEHOLDER"
   },
 	"devDependencies": {
-    "eslint-plugin-daff-packages": "0.0.0-PLACEHOLDER"
+    "eslint-plugin-daff-packages": "0.0.0"
 	},
 	"repository": {
     "type": "git",
